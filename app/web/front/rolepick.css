@@ -1,0 +1,24 @@
+/* Выбор роли (/choose-role): три открытки. Токены мира — /waitgames/world.css, марка и кнопки — /front/app.css. */
+.rp{min-height:100dvh;background:var(--w-table)}
+.rp-in{max-width:1240px;margin:0 auto;padding:clamp(20px,4vh,44px) var(--gut,16px) 48px}
+.rp-top{display:inline-flex;align-items:center;gap:12px;color:var(--w-blue);min-height:44px;text-decoration:none}
+.rp h1{font:500 clamp(34px,4.6vw,64px)/1.02 var(--w-display);letter-spacing:-.015em;margin:clamp(20px,4vh,40px) 0 10px;color:var(--w-ink);text-wrap:balance}
+.rp h1 .ink{color:var(--w-blue);display:block}
+.rp-lead{font-size:clamp(16px,1.3vw,19px);color:var(--w-ink-2);max-width:52ch;margin:0 0 clamp(24px,4vh,40px)}
+.rp-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2vw,28px);align-items:stretch}
+.rp-c{position:relative;display:flex;flex-direction:column;gap:12px;padding:28px 26px 26px;background:var(--w-stock);border:1px solid var(--w-deckle);border-radius:20px 20px 72px 20px;box-shadow:var(--w-shadow-card);color:var(--w-ink);text-decoration:none;transform:rotate(var(--r,0deg));transition:transform .5s var(--w-ease),box-shadow .3s}
+.rp-c:hover,.rp-c:focus-visible{transform:rotate(0) translateY(-4px);box-shadow:var(--w-shadow-lift)}
+.rp-c:focus-visible{outline:2px solid var(--w-blue);outline-offset:4px}
+.rp-c h2{font:500 30px/1.05 var(--w-display);color:var(--w-blue);padding-right:84px}
+.rp-c p{font-size:16px;line-height:1.45;color:var(--w-ink-2);padding-right:72px}
+.rp-c ul{list-style:none;margin:2px 0 8px;padding:0;display:flex;flex-direction:column;gap:7px;font-size:14.5px}
+.rp-c li{display:flex;gap:9px;align-items:flex-start;line-height:1.35}
+.rp-c li::before{content:"";flex:none;width:8px;height:8px;margin-top:6px;border-radius:2px;background:var(--w-lime);box-shadow:inset 0 0 0 1.5px #6fbf3f}
+.rp-c .btn{margin-top:auto;align-self:flex-start}
+.rp-st{--stk:var(--w-stock);--pp:8px;--pr:2.6px;position:absolute;top:18px;right:20px;width:68px;height:74px;display:grid;place-items:center;background:var(--w-lime);color:var(--w-blue);border-radius:2px;rotate:6deg;box-shadow:0 2px 2px rgba(41,47,55,.08),0 10px 18px -8px rgba(41,47,55,.35)}
+.rp-c[data-role="hotelier"] .rp-st{rotate:-5deg}.rp-c[data-role="admin"] .rp-st{rotate:3deg}
+.rp-st svg{width:36px;height:36px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.hbtn-role{text-decoration:none}.hbtn-role svg{width:20px;height:20px}
+@media (max-width:900px){.rp-cards{grid-template-columns:1fr;max-width:560px}.rp-c{transform:none}.rp-c h2{font-size:26px}}
+@media (max-width:640px){.hbtn-role span{display:none}}
+@media (prefers-reduced-motion:reduce){.rp-c{transition:none}}

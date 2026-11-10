@@ -1,0 +1,57 @@
+id: accessibility
+name: Без лестниц
+description: |
+  Удобно ли тем, кому тяжело ходить: есть ли лифт (карточка), сколько этажей в здании (OSM), есть ли удобства для
+  гостей с ограниченной подвижностью. Ступеньки на входе знает только отельер.
+level: отель
+class: policy
+weight: 0.7
+ttl_days: 365
+key: easy
+keywords: ["лифт", "тяжело ходить", "без лестниц", "коляск", "инвалид", "пожил", "без ступен", "ступен", "пандус"]
+default_constraint: {field: easy, op: "==", value: true}
+fields:
+  # «без лестниц» подходит, только если подтверждён лифт, пандус или вход без ступенек; низкое здание без этого «возможно»
+  easy: {type: bool, label: "лифт или вход без ступенек подтверждены", confirm_any: [lift, step_free_entrance, accessible_amenities]}
+  lift: {type: bool, label: "есть лифт"}
+  levels: {type: number, better: lower, label: "этажей в здании"}
+  step_free_entrance: {type: bool, label: "вход без ступенек"}
+methods:
+  - source: card
+    method: "удобства в карточке + этажность здания из OSM"
+    steps:
+      - {as: l, tool: card_search, args: {terms: ["^Лифт$", "elevator", "Работают лифты"], where: ["amenities"]}}
+      - {as: a, tool: card_search, args: {terms: ["пандус", "для гостей с ограниченн", "для людей с ограниченн", "инвалид", "wheelchair"], where: ["amenities"]}}
+      - {as: v, tool: sea_view}
+    value:
+      lift: "l.found"
+      levels: "v.building.levels if v.building.levels_source.startswith('тег') else None"
+      easy: "l.found or (v.building.levels_source.startswith('тег') and v.building.levels <= 2)"
+      accessible_amenities: "a.found"
+    confidence: "0.75 if l.found else 0.5"
+    summary: >-
+      ('лифт есть' if l.found else 'лифт в карточке не указан')
+      + (f', в здании {v.building.levels} эт.' if v.building.levels_source.startswith('тег') else ', этажность неизвестна')
+      + ('; есть удобства для гостей с ограниченной подвижностью' if a.found else '')
+    evidence: "{'lift': l.hits, 'access': a.hits, 'building': v.building}"
+  - source: photos
+    method: "разметка фото отеля зрением Claude: ступеньки у входа, лифт на кадрах (слабая улика: не всегда виден главный вход)"
+    steps:
+      - {as: p, tool: photo_labels}
+    when: "p.elevator.yes > 0 or p.steps.yes > 0"
+    value:
+      lift: "True if p.elevator.yes > 0 else None"
+      step_free_entrance: "False if p.steps.yes > 0 else None"
+      easy: "p.elevator.yes > 0 and p.steps.yes == 0"
+    confidence: "0.35"
+    summary: >-
+      ('на фото виден лифт' if p.elevator.yes > 0 else '')
+      + ('; ' if p.elevator.yes > 0 and p.steps.yes > 0 else '')
+      + ('на фото у входа ступеньки' if p.steps.yes > 0 else '')
+    evidence: "{'photos': p.evidence}"
+question:
+  when: "fact.step_free_entrance is None and (fact.lift or fact.easy or unknown)"
+  text: "'Гости, которым тяжело ходить, спрашивают: можно ли войти в отель без ступенек (или есть пандус)? Есть ли лестница до лифта?'"
+answer_fields:
+  step_free_entrance: {type: bool}
+  notes_steps: {type: text, label: "где ступеньки"}

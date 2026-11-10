@@ -1,0 +1,1372 @@
+{
+ "meta": {
+  "question": "Видно ли море хотя бы из одного номера (окно или балкон)?",
+  "label_source": "Claude (vision + text), НЕ человек; слепо к результатам модели",
+  "rules": "yes: фото номера/балкона с морем или отзыв гостя про море из номера; заявление в категории номера само по себе = unknown; no: только положительные свидетельства отсутствия вида; иначе unknown",
+  "sample_seed": 20261028,
+  "n": 46,
+  "human_review": "data/eval/sea_view_gold_review.csv"
+ },
+ "items": [
+  {
+   "id": "10007237",
+   "name": "Bamboo Dom Guest house",
+   "coast_dist_m": 878,
+   "band": "far",
+   "stratum": "no/hi/far",
+   "sample_from": "спор",
+   "card_review_disagree": true,
+   "label": "yes",
+   "label_confidence": "medium",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "1238487",
+     "note": "вид на море из окна"
+    },
+    {
+     "type": "category",
+     "ref": "Трёхместный номер Standard с видом на море",
+     "note": "заявленный вид"
+    }
+   ],
+   "note": "Отзыв прямо говорит про вид на море из окна номера.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "review"
+   ]
+  },
+  {
+   "id": "10153497",
+   "name": "Sweet Hostel",
+   "coast_dist_m": 714,
+   "band": "mid",
+   "stratum": "no/hi/mid",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": "3 этаж по адресу",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "918882",
+     "note": "вид из окна не симпатичный"
+    },
+    {
+     "type": "photo",
+     "ref": "1",
+     "note": "из окна видны здания, моря нет"
+    }
+   ],
+   "note": "Намёки на городской вид, но для 'no' доказательств мало.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo",
+    "review"
+   ]
+  },
+  {
+   "id": "10370458",
+   "name": "Апарт-отель Лиссабон Неолит",
+   "coast_dist_m": 821,
+   "band": "far",
+   "stratum": "yes/hi/far",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "yes",
+   "label_confidence": "high",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "2263305",
+     "note": "гость в номере с видом на море: вид действительно красивый, мешает котельная под окнами"
+    },
+    {
+     "type": "category",
+     "ref": "Двухместный номер Стандартный с видом на море",
+     "note": "заявлено отелем"
+    }
+   ],
+   "note": "Отзыв подтверждает вид на море из номера.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "review"
+   ]
+  },
+  {
+   "id": "10441489",
+   "name": "Грейс Наири",
+   "coast_dist_m": 750,
+   "band": "mid",
+   "stratum": "no/low/any",
+   "sample_from": "спор",
+   "card_review_disagree": true,
+   "label": "yes",
+   "label_confidence": "high",
+   "floor_side_evidence": "отель на горе, часть номеров видит море, часть окрестности",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "2384011",
+     "note": "балкон с видом на море"
+    },
+    {
+     "type": "review",
+     "ref": "2385904",
+     "note": "в одном номере был вид на море"
+    },
+    {
+     "type": "photo",
+     "ref": "1",
+     "note": "с балкона/террасы видно море вдали"
+    }
+   ],
+   "note": "Отзывы про балкон с видом на море.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo",
+    "review"
+   ]
+  },
+  {
+   "id": "10829905",
+   "name": "Отель Куба",
+   "coast_dist_m": 88,
+   "band": "near",
+   "stratum": "yes/hi/near",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": "одноэтажные модули вокруг внутреннего дворика",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "2119806",
+     "note": "вид из окна во двор"
+    },
+    {
+     "type": "photo",
+     "ref": "3",
+     "note": "одноэтажные номера вокруг замкнутого двора"
+    },
+    {
+     "type": "photo",
+     "ref": "4",
+     "note": "окна выходят во двор, моря нет"
+    }
+   ],
+   "note": "Фото: одноэтажные модули вокруг двора; отзывы про двор не говорят про вид из окна. Свидетельства отсутствия моря нет.",
+   "label_source": "Claude (vision + text), blind; пересмотрено оркестратором: «no» агента не подкреплён положительным свидетельством",
+   "evidence_types": [
+    "photo",
+    "review"
+   ],
+   "label_history": [
+    {
+     "by": "subagent",
+     "label": "no",
+     "note": "Низкие модули вокруг двора, гость подтверждает вид во двор."
+    }
+   ]
+  },
+  {
+   "id": "10843836",
+   "name": "Отель Грей",
+   "coast_dist_m": 635,
+   "band": "mid",
+   "stratum": "no/low/any",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": "отель на горке, мансарда на 4 этаже",
+   "evidence": [
+    {
+     "type": "category",
+     "ref": "Двухместный номер Standard с балконом и с видом на город",
+     "note": "заявлен вид на город"
+    }
+   ],
+   "note": "Нет ни фото, ни отзывов о виде из номеров.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category"
+   ]
+  },
+  {
+   "id": "10950245",
+   "name": "Меблированные Комнаты Надежда",
+   "coast_dist_m": 686,
+   "band": "mid",
+   "stratum": "no/hi/mid",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": "фото 4: балкон верхнего этажа, внизу парковка, дома и холмы",
+   "evidence": [
+    {
+     "type": "photo",
+     "ref": "4",
+     "note": "балкон с видом на парковку, дома и холмы, моря нет"
+    },
+    {
+     "type": "review",
+     "ref": "1637594",
+     "note": "отель на горе, до моря идти с горки"
+    },
+    {
+     "type": "category",
+     "ref": "Люкс с красивым видом из окна",
+     "note": "заявленный вид без уточнения"
+    }
+   ],
+   "note": "Один балкон без моря, но другие номера не проверены.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "photo",
+    "review"
+   ]
+  },
+  {
+   "id": "11278581",
+   "name": "Гостевой дом Ветер Сочи",
+   "coast_dist_m": 832,
+   "band": "far",
+   "stratum": "yes/low/any",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "no",
+   "label_confidence": "low",
+   "floor_side_evidence": "отзыв 1827958: 3 этаж",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "2314448",
+     "note": "вид на город и горы, море далеко"
+    },
+    {
+     "type": "review",
+     "ref": "1879861",
+     "note": "терраса с видом на город и горы"
+    }
+   ],
+   "note": "Категории: «вид на город»; отзывы: терраса «вид на город и горы», отель «не близко от моря» (до моря на автобусе); моря в видах нет.",
+   "label_source": "Claude (vision + text), blind; пересмотрено оркестратором после прохода субагента (слабое отрицательное свидетельство)",
+   "label_history": [
+    {
+     "by": "subagent",
+     "label": "unknown",
+     "note": "Отзывы говорят про город и горы, отель далеко от моря."
+    }
+   ],
+   "evidence_types": [
+    "review"
+   ]
+  },
+  {
+   "id": "11290623",
+   "name": "Гостевой дом 4 AVENUE",
+   "coast_dist_m": 1118,
+   "band": "far",
+   "stratum": "yes/hi/far",
+   "sample_from": "спор",
+   "card_review_disagree": true,
+   "label": "yes",
+   "label_confidence": "medium",
+   "floor_side_evidence": "отзыв 1736396: на пригорке, номер Superior, из окна краешек моря; в Classic моря не видно (1726927)",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "1736396",
+     "note": "вид на ель и краешек моря из окна"
+    },
+    {
+     "type": "review",
+     "ref": "1726927",
+     "note": "в другом номере моря не видно"
+    }
+   ],
+   "note": "Частичный вид на море из окна Superior, в других номерах его нет.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "review"
+   ]
+  },
+  {
+   "id": "11349466",
+   "name": "SL Luxury",
+   "coast_dist_m": 694,
+   "band": "mid",
+   "stratum": "no/hi/mid",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": "отзыв 1754111: номер на 2 этаже",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "2090126",
+     "note": "в одном номере вида из окна нет"
+    },
+    {
+     "type": "category",
+     "ref": "панорамные окна на Навагинскую",
+     "note": "вид на улицу/город, не море"
+    }
+   ],
+   "note": "Фото нет, море нигде не упоминается, одно слабое замечание про отсутствие вида.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "review"
+   ]
+  },
+  {
+   "id": "13286301",
+   "name": "Лавикон Апарт Сочи",
+   "coast_dist_m": 534,
+   "band": "mid",
+   "stratum": "yes/hi/mid",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "medium",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "category",
+     "ref": "Двухместная студия Deluxe с видом на город",
+     "note": "заявлены виды на город и двор"
+    },
+    {
+     "type": "review",
+     "ref": "1668004",
+     "note": "нет красивого вида из окна"
+    },
+    {
+     "type": "photo",
+     "ref": "3",
+     "note": "мансардное окно показывает город"
+    }
+   ],
+   "note": "Виды на город, но достаточных свидетельств полного отсутствия моря нет.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "photo",
+    "review"
+   ]
+  },
+  {
+   "id": "13299353",
+   "name": "Гостевой Дом Michelle",
+   "coast_dist_m": 1088,
+   "band": "far",
+   "stratum": "no/hi/far",
+   "sample_from": "спор",
+   "card_review_disagree": true,
+   "label": "yes",
+   "label_confidence": "medium",
+   "floor_side_evidence": "отзыв 1552081/1618583: семейный номер с видом из окна; кухня на 5 этаже",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "1618583",
+     "note": "очень красивый вид из окна на море и на бассейн"
+    },
+    {
+     "type": "category",
+     "ref": "Семейный номер Superior с 2 комнатами с балконом и с красивым видом из окна",
+     "note": "заявленный красивый вид"
+    },
+    {
+     "type": "review",
+     "ref": "1737315",
+     "note": "другой номер выходил на заброшку: виды разные"
+    }
+   ],
+   "note": "Один гость прямо пишет про вид на море из окна семейного номера.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "review"
+   ]
+  },
+  {
+   "id": "13364688",
+   "name": "Меблированные комнаты на Приморской в центре Сочи",
+   "coast_dist_m": 211,
+   "band": "near",
+   "stratum": "yes/low/any",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "photo",
+     "ref": "2",
+     "note": "море видно с территории у ограждения, не из номера"
+    },
+    {
+     "type": "category",
+     "ref": "Двухместная студия с видом на сад",
+     "note": "виды на сад"
+    }
+   ],
+   "note": "Море на фото только с наружной территории, из номеров не подтверждено.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "photo"
+   ]
+  },
+  {
+   "id": "13646238",
+   "name": "Хостел El Mar Навагинская",
+   "coast_dist_m": 577,
+   "band": "mid",
+   "stratum": "no/hi/mid",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [],
+   "note": "Нет отзывов о виде, на фото окон нет.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": []
+  },
+  {
+   "id": "6577068",
+   "name": "Гостевой дом Антика",
+   "coast_dist_m": 1330,
+   "band": "far",
+   "stratum": "yes/hi/far",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": "отзыв 1768569: окна на дорогу в одном номере",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "1768569",
+     "note": "окна выходили на дорогу, шумно"
+    },
+    {
+     "type": "category",
+     "ref": "Двухместный номер Standard с балконом и с видом на город",
+     "note": "вид на город"
+    }
+   ],
+   "note": "Море не упоминается, но и систематического отсутствия вида не показано.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "review"
+   ]
+  },
+  {
+   "id": "6593439",
+   "name": "Studio Bambukovaya 42A",
+   "coast_dist_m": 701,
+   "band": "mid",
+   "stratum": "yes/hi/mid",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "photo",
+     "ref": "2",
+     "note": "окно кухни выходит на зелень"
+    }
+   ],
+   "note": "Отзывов и категорий нет, фото интерьера без моря, но и однозначного отсутствия вида нет.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo"
+   ]
+  },
+  {
+   "id": "6604665",
+   "name": "Гостевой дом Мамы Терезы",
+   "coast_dist_m": 1345,
+   "band": "far",
+   "stratum": "no/low/any",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "458892",
+     "note": "вид из окна на город"
+    },
+    {
+     "type": "review",
+     "ref": "448764",
+     "note": "шикарный вид, без уточнения"
+    }
+   ],
+   "note": "Вид на город, море не упомянуто; отрицательного доказательства нет.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "review"
+   ]
+  },
+  {
+   "id": "6848682",
+   "name": "Отель Соната",
+   "coast_dist_m": 219,
+   "band": "near",
+   "stratum": "yes/hi/near",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": "бассейн на крыше 7 этажа с шикарным видом",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "1222003",
+     "note": "вид с бассейна на крыше, не из номера"
+    },
+    {
+     "type": "review",
+     "ref": "1740891",
+     "note": "одно окно выходит на задний двор с деревьями"
+    }
+   ],
+   "note": "Вид из номеров на море не подтверждён.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "review"
+   ]
+  },
+  {
+   "id": "6911393",
+   "name": "Гостевой дом на Виноградной",
+   "coast_dist_m": 1279,
+   "band": "far",
+   "stratum": "yes/low/any",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "yes",
+   "label_confidence": "high",
+   "floor_side_evidence": "отзыв 594775: на возвышенности, с балкона виды на море и горы",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "594775",
+     "note": "с балкона красивые виды на море и горы"
+    },
+    {
+     "type": "review",
+     "ref": "541843",
+     "note": "с балкона с одной стороны море, с другой город"
+    },
+    {
+     "type": "category",
+     "ref": "Двухместный номер Standard с балконом и с видом на море",
+     "note": "заявленная категория"
+    }
+   ],
+   "note": "Два независимых отзыва подтверждают море с балкона.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "review"
+   ]
+  },
+  {
+   "id": "7380700",
+   "name": "Отель У Бочарова Ручья",
+   "coast_dist_m": 748,
+   "band": "mid",
+   "stratum": "yes/hi/mid",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "1709994",
+     "note": "шикарный вид с балкона, море не названо"
+    },
+    {
+     "type": "photo",
+     "ref": "2",
+     "note": "с террасы виден склон и город, моря нет"
+    }
+   ],
+   "note": "Хвалят вид, но море не упомянуто; отель на склоне, виден город.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo",
+    "review"
+   ]
+  },
+  {
+   "id": "7380741",
+   "name": "Гостевой Дом Акс",
+   "coast_dist_m": 752,
+   "band": "mid",
+   "stratum": "no/low/any",
+   "sample_from": "спор",
+   "card_review_disagree": true,
+   "label": "yes",
+   "label_confidence": "high",
+   "floor_side_evidence": "мансарды 4 этаж, море частично перекрыто домами",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "1013148",
+     "note": "номер с балконом и видом на море, хоть и сильно перекрыто домами"
+    },
+    {
+     "type": "review",
+     "ref": "481198",
+     "note": "из мансардных окон вид на море"
+    },
+    {
+     "type": "category",
+     "ref": "Двухместный номер Standard с балконом и с видом на море",
+     "note": "заявленный вид на море"
+    }
+   ],
+   "note": "Два независимых отзыва подтверждают вид на море, пусть и частичный.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "review"
+   ]
+  },
+  {
+   "id": "7381093",
+   "name": "Гостевой дом Вилла Бавария",
+   "coast_dist_m": 524,
+   "band": "mid",
+   "stratum": "no/low/any",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "photo",
+     "ref": "1",
+     "note": "балконы фасада, вида из них нет"
+    },
+    {
+     "type": "review",
+     "ref": "1439410",
+     "note": "номер с балконом, про вид ни слова"
+    }
+   ],
+   "note": "Нет свидетельств о виде из номеров.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo",
+    "review"
+   ]
+  },
+  {
+   "id": "7606060",
+   "name": "Отель Экодом Сочи",
+   "coast_dist_m": 806,
+   "band": "far",
+   "stratum": "no/hi/far",
+   "sample_from": "спор",
+   "card_review_disagree": true,
+   "label": "yes",
+   "label_confidence": "medium",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "2134649",
+     "note": "студия с красивым видом, даже видно море"
+    }
+   ],
+   "note": "Один отзыв гостя студии: из номера видно море.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "review"
+   ]
+  },
+  {
+   "id": "7608669",
+   "name": "Yozh Hostel",
+   "coast_dist_m": 742,
+   "band": "mid",
+   "stratum": "yes/hi/mid",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [],
+   "note": "Нет фото, категорий и отзывов о виде.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": []
+  },
+  {
+   "id": "7674705",
+   "name": "Гостевой дом Вилла Светлана",
+   "coast_dist_m": 88,
+   "band": "near",
+   "stratum": "yes/hi/near",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "yes",
+   "label_confidence": "high",
+   "floor_side_evidence": "полулюкс с балконом, фасад на море (фото 2 с высоты второго этажа)",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "1093191",
+     "note": "вид на море из окна и балкона"
+    },
+    {
+     "type": "review",
+     "ref": "1444375",
+     "note": "красивый вид на море, балкон"
+    },
+    {
+     "type": "photo",
+     "ref": "2",
+     "note": "вид на море и набережную из окна"
+    }
+   ],
+   "note": "Два отзыва и фото с видом на море.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo",
+    "review"
+   ]
+  },
+  {
+   "id": "7842711",
+   "name": "Мини-отель Сон у Моря",
+   "coast_dist_m": 43,
+   "band": "near",
+   "stratum": "yes/hi/near",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "yes",
+   "label_confidence": "high",
+   "floor_side_evidence": "отзыв 1867319: под балконом сразу пляж",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "2260051",
+     "note": "номер с балконом, вид на море"
+    },
+    {
+     "type": "review",
+     "ref": "1867319",
+     "note": "номер с балконом с видом на море, под балконом пляж"
+    },
+    {
+     "type": "category",
+     "ref": "Номер семейный с видом на море",
+     "note": "заявлено отелем"
+    }
+   ],
+   "note": "Несколько отзывов гостей номеров с балконом подтверждают вид на море.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "review"
+   ]
+  },
+  {
+   "id": "7855157",
+   "name": "Меблированные комнаты Аледо",
+   "coast_dist_m": 765,
+   "band": "mid",
+   "stratum": "no/low/any",
+   "sample_from": "спор",
+   "card_review_disagree": true,
+   "label": "yes",
+   "label_confidence": "high",
+   "floor_side_evidence": "отзыв 1146119: с балкона 3 этажа",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "1146119",
+     "note": "вид с балкона третьего этажа на море отличный"
+    },
+    {
+     "type": "category",
+     "ref": "Номер Standard с балконом и с видом на море",
+     "note": "заявленная категория"
+    }
+   ],
+   "note": "Гость прямо пишет про вид на море с балкона.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "review"
+   ]
+  },
+  {
+   "id": "7967155",
+   "name": "Отель Swissôtel Resort Sochi Kamelia",
+   "coast_dist_m": 209,
+   "band": "near",
+   "stratum": "yes/hi/near",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "medium",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "description",
+     "ref": "описание",
+     "note": "террасы с видом на море или парк (заявление отеля)"
+    },
+    {
+     "type": "category",
+     "ref": "Двухместный номер Премиум с видом на море",
+     "note": "заявленный вид на море"
+    },
+    {
+     "type": "photo",
+     "ref": "3",
+     "note": "вид на море сверху, но не из номера"
+    }
+   ],
+   "note": "Только заявления отеля, независимого фото номера или отзыва нет.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "description",
+    "photo"
+   ]
+  },
+  {
+   "id": "8271671",
+   "name": "Garage Hostel",
+   "coast_dist_m": 534,
+   "band": "mid",
+   "stratum": "yes/low/any",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "156609",
+     "note": "комнаты без окон"
+    },
+    {
+     "type": "photo",
+     "ref": "1",
+     "note": "хостел, окна на улицу, моря нет"
+    }
+   ],
+   "note": "Вид на море не показан, но доказательства отсутствия слабые.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo",
+    "review"
+   ]
+  },
+  {
+   "id": "8307772",
+   "name": "Гостевой Дом Просперус",
+   "coast_dist_m": 1164,
+   "band": "far",
+   "stratum": "yes/low/any",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": "высокий этаж, панорама города и холмов",
+   "evidence": [
+    {
+     "type": "photo",
+     "ref": "2",
+     "note": "из окна город и холмы, моря не видно"
+    },
+    {
+     "type": "review",
+     "ref": "1217748",
+     "note": "балкон с видом, без уточнения"
+    }
+   ],
+   "note": "Вид на город, море не подтверждено.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo",
+    "review"
+   ]
+  },
+  {
+   "id": "8360529",
+   "name": "Санаторий Русь",
+   "coast_dist_m": 224,
+   "band": "near",
+   "stratum": "no/hi/near",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "photo",
+     "ref": "4",
+     "note": "море видно с террасы ресторана, не из номера"
+    }
+   ],
+   "note": "Море видно только с общей террасы, номеров и отзывов о виде нет.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo"
+   ]
+  },
+  {
+   "id": "8436925",
+   "name": "Мини-Гостиница Сокол",
+   "coast_dist_m": 717,
+   "band": "mid",
+   "stratum": "yes/low/any",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": "окна на оживлённую улицу Виноградную",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "933739",
+     "note": "окна выходят на оживлённую улицу"
+    }
+   ],
+   "note": "Вид на улицу у части номеров, море не упомянуто.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "review"
+   ]
+  },
+  {
+   "id": "8573894",
+   "name": "Санаторий Октябрьский",
+   "coast_dist_m": 488,
+   "band": "mid",
+   "stratum": "no/hi/mid",
+   "sample_from": "спор",
+   "card_review_disagree": true,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "category",
+     "ref": "Стандарт улучшенный с балконом и с видом на море",
+     "note": "только заявление отеля"
+    }
+   ],
+   "note": "Только категория с видом на море, отзывов про вид и фото номеров нет.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category"
+   ]
+  },
+  {
+   "id": "8696062",
+   "name": "Гостевой дом Белый парус",
+   "coast_dist_m": 2425,
+   "band": "far",
+   "stratum": "no/hi/far",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "photo",
+     "ref": "4",
+     "note": "окно номера выходит на крыши соседних домов, моря нет"
+    }
+   ],
+   "note": "Доказательств вида на море нет, только балкон в названии категории.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo"
+   ]
+  },
+  {
+   "id": "8747326",
+   "name": "Меблированные комнаты Delsochi",
+   "coast_dist_m": 1038,
+   "band": "far",
+   "stratum": "yes/hi/far",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "category",
+     "ref": "Двухместный номер Классический с видом на море и дендрарий",
+     "note": "только заявление отеля"
+    },
+    {
+     "type": "photo",
+     "ref": "1-4",
+     "note": "бассейн, двор, ворота; номеров и моря нет"
+    }
+   ],
+   "note": "Только категории с видом на море, отзывов о виде нет, фото без видов из номеров.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "photo"
+   ]
+  },
+  {
+   "id": "8753343",
+   "name": "Отель Атмосфера",
+   "coast_dist_m": 1291,
+   "band": "far",
+   "stratum": "yes/hi/far",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "no",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "2308932",
+     "note": "вид на горный Сочи"
+    },
+    {
+     "type": "review",
+     "ref": "2003624",
+     "note": "вид на город"
+    }
+   ],
+   "note": "Категории номеров в карточке: вид на внутренний двор и на город; два отзыва гостей: «вид на город», «классный вид на горный Сочи»; моря нигде нет.",
+   "label_source": "Claude (vision + text), blind; пересмотрено оркестратором после прохода субагента (слабое отрицательное свидетельство)",
+   "label_history": [
+    {
+     "by": "subagent",
+     "label": "unknown",
+     "note": "Отзывы про город и горы, море не упомянуто, но единичные номера не доказывают отсутствие."
+    }
+   ],
+   "evidence_types": [
+    "review"
+   ]
+  },
+  {
+   "id": "8871740",
+   "name": "Отель Черноморъ",
+   "coast_dist_m": 63,
+   "band": "near",
+   "stratum": "yes/hi/near",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "yes",
+   "label_confidence": "high",
+   "floor_side_evidence": "категории с прямым и боковым видом на море",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "1347847",
+     "note": "прекрасный вид на море из номера"
+    },
+    {
+     "type": "review",
+     "ref": "1535366",
+     "note": "люкс, вид на море"
+    },
+    {
+     "type": "photo",
+     "ref": "4",
+     "note": "окно номера, за шторами море"
+    }
+   ],
+   "note": "Отзывы и фото подтверждают вид на море.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo",
+    "review"
+   ]
+  },
+  {
+   "id": "8880663",
+   "name": "Хостел  ДеАрт Хаус",
+   "coast_dist_m": 645,
+   "band": "mid",
+   "stratum": "yes/hi/mid",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "category",
+     "ref": "Кровать в общем номере с видом на город",
+     "note": "заявлен вид на город"
+    }
+   ],
+   "note": "О виде на море нет данных.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category"
+   ]
+  },
+  {
+   "id": "9079349",
+   "name": "Гостевой дом Vostok",
+   "coast_dist_m": 1110,
+   "band": "far",
+   "stratum": "yes/hi/far",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "yes",
+   "label_confidence": "high",
+   "floor_side_evidence": "панорамные окна в номерах Comfort, часть номеров видит соседние дома",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "1717152",
+     "note": "панорамные окна выходят на город и море"
+    },
+    {
+     "type": "review",
+     "ref": "1210133",
+     "note": "отличный вид из окна на город и море"
+    },
+    {
+     "type": "review",
+     "ref": "2013687",
+     "note": "вид на море"
+    }
+   ],
+   "note": "Несколько отзывов подтверждают вид на море из номеров.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "review"
+   ]
+  },
+  {
+   "id": "9244943",
+   "name": "Отель Grand Way Один Сочи Центр",
+   "coast_dist_m": 1160,
+   "band": "far",
+   "stratum": "no/hi/far",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [],
+   "note": "Центр Сочи, о виде нет данных, часть номеров без окна.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": []
+  },
+  {
+   "id": "9322031",
+   "name": "Сочи Ярдъ",
+   "coast_dist_m": 252,
+   "band": "near",
+   "stratum": "no/hi/near",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "photo",
+     "ref": "1-4",
+     "note": "интерьер, окна с занавесками, вида нет"
+    }
+   ],
+   "note": "Нет информации о виде из номеров.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo"
+   ]
+  },
+  {
+   "id": "9751811",
+   "name": "Grand Way Panorama",
+   "coast_dist_m": 729,
+   "band": "mid",
+   "stratum": "yes/hi/mid",
+   "sample_from": "спор",
+   "card_review_disagree": true,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": "отзыв 1088628: из окна Standard вид на стену; отзыв 1346976: под окнами ресторан",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "1088628",
+     "note": "в номере Standard вид на стену"
+    },
+    {
+     "type": "review",
+     "ref": "1066599",
+     "note": "вид из окна хвалят, море не названо"
+    },
+    {
+     "type": "photo",
+     "ref": "1-4",
+     "note": "только ванные комнаты"
+    }
+   ],
+   "note": "Море нигде не названо, часть номеров смотрит на стену, но Panorama-номера не опровергнуты.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo",
+    "review"
+   ]
+  },
+  {
+   "id": "9751868",
+   "name": "Бутик-отель Усадьба Хлудова",
+   "coast_dist_m": 277,
+   "band": "near",
+   "stratum": "yes/hi/near",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "medium",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "photo",
+     "ref": "1",
+     "note": "усадьба и бассейн, моря в кадре нет"
+    }
+   ],
+   "note": "Нет отзывов о виде и нет фото номеров.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo"
+   ]
+  },
+  {
+   "id": "9824926",
+   "name": "Гостевой дом Мамайка Резиденс",
+   "coast_dist_m": 1378,
+   "band": "far",
+   "stratum": "no/hi/far",
+   "sample_from": "спор",
+   "card_review_disagree": true,
+   "label": "yes",
+   "label_confidence": "medium",
+   "floor_side_evidence": null,
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "1751954",
+     "note": "гость номера Deluxe с видом из окна пишет: вид на море"
+    },
+    {
+     "type": "category",
+     "ref": "Двухместный номер Deluxe с видом на море",
+     "note": "заявлено отелем"
+    }
+   ],
+   "note": "Отзыв гостя Deluxe упоминает вид на море в перечне плюсов, плюс категория с видом на море; формулировка не вполне однозначна.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "category",
+    "review"
+   ]
+  },
+  {
+   "id": "9974510",
+   "name": "Отель Bergs Spa and Сonference hotel",
+   "coast_dist_m": 747,
+   "band": "mid",
+   "stratum": "no/hi/mid",
+   "sample_from": "спор",
+   "card_review_disagree": true,
+   "label": "yes",
+   "label_confidence": "high",
+   "floor_side_evidence": "отзыв 2097838: боковой вид на море с балкона, 6 этаж, отель на горке",
+   "evidence": [
+    {
+     "type": "review",
+     "ref": "2097838",
+     "note": "балкон номера, боковой вид на море, 6 этаж"
+    },
+    {
+     "type": "photo",
+     "ref": "2",
+     "note": "терраса 8 этажа с видом на море"
+    }
+   ],
+   "note": "Гость прямо пишет о боковом виде на море с балкона номера.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo",
+    "review"
+   ]
+  },
+  {
+   "id": "9994616",
+   "name": "Хостел Солнечный Сочи",
+   "coast_dist_m": 328,
+   "band": "mid",
+   "stratum": "yes/hi/mid",
+   "sample_from": "ячейка",
+   "card_review_disagree": false,
+   "label": "unknown",
+   "label_confidence": "low",
+   "floor_side_evidence": "фото номеров с видом на город и деревья, моря нет",
+   "evidence": [
+    {
+     "type": "photo",
+     "ref": "2",
+     "note": "из окна номера город и зелень"
+    },
+    {
+     "type": "photo",
+     "ref": "3",
+     "note": "из окна номера высотки и пальмы"
+    }
+   ],
+   "note": "На фото моря нет, но недостаточно для отрицания.",
+   "label_source": "Claude (vision + text), blind to model output, not a human",
+   "evidence_types": [
+    "photo"
+   ]
+  }
+ ]
+}

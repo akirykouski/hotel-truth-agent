@@ -1,0 +1,42 @@
+id: kitchen
+name: Кухня в номере
+description: |
+  Можно ли готовить самому: кухня или мини-кухня в номере, по удобствам номеров в карточке Островка.
+  Важно для долгих поездок и семей.
+level: категория номера
+weight: 0.5
+ttl_days: 365
+key: has
+keywords: ["кухн", "готовить", "плит"]
+default_constraint: {field: has, op: "==", value: true}
+fields:
+  has: {type: bool, label: "кухня хотя бы в части номеров"}
+  share: {type: number, better: higher, label: "доля категорий номеров с кухней"}
+methods:
+  - source: card
+    method: "удобства номеров в карточке (kitchen, kitchen-stuff)"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["^kitchen$", "^kitchen-stuff$", "кухн"], where: ["rooms"]}}
+    when: "c.found"
+    value:
+      has: "True"
+      share: "round(c.rooms_matched / c.rooms_total, 2) if c.rooms_total else None"
+    confidence: "0.8"
+    summary: "f'кухня в {c.rooms_matched} из {c.rooms_total} категорий номеров'"
+    evidence: "{'hits': c.hits}"
+  - source: card
+    method: "в удобствах номеров кухни нет"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["^kitchen$", "^kitchen-stuff$", "кухн"], where: ["rooms"]}}
+    when: "not c.found and c.rooms_total >= 1"
+    value:
+      has: "False"
+      share: "0"
+    confidence: "0.6"
+    summary: "f'кухни нет ни в одной из {c.rooms_total} категорий номеров'"
+question:
+  when: "unknown"
+  text: "'Есть ли в номерах кухня или мини-кухня? В каких категориях?'"
+answer_fields:
+  has: {type: bool}
+  categories: {type: text}

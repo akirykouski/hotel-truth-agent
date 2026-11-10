@@ -1,0 +1,54 @@
+id: meal_plan
+name: "Питание: пансион и «всё включено»"
+description: |
+  Можно ли взять полупансион, полный пансион или «всё включено»: по удобствам и описанию в карточке Островка.
+  Для отдыха «как в Турции» это главный вопрос; в Сочи такой формат редкий, поэтому показываем честно.
+level: отель
+weight: 0.6
+ttl_days: 365
+key: any_board
+keywords: ["полупансион", "полный пансион", "пансион", "всё включено", "все включено", "all inclusive", "трёхразов", "трехразов"]
+phrases:
+  "вс[её] включено|all inclusive|олл инклюзив": {field: all_inclusive, op: "==", value: true}
+  "полный пансион|тр[её]хразов": {field: full_board, op: "==", value: true}
+  "полупансион|двухразов": {field: half_board, op: "==", value: true}
+default_constraint: {field: any_board, op: "==", value: true}
+fields:
+  any_board: {type: bool, label: "можно взять питание пансионом"}
+  half_board: {type: bool, label: "полупансион"}
+  full_board: {type: bool, label: "полный пансион"}
+  all_inclusive: {type: bool, label: "всё включено"}
+methods:
+  - source: card
+    method: "удобства и описание в карточке"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["пансион", "вс[её] включено", "all inclusive", "тр[её]хразов"], where: ["amenities", "description", "policies"]}}
+    when: "c.found"
+    value:
+      any_board: "True"
+      half_board: "any('полупансион' in h.quote.lower() for h in c.hits)"
+      full_board: "any(('полный пансион' in h.quote.lower() or 'разов' in h.quote.lower()) for h in c.hits)"
+      all_inclusive: "any(('всё включено' in h.quote.lower() or 'все включено' in h.quote.lower() or 'all inclusive' in h.quote.lower()) for h in c.hits)"
+    confidence: "0.75"
+    summary: "'в карточке: ' + '; '.join(([h.quote[:120] for h in c.hits if ('inclusive' in h.quote.lower() or 'всё включено' in h.quote.lower() or 'все включено' in h.quote.lower())] + sorted(set(h.quote[:90] for h in c.hits)))[:2])"
+    evidence: "{'hits': c.hits}"
+  - source: card
+    method: "в подробной карточке пансион не указан"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["пансион", "вс[её] включено", "all inclusive"]}}
+    when: "not c.found and len(hotel.amenities) >= 30"
+    value:
+      any_board: "False"
+      half_board: "False"
+      full_board: "False"
+      all_inclusive: "False"
+    confidence: "0.55"
+    summary: "f'в карточке {len(hotel.amenities)} удобств, пансиона и «всё включено» среди них нет'"
+question:
+  when: "unknown or conf < 0.6"
+  text: "'Можно ли у вас взять полупансион, полный пансион или «всё включено»? Сколько это стоит в сутки?'"
+answer_fields:
+  half_board: {type: bool}
+  full_board: {type: bool}
+  all_inclusive: {type: bool}
+  price_rub: {type: number}

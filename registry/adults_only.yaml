@@ -1,0 +1,46 @@
+id: adults_only
+name: Для взрослых
+description: |
+  Спокойный отель без шумных детских компаний: либо отель прямо пишет «только для взрослых» в карточке, либо по
+  отзывам Островка семьи с детьми там почти не останавливаются (тип путешественника в отзыве).
+level: отель
+weight: 0.5
+ttl_days: 180
+key: adult
+keywords: ["для взрослых", "без детей", "adults only", "взрослый отдых"]
+phrases:
+  "только для взрослых|adults only|18\\+": {field: adults_only, op: "==", value: true}
+default_constraint: {field: adult, op: "==", value: true}
+fields:
+  adult: {type: bool, label: "отдых для взрослых: без детей или почти без семей с детьми"}
+  adults_only: {type: bool, label: "отель только для взрослых"}
+  families_share: {type: number, better: lower, label: "доля отзывов от семей с детьми"}
+methods:
+  - source: card
+    method: "пометка «Только для взрослых» в карточке"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["только для взрослых", "adults only", "adults-only"], where: ["amenities", "description", "policies"]}}
+    when: "c.found"
+    value:
+      adult: "True"
+      adults_only: "True"
+    confidence: "0.85"
+    summary: "'в карточке: ' + c.hits[0].quote[:90]"
+    evidence: "{'hits': c.hits}"
+  - source: reviews
+    method: "кто останавливается: тип путешественника в отзывах"
+    steps:
+      - {as: s, tool: review_stats}
+    when: "sum(s.travellers.values()) >= 8"
+    value:
+      adult: "(s.travellers.family or 0) / sum(s.travellers.values()) <= 0.1"
+      families_share: "round((s.travellers.family or 0) / sum(s.travellers.values()), 2)"
+    confidence: "min(0.65, 0.35 + 0.015 * sum(s.travellers.values()))"
+    summary: "f'семьи с детьми — {round(100 * (s.travellers.family or 0) / sum(s.travellers.values()))}% из {sum(s.travellers.values())} отзывов, где указано, кто ездил'"
+    evidence: "{'travellers': s.travellers}"
+question:
+  when: "unknown or conf < 0.6"
+  text: "'Принимаете ли вы гостей с детьми? Есть ли у вас корпус или этаж только для взрослых?'"
+answer_fields:
+  adults_only: {type: bool}
+  quiet_zone: {type: text}

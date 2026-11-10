@@ -1,0 +1,32 @@
+id: sunset
+name: Закат из окна
+description: |
+  Виден ли закат из окон в выбранный месяц: где садится солнце (азимут меняется от 237° зимой до 303° летом),
+  какая сторона здания на него смотрит, с какого этажа горизонт открыт и садится ли солнце в море.
+level: сторона здания × этаж × месяц
+class: physical
+weight: 0.8
+ttl_days: 365
+key: visible_any
+keywords: ["закат", "на закат", "закатом"]
+city_terms: ["закат"]  # как тема звучит в описаниях и отзывах региона (профиль города, app/city.py)
+default_constraint: {field: visible, op: "==", value: true}
+phrases:
+  "закат (над|в) мор|солнце садится в море": {field: over_sea, op: "==", value: true}
+fields:
+  visible: {type: bool, per_month: true, path: by_month, label: "закат виден из окна"}
+  over_sea: {type: bool, per_month: true, path: by_month, label: "солнце садится в море"}
+  from_floor: {type: number, per_month: true, path: by_month, better: lower, label: "с какого этажа виден закат"}
+methods:
+  - source: geo
+    method: "азимут заката по месяцам + профиль горизонта по DEM и зданиям OSM"
+    steps:
+      - {as: s, tool: sunset}
+    value:
+      by_month: "{m: {'visible': x.from_floor is not None, 'over_sea': x.over_sea, 'from_floor': x.from_floor, 'facade': x.facade, 'azimuth': x.azimuth} for m, x in s.months.items()} if False else dict([(m, {'visible': x.from_floor is not None, 'over_sea': x.over_sea, 'from_floor': x.from_floor, 'facade': x.facade, 'azimuth': x.azimuth}) for m, x in s.months.items()])"
+      visible_any: "any(x.from_floor is not None for x in s.months.values())"
+      summer_over_sea: "any(s.months[m].over_sea for m in ['6', '7', '8'])"
+    confidence: "0.75 if s.building.levels_source.startswith('тег') else 0.55"
+    summary: >-
+      'закат летом (' + (s.months['7'].facade or '—') + (f', с {s.months["7"].from_floor}-го эт.' if s.months['7'].from_floor else ', не виден') + '), зимой (' + (s.months['12'].facade or '—') + (f', с {s.months["12"].from_floor}-го эт.' if s.months['12'].from_floor else ', не виден') + ')'
+    evidence: "{'months': s.months, 'building': s.building}"

@@ -1,0 +1,45 @@
+id: spa
+name: СПА и сауна
+description: Есть ли в отеле СПА, сауна, хаммам, массаж или джакузи, по удобствам в карточке Островка.
+level: отель
+weight: 0.5
+ttl_days: 365
+key: has
+keywords: ["spa", "сауна", "хаммам", "массаж", "джакузи", "баня"]  # «спа» отдельным словом в phrases: подстрока ловила «спать»
+phrases:
+  "(?<![а-яё])спа(?![а-яё])": {field: has, op: "==", value: true}
+  "саун|бан[яи]|хаммам": {field: sauna, op: "==", value: true}
+  "массаж": {field: massage, op: "==", value: true}
+default_constraint: {field: has, op: "==", value: true}
+fields:
+  has: {type: bool, label: "СПА или сауна в отеле"}
+  sauna: {type: bool, label: "сауна или хаммам"}
+  massage: {type: bool, label: "массаж"}
+methods:
+  - source: card
+    method: "удобства в карточке"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["спа-", "^спа$", "spa", "саун", "хаммам", "массаж", "джакузи", "^sauna$"], where: ["amenities", "rooms"]}}
+    when: "c.found"
+    value:
+      has: "True"
+      sauna: "any(('саун' in h.quote.lower() or 'хаммам' in h.quote.lower() or 'sauna' in h.quote.lower()) for h in c.hits)"
+      massage: "any('массаж' in h.quote.lower() for h in c.hits)"
+    confidence: "0.8"
+    summary: "'в карточке: ' + ', '.join(sorted(set(h.quote[:40] for h in c.hits))[:4])"
+    evidence: "{'hits': c.hits}"
+  - source: card
+    method: "в подробной карточке СПА не указан"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["спа-", "^спа$", "spa", "саун", "хаммам", "массаж", "джакузи"]}}
+    when: "not c.found and len(hotel.amenities) >= 30"
+    value:
+      has: "False"
+    confidence: "0.55"
+    summary: "f'в карточке {len(hotel.amenities)} удобств, СПА и сауны среди них нет'"
+question:
+  when: "unknown"
+  text: "'Есть ли у вас СПА, сауна или массаж? Для гостей бесплатно или за доплату?'"
+answer_fields:
+  has: {type: bool}
+  free: {type: bool}

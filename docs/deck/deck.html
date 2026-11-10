@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>О!Правда об отеле</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600&family=Onest:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#0b4fd6;--ink:#141b2d;--ink2:#5a6478;--lime:#b7ec5a;--bg:#f4f3ef;--card:#fff;--line:#e3e1da;--red:#d9442b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#ccc;font-family:Onest,system-ui,sans-serif;color:var(--ink)}
+.s{width:1280px;height:720px;background:var(--bg);margin:0 auto 24px;padding:56px 64px;position:relative;overflow:hidden;page-break-after:always;display:flex;flex-direction:column}
+@media print{body{background:none}.s{margin:0}}
+@page{size:1280px 720px;margin:0}
+h1{font-family:Unbounded,sans-serif;font-weight:600;font-size:54px;line-height:1.08;letter-spacing:-.01em}
+h2{font-family:Unbounded,sans-serif;font-weight:600;font-size:34px;line-height:1.15;margin-bottom:28px}
+.k{font-size:15px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:14px}
+p,li{font-size:21px;line-height:1.45}
+.mut{color:var(--ink2)}
+.foot{position:absolute;left:64px;right:64px;bottom:26px;display:flex;justify-content:space-between;font-size:14px;color:var(--ink2)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:40px;flex:1;min-height:0}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 26px}
+.big{font-family:Unbounded,sans-serif;font-size:44px;font-weight:600;color:var(--blue);line-height:1}
+.lime{background:var(--lime);border-radius:6px;padding:0 6px}
+ul{list-style:none}
+ul li{padding-left:26px;position:relative;margin-bottom:12px}
+ul li:before{content:"";position:absolute;left:4px;top:12px;width:9px;height:9px;border-radius:50%;background:var(--blue)}
+img{display:block;border-radius:14px;border:1px solid var(--line);max-width:100%}
+table{border-collapse:collapse;width:100%;font-size:18px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink2);font-weight:700}
+td b{font-weight:700}
+.tag{display:inline-block;font-size:14px;font-weight:700;padding:3px 10px;border-radius:99px;background:#e8eefc;color:var(--blue);margin-right:6px}
+.flow{display:flex;gap:12px;align-items:stretch;margin-top:8px}
+.flow .box{flex:1;padding:18px}
+.flow .box b{display:block;font-size:18px;margin-bottom:6px}
+.flow .box span{font-size:16px;color:var(--ink2);line-height:1.4;display:block}
+</style>
+</head>
+<body>
+
+<section class="s" style="justify-content:center">
+  <div class="k">Хакатон Островка · трек «О!дин шаг до идеального отеля»</div>
+  <h1>О!Правда об отеле</h1>
+  <p style="font-size:30px;margin-top:26px;max-width:960px;line-height:1.3">Мы проверяем детали отеля, которые важны <span class="lime">именно для вашей поездки</span>: видно ли море из номера, который вам дадут, сколько на самом деле идти до пляжа и где слова отеля расходятся с расчётом.</p>
+  <p class="mut" style="margin-top:34px">Центр Сочи, 229 отелей. Ещё два региона собраны тем же конвейером: Адлер (339) и Хоста (22).</p>
+  <div class="foot"><span>Октябрь 2026</span><span>Видео: docs/demo.mp4 · код и запуск: README</span></div>
+</section>
+
+<section class="s">
+  <div class="k">Проблема</div>
+  <h2>Карточка отвечает не на тот вопрос, который задаёт гость</h2>
+  <div class="cols">
+    <div>
+      <ul>
+        <li>«Вид на море» в описании отеля не значит, что его будет видно из вашего номера: номер выбирают при заселении.</li>
+        <li>«50 м до пляжа» часто считают по прямой. Пешком с подъёмом и переходом через железную дорогу выходит иначе.</li>
+        <li>Шумно ли ночью, видно ли закат в июле, подходит ли отель для собаки 25 кг: в карточке этого нет.</li>
+      </ul>
+    </div>
+    <div class="box" style="align-self:start">
+      <div class="k" style="color:var(--ink2)">Пример из данных</div>
+      <p><b>Серенити Премиум</b>: в карточке «50 м от пляжа».</p>
+      <p style="margin-top:10px">По пешеходному графу OSM с рельефом: <b>242 м</b>. Мы помечаем это как <b>«спорно»</b>, а не «обман»: 50 м, вероятно, по прямой.</p>
+    </div>
+  </div>
+  <div class="foot"><span>О!Правда об отеле</span><span>2</span></div>
+</section>
+
+<section class="s">
+  <div class="k">Как это работает</div>
+  <h2>LLM не угадывает факты. Все числа считает код по открытым данным</h2>
+  <div class="flow">
+    <div class="box"><b>Данные</b><span>Карточки Островка, OSM, рельеф Copernicus GLO-30, климат Open-Meteo, отзывы и фото</span></div>
+    <div class="box"><b>Расчёт</b><span>Лучи видимости по сторонам и этажам, 24 прогона со случайными высотами соседних домов. Пеший путь с подъёмом. Шум по часам ночи</span></div>
+    <div class="box"><b>Факты</b><span>Значение + источник + уверенность + дата + срок годности. Противоречия видны, а не спрятаны</span></div>
+    <div class="box"><b>Отельер</b><span>Не больше 3 вопросов на отель, по ценности. Ответ свободным текстом раскладывается по полям</span></div>
+    <div class="box"><b>Поиск</b><span>Запрос словами → условия → подходит / возможно / не подходит, с источником каждого вывода</span></div>
+  </div>
+  <p style="margin-top:30px">LLM делает три вещи: разбирает запрос, пишет рецепт новой характеристики и раскладывает ответ отельера. <b>Без ключа LLM всё основное работает</b> на правилах.</p>
+  <p class="mut" style="margin-top:12px">6 634 факта по 29 характеристикам. Новая характеристика = YAML-рецепт поверх общих инструментов, код не меняется.</p>
+  <div class="foot"><span>О!Правда об отеле</span><span>3</span></div>
+</section>
+
+<section class="s">
+  <div class="k">Гость</div>
+  <h2>Три лучших варианта: чем подходит, чего не знаем, откуда это</h2>
+  <div class="cols" style="grid-template-columns:1.25fr 1fr">
+    <div style="display:flex;flex-direction:column;gap:12px;min-height:0">
+      <img src="img/card1.jpg" alt="Карточка: всё проверенное выполнено" style="max-height:205px;object-fit:cover;object-position:top">
+      <img src="img/card2.jpg" alt="Карточка: часть запроса пока не знаем" style="max-height:205px;object-fit:cover;object-position:top">
+    </div>
+    <div>
+      <img src="img/verdict.jpg" alt="Какой номер брать" style="max-height:250px;object-fit:cover;object-position:top">
+      <p style="margin-top:18px">«Какой номер брать»: сторона и этаж, которые стоит попросить, и готовый текст просьбы для брони.</p>
+      <p class="mut" style="margin-top:8px;font-size:18px">Первыми показываем три лучших варианта, остальные по кнопке. Метки источника: рассчитано, карточка, отзывы, отельер.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Запросы: «тихий номер с видом на закат недалеко от моря, июль» и «тихий отель с веганским завтраком»</span><span>4</span></div>
+</section>
+
+<section class="s">
+  <div class="k">Честность</div>
+  <h2>Чего не знаем, так и говорим</h2>
+  <div class="cols">
+    <div>
+      <img src="img/vegan.jpg" alt="Веганский завтрак" style="max-height:200px;object-fit:cover;object-position:top">
+      <img src="img/kazan.jpg" alt="Казань" style="max-height:200px;object-fit:cover;object-position:top;margin-top:14px">
+    </div>
+    <div>
+      <ul>
+        <li>«Не нужен вид на море» больше не превращается в обязательный вид на море.</li>
+        <li>«Веганский завтрак», «собака 12 кг»: проверяем то, что умеем, остальное выносим в «пока не знаем», без обещания «всё выполнено».</li>
+        <li>«В Казани» при регионе Сочи: отели Сочи не выдаём за ответ про Казань.</li>
+        <li>Одиночное заявление отельера не переворачивает расчёт: <b>120 из 120</b> синтетических заявлений против расчёта не прошли. Так задумано, правоту расчёта это не проверяет.</li>
+        <li>Одобрить характеристику может только команда Островка, отельер отвечает только за свой отель. Это проверяет сервер.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Проверки: 36 смысловых запросов, 41 smoke-проверка, проверка ролей</span><span>5</span></div>
+</section>
+
+<section class="s">
+  <div class="k">Точность вида на море</div>
+  <h2>Проверили на слепой разметке. Результат скромный, показываем как есть</h2>
+  <div class="cols" style="grid-template-columns:1.35fr 1fr">
+    <div>
+      <table>
+        <tr><th>Метод (n = 17 размеченных)</th><th>Precision</th><th>Recall</th></tr>
+        <tr><td><b>Наш расчёт</b></td><td>0,78 (7/9)</td><td>0,47 (7/15)</td></tr>
+        <tr><td>До берега ≤ 300 м</td><td>1,00 (3/3)</td><td>0,20 (3/15)</td></tr>
+        <tr><td>Карточка заявляет вид*</td><td>1,00 (9/9)</td><td>0,60 (9/15)</td></tr>
+        <tr><td>Всегда «видно»</td><td>0,88 (15/17)</td><td>1,00 (15/15)</td></tr>
+      </table>
+      <p class="mut" style="font-size:16px;margin-top:14px">Выборка 46 отелей, стратифицирована, зерно зафиксировано до разметки. Размечено yes 15, no 2, unknown 29. Разметка: Claude по фото, категориям и отзывам, не видя расчёта, не человек; лист для проверки людьми приложен. * Категории видны разметчику, поэтому эта линия не независима. Precision при 2 отрицательных почти равна доле «yes» и ложные «видно» не оценивает.</p>
+    </div>
+    <div>
+      <div class="box">
+        <p><b>Где выигрываем:</b> находим вид дальше 300 м от берега (4 из 12), где расстояние не находит ни одного.</p>
+        <p style="margin-top:12px"><b>Где ошибаемся:</b> 8 пропусков на 747–1378 м от берега, все среди 11 отелей, отобранных за спор с карточкой или отзывами: расчёт считает вид закрытым. Причину ещё не разобрали.</p>
+        <p style="margin-top:12px"><b>Чего не знаем:</b> долю ложных «видно», отрицательных меток всего 2.</p>
+      </div>
+      <p class="mut" style="font-size:16px;margin-top:12px">docs/accuracy.md · make eval-sea</p>
+    </div>
+  </div>
+  <div class="foot"><span>Метод на этой выборке не настраивали</span><span>6</span></div>
+</section>
+
+<section class="s">
+  <div class="k">Масштаб</div>
+  <h2>Новый город и новая характеристика без нового кода</h2>
+  <div class="cols">
+    <div>
+      <ul>
+        <li><b>Новый регион одним скриптом</b>: около 2 минут расчёта плюс загрузка OSM. Адлер и Хоста собраны так.</li>
+        <li><b>Новая характеристика словами</b>: агент выбирает инструменты, пишет рецепт, проверяет на 5 отелях. Публичной она становится после одобрения командой Островка.</li>
+        <li><b>MCP-сервер и OpenAI-совместимый API</b>: знания об отелях доступны любому агенту.</li>
+        <li><b>Актуализация</b>: сроки годности фактов, «построили дом» → пересчёт соседей и вопросы отельерам.</li>
+      </ul>
+    </div>
+    <div class="box" style="align-self:start">
+      <div class="k" style="color:var(--ink2)">Запуск</div>
+      <p style="font-family:ui-monospace,Menlo,monospace;font-size:18px">cp .env.example .env<br>docker compose up --build<br>→ http://localhost:8000</p>
+      <p class="mut" style="margin-top:12px;font-size:17px">Ключ LLM не обязателен. Демо-вход: пароль админа и код отельера <b>demo</b>.</p>
+    </div>
+  </div>
+  <div class="foot"><span>О!Правда об отеле</span><span>7</span></div>
+</section>
+
+<section class="s">
+  <div class="k">Что дальше</div>
+  <h2>Что нужно, чтобы этому можно было верить в продакшене</h2>
+  <ul>
+    <li>Ручная разметка вида на море людьми, с явными отрицательными примерами: измерить долю ложных «видно».</li>
+    <li>Видимость с конкретного фасада, а не из центра здания; высоты соседних домов из фото и панорам.</li>
+    <li>Небольшое исследование с гостями: время до решения и пропущенные требования против обычной карточки.</li>
+    <li>Кластеры вкуса пока работают в фоне как эксперимент: пользу на реальных данных мы не доказали.</li>
+  </ul>
+  <div class="box" style="margin-top:auto;margin-bottom:30px;background:var(--lime);border:0">
+    <p style="font-family:Unbounded,sans-serif;font-size:30px;line-height:1.25">Ответ на вопрос гостя с источником каждого факта, а там, где мы не знаем, так и написано.</p>
+  </div>
+  <div class="foot"><span>О!Правда об отеле</span><span>8</span></div>
+</section>
+
+</body>
+</html>

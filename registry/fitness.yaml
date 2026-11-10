@@ -1,0 +1,37 @@
+id: fitness
+name: Тренажёрный зал
+description: Есть ли в отеле тренажёрный зал или фитнес-центр, по удобствам в карточке Островка.
+level: отель
+weight: 0.4
+ttl_days: 365
+key: has
+keywords: ["тренаж", "фитнес", "спортзал", "gym", "fitness"]
+default_constraint: {field: has, op: "==", value: true}
+fields:
+  has: {type: bool, label: "тренажёрный зал"}
+methods:
+  - source: card
+    method: "удобства в карточке"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["тренаж", "фитнес", "^fitness$", "спортзал"], where: ["amenities", "rooms"]}}
+    when: "c.found"
+    value:
+      has: "True"
+    confidence: "0.8"
+    summary: "'в карточке: ' + ', '.join(sorted(set(h.quote[:40] for h in c.hits))[:3])"
+    evidence: "{'hits': c.hits}"
+  - source: card
+    method: "в подробной карточке зала нет"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["тренаж", "фитнес", "fitness", "спортзал"]}}
+    when: "not c.found and len(hotel.amenities) >= 30"
+    value:
+      has: "False"
+    confidence: "0.55"
+    summary: "f'в карточке {len(hotel.amenities)} удобств, тренажёрного зала среди них нет'"
+question:
+  when: "unknown"
+  text: "'Есть ли у вас тренажёрный зал? Часы работы?'"
+answer_fields:
+  has: {type: bool}
+  hours: {type: text}

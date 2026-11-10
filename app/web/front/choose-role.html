@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b4ec2">
+<title>Выбор роли · О!Правда об отеле</title>
+<meta name="description" content="Вход для гостей, отельеров и команды Островка.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/waitgames/world.css">
+<link rel="stylesheet" href="/front/app.css">
+<link rel="stylesheet" href="/front/rolepick.css">
+</head>
+<body>
+<!-- Выбор роли: открывается вместо / (редирект в app/api.py). Гость — витрина /ui, отельер — /hotelier, команда — /backoffice. -->
+<main class="rp" id="main">
+  <div class="rp-in">
+    <a class="rp-top" href="/choose-role" aria-label="О!Правда об отеле"><span class="o-mark">OSTR<svg viewBox="0 0 15 19" aria-hidden="true"><path fill="currentColor" d="M7.5 0C3.4 0 0 3.3 0 7.4c0 5 6.3 10.8 6.6 11.1.5.4 1.3.4 1.8 0 .3-.3 6.6-6.1 6.6-11.1C15 3.3 11.6 0 7.5 0zm0 10.6a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4z"/></svg>VOK.RU</span><span class="logo-sub">О!Правда об отеле</span></a>
+    <h1>Кто вы? <span class="ink">Выберите вход</span></h1>
+    <p class="rp-lead">Один и тот же расчёт по открытым данным нужен трём людям по-разному.</p>
+    <div class="rp-cards">
+      <a class="rp-c" data-role="guest" href="/ui" style="--r:-1.6deg">
+        <span class="rp-st perf" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h16v12H4zM9 8V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V8M4 13h16M9 13v2M15 13v2"/></svg></span>
+        <h2>Гостям</h2>
+        <p>Опишите отдых словами, а мы проверим отели по карте, высотам, шуму и отзывам.</p>
+        <ul><li>вид на море и закат по этажам</li><li>путь до пляжа с подъёмом и с коляской</li><li>тихая сторона ночью</li><li>источник у каждого факта</li></ul>
+        <span class="btn btn-blue">Искать отель<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+      </a>
+      <a class="rp-c" data-role="hotelier" href="/hotelier" style="--r:.9deg">
+        <span class="rp-st perf" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3.5 19h17M5.5 19a6.5 6.5 0 0 1 13 0M12 12.5V10M10 10h4M12 6.5h.01"/></svg></span>
+        <h2>Отельерам</h2>
+        <p>Что гости узнают о вашем отеле и где мы не уверены: ответьте свободным текстом.</p>
+        <ul><li>не больше трёх вопросов на отель</li><li>ответ разбираем и переспрашиваем: «Мы поняли так… Верно?»</li><li>скрытые сильные стороны номеров</li><li>проверка обещаний карточки</li></ul>
+        <span class="btn btn-lime">В кабинет<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+      </a>
+      <a class="rp-c" data-role="admin" href="/backoffice" style="--r:-.7deg">
+        <span class="rp-st perf" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20h16M6.5 20v-7M12 20V5M17.5 20v-10M4.5 9.5l4-3 4 2.5 6-5"/></svg></span>
+        <h2>Команде Островка</h2>
+        <p>Что важно гостям в городе, чего не хватает в поиске и как растёт база фактов.</p>
+        <ul><li>профиль города и веса характеристик</li><li>новые характеристики из запросов гостей</li><li>вопросы отельерам и актуализация</li><li>новые регионы из интерфейса</li></ul>
+        <span class="btn btn-lime">В бэк-офис<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+      </a>
+    </div>
+  </div>
+</main>
+</body>
+</html>

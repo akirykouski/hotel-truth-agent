@@ -1,0 +1,39 @@
+id: night_open
+name: Что открыто ночью
+description: |
+  Что работает рядом в час ночи: круглосуточные аптеки в 800 м, магазины и еда в 500 м, по opening_hours из OSM.
+  Объекты без часов работы не считаем открытыми и показываем, сколько таких.
+level: отель
+class: physical
+weight: 0.5
+ttl_days: 90
+key: pharmacy_24h
+keywords: ["круглосуточн", "24/7", "поздно вечером", "аптек"]
+phrases:
+  "открыт\\w* ночью|поесть ночью|ночью поесть": {field: food_late, op: "==", value: true}
+default_constraint: {field: food_late, op: "==", value: true}
+fields:
+  pharmacy_24h: {type: bool, label: "круглосуточная аптека в 800 м"}
+  food_late: {type: bool, label: "еда открыта в час ночи в 500 м"}
+  shop_late: {type: bool, label: "магазин открыт в час ночи в 500 м"}
+methods:
+  - source: osm
+    method: "OSM opening_hours, пятница 01:00"
+    steps:
+      - {as: ph, tool: nearby, args: {tags: {amenity: pharmacy}, radius_m: 800, open_at_hour: 1.0, weekday: 5}}
+      - {as: fd, tool: nearby, args: {tags: {amenity: "cafe|restaurant|fast_food|bar|pub"}, radius_m: 500, open_at_hour: 1.0, weekday: 5}}
+      - {as: sh, tool: nearby, args: {tags: {shop: "convenience|supermarket|alcohol"}, radius_m: 500, open_at_hour: 1.0, weekday: 5}}
+    value:
+      pharmacy_24h: "ph.count > 0"
+      pharmacy_m: "ph.nearest_m"
+      food_late: "fd.count > 0"
+      food_count: "fd.count"
+      shop_late: "sh.count > 0"
+      shop_m: "sh.nearest_m"
+    confidence: "0.8 if (ph.unknown_hours + fd.unknown_hours + sh.unknown_hours) < 10 else 0.6"
+    summary: >-
+      ('аптека 24/7 в ' + str(ph.nearest_m) + ' м' if ph.count else 'аптек 24/7 в 800 м нет') + '; '
+      + (f'еда в час ночи: {fd.count} мест' if fd.count else 'еды в час ночи в 500 м нет') + '; '
+      + ('магазин в ' + str(sh.nearest_m) + ' м' if sh.count else 'магазинов в час ночи нет')
+      + f' (без часов работы: {ph.unknown_hours + fd.unknown_hours + sh.unknown_hours})'
+    evidence: "{'pharmacies': ph.items, 'food': fd.items, 'shops': sh.items}"

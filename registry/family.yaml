@@ -1,0 +1,53 @@
+id: family
+name: Для семей с детьми
+description: |
+  Удобно ли с детьми в самом отеле: семейные номера, детская комната или клуб, игровая площадка на территории.
+  По карточке Островка и доле семей в отзывах. Что рядом с отелем (площадки, парки, больница), считает
+  характеристика «Для детей рядом».
+level: отель
+weight: 0.6
+ttl_days: 365
+key: friendly
+keywords: ["семейн", "детский клуб", "детская комната", "аниматор", "анимаци", "детское меню", "кроватк"]
+phrases:
+  "детск\\w* (клуб|комнат)|аниматор|анимаци": {field: kids_club, op: "==", value: true}
+  "семейн\\w* номер": {field: family_rooms, op: "==", value: true}
+default_constraint: {field: friendly, op: "==", value: true}
+fields:
+  friendly: {type: bool, label: "отель удобен для семей с детьми"}
+  family_rooms: {type: bool, label: "семейные номера"}
+  kids_club: {type: bool, label: "детская комната, клуб или анимация"}
+  playground: {type: bool, label: "детская площадка на территории"}
+  families_share: {type: number, better: higher, label: "доля отзывов от семей с детьми"}
+methods:
+  - source: card
+    method: "удобства в карточке"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["семейн", "семей/детей", "детск", "игровая комната", "аниматор", "анимаци", "кроватк"], where: ["amenities", "description"]}}
+    when: "c.found"
+    value:
+      friendly: "True"
+      family_rooms: "any('семейные номера' in h.quote.lower() for h in c.hits)"
+      kids_club: "any(('игровая комната' in h.quote.lower() or 'детский клуб' in h.quote.lower() or 'анимац' in h.quote.lower() or 'аниматор' in h.quote.lower()) for h in c.hits)"
+      playground: "any('площадка' in h.quote.lower() for h in c.hits)"
+    confidence: "0.75"
+    summary: "'в карточке: ' + ', '.join(sorted(set(h.quote[:45] for h in c.hits))[:4])"
+    evidence: "{'hits': c.hits}"
+  - source: reviews
+    method: "кто останавливается: тип путешественника в отзывах"
+    steps:
+      - {as: s, tool: review_stats}
+    when: "sum(s.travellers.values()) >= 8"
+    value:
+      friendly: "(s.travellers.family or 0) / sum(s.travellers.values()) >= 0.3"
+      families_share: "round((s.travellers.family or 0) / sum(s.travellers.values()), 2)"
+    confidence: "min(0.6, 0.3 + 0.015 * sum(s.travellers.values()))"
+    summary: "f'семьи с детьми — {round(100 * (s.travellers.family or 0) / sum(s.travellers.values()))}% из {sum(s.travellers.values())} отзывов, где указано, кто ездил'"
+    evidence: "{'travellers': s.travellers}"
+question:
+  when: "unknown or (fact.friendly and fact.kids_club is None)"
+  text: "'Что у вас есть для детей: детская комната или клуб, аниматоры, детское меню, кроватки?'"
+answer_fields:
+  kids_club: {type: bool}
+  kids_menu: {type: bool}
+  cots: {type: bool}

@@ -1,0 +1,70 @@
+id: sea_view
+name: Вид на море
+description: |
+  Видно ли море из окон и с какой стороны здания, начиная с какого этажа. Считаем лучами по карте высот и зданиям
+  OSM; сверяем с тем, что заявлено в карточке (категории «с видом на море») и что пишут гости.
+level: сторона здания × этаж
+class: physical
+weight: 1.0
+ttl_days: 365
+key: has
+keywords: ["вид на море", "видом на море", "видно море", "море из окна", "окна на море", "с видом на мор", "вида на море"]
+city_terms: ["вид\\w* на мор", "мор(е|я|ю|ем)\\b", "панорам"]  # как тема звучит в описаниях и отзывах региона (профиль города, app/city.py)
+default_constraint: {field: has, op: "==", value: true}
+fields:
+  has: {type: bool, label: "море видно хотя бы с одной стороны"}
+  from_floor: {type: number, better: lower, label: "с какого этажа видно море"}
+  facade: {type: text, label: "сторона здания"}
+methods:
+  - source: geo
+    method: "лучи по DEM Copernicus + здания OSM + деревья (превышение DSM над рельефом), Монте-Карло 24 прогона"
+    steps:
+      - {as: v, tool: sea_view}
+    value:
+      has: "v.sea_view.possible"
+      from_floor: "v.sea_view.from_floor"
+      facade: "v.sea_view.facade"
+      levels: "v.building.levels"
+    confidence: "v.sea_view.confidence"
+    summary: >-
+      f'море видно со стороны {v.sea_view.facade} начиная с {v.sea_view.from_floor}-го этажа (здание {v.building.levels} эт.)'
+      if v.sea_view.possible else f'моря не видно ни с одной стороны здания (до {v.building.levels}-го этажа)'
+    evidence: "{'facades': v.facades, 'drivers': v.uncertainty_drivers, 'building': v.building, 'inputs': v.inputs}"
+  - source: card
+    method: "названия категорий номеров в карточке"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["вид(ом)? на море", "sea[- ]view", "морск(ой|им) вид"]}}
+    when: "c.found"
+    value: {has: "True"}
+    confidence: "0.7"
+    summary: "f'в карточке вид на море заявлен у {c.rooms_matched} из {c.rooms_total} категорий номеров'"
+    evidence: "{'hits': c.hits}"
+  - source: photos
+    method: "разметка фото отеля зрением Claude: кадр из номера или с балкона с морем (только положительные факты)"
+    steps:
+      - {as: p, tool: photo_labels}
+    when: "p.room_photos > 0 and p.sea_from_room > 0"
+    value: {has: "True"}
+    confidence: "min(0.8, 0.5 + 0.15 * p.sea_from_room) * p.best_conf"
+    summary: "f'на {p.sea_from_room} из {p.room_photos} фото номеров и балконов видно море'"
+    evidence: "{'photos': p.evidence}"
+  - source: reviews
+    method: "упоминания в отзывах"
+    steps:
+      - {as: r, tool: reviews_search, args: {terms: ["вид на море", "видно море", "вид из окна на море", "морем из окна", "вид на мор"], exclude: ["нет вида", "не видно", "без вида"]}}
+      - {as: n, tool: reviews_search, args: {terms: ["нет вида на море", "моря не видно", "море не видно", "вид на стену", "вид во двор"]}}
+    when: "r.positive + n.negative + n.positive > 0"
+    value: {has: "r.positive > (n.negative + n.positive)"}
+    confidence: "min(0.65, 0.3 + 0.1 * (r.positive + n.negative + n.positive))"
+    summary: "f'гости: вид на море хвалят {r.positive} раз, жалуются на его отсутствие {n.negative + n.positive} раз'"
+    evidence: "{'positive': r.positive_quotes, 'negative': n.negative_quotes + n.positive_quotes}"
+question:
+  when: "conf < 0.7 or conflict"
+  text: >-
+    f'Мы посчитали по карте высот и соседним зданиям: море видно со стороны {fact.facade} начиная с {fact.from_floor}-го этажа. Какие категории номеров выходят на эту сторону и с какого этажа они начинаются?'
+    if fact.has else
+    'По нашему расчёту море из окон закрыто соседними зданиями. Есть ли номера, из которых видно море? Какие категории и этажи?'
+answer_fields:
+  has: {type: bool}
+  from_floor: {type: number}
+  categories: {type: text, label: "какие категории номеров с видом"}

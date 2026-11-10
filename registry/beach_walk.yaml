@@ -1,0 +1,48 @@
+id: beach_walk
+name: Путь до пляжа
+description: |
+  Сколько идти до ближайшего пляжа по реальным дорожкам, а не по прямой: время туда и обратно с учётом подъёма
+  (функция Тоблера по карте высот), лестницы, нужно ли переходить железную дорогу или крупную дорогу.
+level: отель
+class: physical
+weight: 0.9
+ttl_days: 365
+key: minutes_there
+keywords: ["до пляжа", "до моря", "недалеко от моря", "недалеко от пляжа", "ближе к морю", "близко к морю", "рядом с морем", "у моря", "пешком до пляжа", "без подъёма", "в гору", "чемодан"]
+city_terms: ["пляж", "до мор", "набережн", "в гору|подъ[её]м|спуск"]  # как тема звучит в описаниях и отзывах региона (профиль города, app/city.py)
+default_constraint: {field: minutes_there, op: "<=", value: 15}
+phrases:
+  "без подъ[её]ма|не в гору|чемодан|без горки|пожил": {field: climb_back_m, op: "<=", value: 25}
+  "без перехода через (ж/?д|железн|пути)|не переходить (ж/?д|железн|пути)": {field: crosses_rail, op: "==", value: false}
+  "(рядом|близко|недалеко|ближе|минут\\w*)( \\w+){0,3} (с|от|до|к) (пляж|мор)\\w*|пляж\\w* рядом": {field: minutes_there, op: "<=", value: 15}
+  "(5|пять) минут до (моря|пляжа)|первая линия|первой линии": {field: minutes_there, op: "<=", value: 6}
+  "(?<![а-яё])не\\s+(?:слишком\\s+|очень\\s+|так\\s+|сильно\\s+)?далеко\\s+от\\s+(мор|пляж)\\w*|(?<![а-яё])(?:рядом|близко)\\s+(?:\\w+\\s+)?(?:мор|пляж)\\w*": {field: minutes_there, op: "<=", value: 15}
+  "(?<!не )(?<!слишком )(?<!очень )(?<!так )(?<!сильно )(?<![а-яё])(подальше|далеко|вдали|в стороне)\\s+от\\s+(мор|пляж)\\w*": {field: minutes_there, op: ">", value: 15}
+  "пляж\\w*\\s+(?:не дальше\\s+)?(\\d+)\\s*мин": {field: minutes_there, op: "<=", value: 15}
+fields:
+  minutes_there: {type: number, better: lower, label: "минут пешком до пляжа"}
+  minutes_back: {type: number, better: lower, label: "минут обратно (в гору)"}
+  climb_back_m: {type: number, better: lower, label: "подъём на обратном пути, м"}
+  crosses_rail: {type: bool, label: "надо переходить железную дорогу"}
+  crosses_road: {type: bool, label: "надо переходить крупную дорогу по земле"}
+  steps_m: {type: number, better: lower, label: "метров лестниц"}
+methods:
+  - source: geo
+    method: "пеший граф OSM + DEM, функция Тоблера"
+    steps:
+      - {as: r, tool: walk_to, args: {target: beach}}
+    when: "r.distance_m is not None"
+    value:
+      minutes_there: "r.minutes_there"
+      minutes_back: "r.minutes_back"
+      climb_back_m: "r.climb_back_m"
+      distance_m: "r.distance_m"
+      crosses_rail: "any(c.what == 'железная дорога' for c in r.crossings)"
+      crosses_road: "any(c.how == 'наземный переход' and c.what != 'железная дорога' for c in r.crossings)"
+      steps_m: "r.steps_m"
+      beach: "r.target"
+    confidence: "(0.85 if r.snap_m < 40 else 0.6) * (0.6 if r.detour > 3 else 1.0)"
+    summary: >-
+      f'{r.target}: {r.distance_m} м, ' + (f'{round(r.minutes_there)} мин туда и {round(r.minutes_back)} мин обратно' if r.minutes_back >= 1.5 else 'меньше 2 минут пешком') + (f', подъём на обратном пути {r.climb_back_m} м' if r.climb_back_m >= 4 else ', без подъёма')
+      + (', переходы: ' + ', '.join(sorted(set(c.what + ' (' + c.how + ')' for c in r.crossings))) if r.crossings else ', без переходов через ж/д и крупные дороги')
+    evidence: "{'route': r.polyline, 'crossings': r.crossings, 'straight_m': r.straight_m}"

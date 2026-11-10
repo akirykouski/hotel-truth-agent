@@ -1,0 +1,60 @@
+id: pool
+name: Бассейн
+description: |
+  Есть ли в отеле бассейн: открытый или крытый, с подогревом ли (важно вне сезона). По удобствам в карточке Островка
+  и отзывам гостей.
+level: отель
+weight: 0.7
+ttl_days: 365
+key: has
+keywords: ["бассейн", "pool"]
+phrases:
+  "подогрев|т[её]пл\\w* бассейн": {field: heated, op: "==", value: true}
+  "крыт\\w* бассейн|бассейн зимой|круглый год": {field: indoor, op: "==", value: true}
+default_constraint: {field: has, op: "==", value: true}
+fields:
+  has: {type: bool, label: "бассейн в отеле"}
+  outdoor: {type: bool, label: "открытый бассейн"}
+  indoor: {type: bool, label: "крытый бассейн"}
+  heated: {type: bool, label: "бассейн с подогревом"}
+methods:
+  - source: card
+    method: "удобства в карточке"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["бассейн", "pool"], where: ["amenities", "description"], exclude: ['полотенц', 'рядом с отелем', 'в \d+ ?м\b', 'в \d+ метр', '\d+ минут\w* (?:ходьбы|пешком)', 'towel']}}
+    when: "c.found"
+    value:
+      has: "True"
+      outdoor: "any('открыт' in h.quote.lower() for h in c.hits)"
+      indoor: "any(('крыт' in h.quote.lower() and 'открыт' not in h.quote.lower()) for h in c.hits)"
+      heated: "any('подогрев' in h.quote.lower() for h in c.hits)"
+    confidence: "0.8"
+    summary: "'в карточке: ' + '; '.join(sorted(set(h.quote[:70] for h in c.hits))[:3])"
+    evidence: "{'hits': c.hits}"
+  - source: card
+    method: "в подробной карточке бассейн не указан"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["бассейн", "pool"], exclude: ['полотенц', 'рядом с отелем', 'в \d+ ?м\b', 'в \d+ метр', '\d+ минут\w* (?:ходьбы|пешком)', 'towel']}}
+    when: "not c.found and len(hotel.amenities) >= 30"
+    value:
+      has: "False"
+    confidence: "0.55"
+    summary: "f'в карточке {len(hotel.amenities)} удобств, бассейна среди них нет'"
+  - source: reviews
+    method: "упоминания бассейна в отзывах"
+    steps:
+      - {as: r, tool: reviews_search, args: {terms: ["бассейн"], exclude: ["нет бассейн", "без бассейн", "бассейна нет", "полотенц", "рядом с отелем"]}}
+    when: "r.positive + r.negative > 0"
+    value:
+      has: "True"
+    confidence: "min(0.6, 0.35 + 0.08 * (r.positive + r.negative))"
+    summary: "f'бассейн упоминают в отзывах {r.positive + r.negative} раз: хвалят {r.positive}, ругают {r.negative}'"
+    evidence: "{'quotes': r.positive_quotes + r.negative_quotes}"
+question:
+  when: "unknown or (fact.has and fact.heated is None)"
+  text: "'Есть ли у вас бассейн? Открытый или крытый, с подогревом ли и с какого по какой месяц работает?'"
+answer_fields:
+  has: {type: bool}
+  indoor: {type: bool}
+  heated: {type: bool}
+  season: {type: text}

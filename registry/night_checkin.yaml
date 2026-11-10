@@ -1,0 +1,45 @@
+id: night_checkin
+name: Заселение ночью
+description: |
+  Можно ли заселиться поздно ночью: круглосуточная стойка регистрации или бесконтактный заезд, по удобствам и правилам
+  в карточке; подтверждаем отзывами о позднем заезде. Если в карточке ничего нет — вопрос отельеру.
+level: отель
+class: policy
+weight: 0.6
+ttl_days: 365
+key: allowed
+keywords: ["ночью приезжа", "поздний заезд", "прилетаем ночью", "в 2 ночи", "в 3 ночи", "заселиться ночью", "круглосуточн", "заселени", "заезд"]
+default_constraint: {field: allowed, op: "==", value: true}
+fields:
+  allowed: {type: bool, label: "можно заселиться ночью"}
+  desk_24h: {type: bool, label: "круглосуточная стойка регистрации"}
+methods:
+  - source: card
+    method: "удобства и правила в карточке"
+    steps:
+      - {as: d, tool: card_search, args: {terms: ["Круглосуточная стойка", "стойка регистрации работает 24", "Стойка регистрации работает круглосуточно", "24/7"], where: ["amenities", "policies"]}}
+      - {as: s, tool: card_search, args: {terms: ["[Бб]есконтактн\\w* (заезд|регистрац|заселени)", "Самостоятельн\\w* (заезд|заселени)", "ключ\\w* в (сейфе|ячейке)"], where: ["amenities", "policies", "description"]}}
+    when: "d.found or s.found"
+    value:
+      allowed: "True"
+      desk_24h: "d.found"
+      self_checkin: "s.found"
+    confidence: "0.8 if d.found else 0.65"
+    summary: "('круглосуточная стойка регистрации' if d.found else 'бесконтактный заезд') + (' и бесконтактный заезд' if d.found and s.found else '') + ' (карточка)'"
+    evidence: "{'desk': d.hits[:3], 'self': s.hits[:3]}"
+  - source: reviews
+    method: "отзывы о позднем заезде"
+    steps:
+      - {as: r, tool: reviews_search, args: {terms: ["ночью заселил", "поздн\\w* заезд", "приехали ночью", "заселили ночью", "в \\d ночи"]}}
+    when: "r.positive + r.negative > 0"
+    value: {allowed: "r.positive >= r.negative"}
+    confidence: "min(0.6, 0.3 + 0.1 * (r.positive + r.negative))"
+    summary: "f'отзывы о позднем заезде: хороших {r.positive}, плохих {r.negative}'"
+    evidence: "{'good': r.positive_quotes, 'bad': r.negative_quotes}"
+question:
+  when: "unknown"
+  text: "'Гости спрашивают про поздний заезд: можно ли заселиться в 2–3 часа ночи? Есть ли круглосуточная стойка или бесконтактный заезд, нужна ли доплата?'"
+answer_fields:
+  allowed: {type: bool}
+  fee_rub: {type: number}
+  notes: {type: text}

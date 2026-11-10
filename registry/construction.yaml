@@ -1,0 +1,27 @@
+id: construction
+name: Стройка рядом
+description: |
+  Есть ли рядом стройплощадка (OSM landuse=construction или building=construction в 250 м): шум днём и риск, что
+  закроют вид. Даты строек в OSM почти не размечены, поэтому срок годности короткий.
+level: отель
+class: physical
+weight: 0.6
+ttl_days: 60
+key: none_near
+keywords: ["стройк", "строительств", "ремонт рядом"]
+default_constraint: {field: none_near, op: "==", value: true}
+fields:
+  none_near: {type: bool, label: "стройки рядом нет"}
+  nearest_m: {type: number, better: higher, label: "до стройки, м"}
+methods:
+  - source: osm
+    method: "OSM landuse=construction, building=construction"
+    steps:
+      - {as: a, tool: nearby, args: {tags: {landuse: construction}, radius_m: 250}}
+      - {as: b, tool: nearby, args: {tags: {building: construction}, radius_m: 250}}
+    value:
+      none_near: "a.count + b.count == 0"
+      nearest_m: "min([x for x in [a.nearest_m, b.nearest_m] if x is not None]) if (a.count + b.count) else None"
+    confidence: "0.6"
+    summary: "f'стройка в {min([x for x in [a.nearest_m, b.nearest_m] if x is not None])} м' if (a.count + b.count) else 'строек в 250 м по OSM нет'"
+    evidence: "{'sites': a.items + b.items}"

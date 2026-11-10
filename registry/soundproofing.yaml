@@ -1,0 +1,39 @@
+id: soundproofing
+name: Шумоизоляция
+description: |
+  Хорошая ли шумоизоляция в номерах: что заявлено в карточке и что пишут гости про слышимость соседей и улицы.
+level: категория номера
+class: experiential
+weight: 0.6
+ttl_days: 365
+key: good
+keywords: ["шумоизоляц", "звукоизоляц", "не слышно соседей", "стены"]
+default_constraint: {field: good, op: "==", value: true}
+fields:
+  good: {type: bool, label: "хорошая шумоизоляция"}
+methods:
+  - source: card
+    method: "удобства в карточке"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["звукоизоляц", "шумоизоляц", "soundproof"]}}
+    when: "c.found"
+    value: {good: "True"}
+    confidence: "0.6"
+    summary: "'в карточке заявлено: ' + c.hits[0].quote"
+    evidence: "{'hits': c.hits}"
+  - source: reviews
+    method: "отзывы про слышимость"
+    steps:
+      - {as: bad, tool: reviews_search, args: {terms: ["тонкие стены", "слышно соседей", "слышимость", "шумоизоляц\\w* (плох|никак|отсутств|нулев)", "звукоизоляц\\w* (плох|никак|отсутств|нулев)", "слышно вс"]}}
+      - {as: good, tool: reviews_search, args: {terms: ["хорошая (шумо|звуко)изоляц", "не слышно соседей", "отличная (шумо|звуко)изоляц"]}}
+    when: "bad.negative + bad.positive + good.positive > 0"
+    value: {good: "good.positive > bad.negative + bad.positive"}
+    confidence: "min(0.7, 0.35 + 0.1 * (bad.negative + bad.positive + good.positive))"
+    summary: "f'в отзывах: хвалят изоляцию {good.positive} раз, жалуются на слышимость {bad.negative + bad.positive} раз'"
+    evidence: "{'bad': bad.negative_quotes + bad.positive_quotes, 'good': good.positive_quotes}"
+question:
+  when: "unknown or conflict"
+  text: "'Гости спрашивают про шумоизоляцию. Есть ли в номерах шумоизоляция или окна с двойным стеклопакетом? В каких категориях тише всего?'"
+answer_fields:
+  good: {type: bool}
+  categories: {type: text}

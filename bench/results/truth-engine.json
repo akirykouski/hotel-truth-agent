@@ -1,0 +1,334 @@
+{
+ "repo": ".",
+ "branch": "feat/truth-engine",
+ "sha": "d8356ea",
+ "at": "2026-10-27 20:52",
+ "tracks": {
+  "t1_metrics": {
+   "status": "ok",
+   "sec": 0.44,
+   "result": {
+    "sea_recall_vs_card": 0.9,
+    "sea_recall_vs_reviews": 0.87,
+    "sea_recall_vs_strong": 0.89,
+    "sea_agrees_no_view": 0.33,
+    "sea_geo_yes_not_advertised": 95,
+    "noise_complaints_per100_by_band": [
+     2.7,
+     3.2,
+     4.0
+    ],
+    "noise_monotonic": true,
+    "claims_overstated": 1,
+    "coverage_mean": 0.942,
+    "conflicts_total": 54,
+    "characteristics": 18,
+    "questions_total": 493,
+    "facts_total": 4624
+   }
+  },
+  "t2_fraud": {
+   "status": "ok",
+   "sec": 0.72,
+   "result": {
+    "sea_view": {
+     "n": 40,
+     "physics_holds": 1.0,
+     "conflict_flagged": 1.0
+    },
+    "night_quiet": {
+     "n": 40,
+     "physics_holds": 1.0,
+     "conflict_flagged": 1.0
+    },
+    "beach_walk": {
+     "n": 0,
+     "physics_holds": 0.0,
+     "conflict_flagged": 0.0
+    },
+    "sunset": {
+     "n": 40,
+     "physics_holds": 1.0,
+     "conflict_flagged": 1.0
+    },
+    "pets": {
+     "n": 40,
+     "hotelier_wins": 1.0,
+     "conflict_flagged": 0.975
+    },
+    "night_checkin": {
+     "n": 40,
+     "hotelier_wins": 1.0,
+     "conflict_flagged": 1.0
+    },
+    "_score": {
+     "physics_holds_mean": 1.0,
+     "policy_hotelier_wins_mean": 1.0
+    }
+   }
+  },
+  "t2_correction": {
+   "status": "ok",
+   "sec": 0.12,
+   "result": {
+    "night_quiet": {
+     "n": 26,
+     "correction_accepted": 1.0
+    },
+    "_score": {
+     "n": 26,
+     "correction_accepted": 1.0
+    }
+   }
+  },
+  "t3_heldout": {
+   "status": "ok",
+   "sec": 0.17,
+   "result": {
+    "night_quiet": {
+     "n": 34,
+     "agree": 0.235,
+     "ece": 0.323,
+     "mean_conf": 0.558
+    },
+    "sea_view": {
+     "n": 12,
+     "agree": 1.0,
+     "ece": 0.14,
+     "mean_conf": 0.86
+    },
+    "soundproofing": {
+     "n": 1,
+     "agree": 0.0,
+     "ece": 0.599,
+     "mean_conf": 0.599
+    },
+    "wifi": {
+     "n": 133,
+     "agree": 0.496,
+     "ece": 0.006,
+     "mean_conf": 0.49
+    },
+    "_score": {
+     "n": 180,
+     "agree": 0.478,
+     "ece": 0.069
+    },
+    "_overconfidence": {
+     "sea_view_conf_eq_1": 0,
+     "sea_view_conf_ge_095": 1
+    }
+   }
+  },
+  "t4_search": {
+   "status": "ok",
+   "sec": 0.22,
+   "result": {
+    "scenarios": [
+     {
+      "q": "Тихий номер с видом на закат недалеко от моря, едем в июле",
+      "constraints": 4,
+      "counts": {
+       "match": 19,
+       "maybe": 0,
+       "fail": 210
+      },
+      "top": [
+       "8871166",
+       "8662148",
+       "7927299",
+       "7967155",
+       "10622327"
+      ]
+     },
+     {
+      "q": "Еду с мамой, ей тяжело ходить в гору. Нужно близко к пляжу и",
+      "constraints": 3,
+      "counts": {
+       "match": 65,
+       "maybe": 0,
+       "fail": 164
+      },
+      "top": [
+       "8276259",
+       "8871740",
+       "9974360",
+       "7927299",
+       "7861043"
+      ]
+     },
+     {
+      "q": "Мы с ребёнком 3 лет и собакой 12 кг. Нужна детская площадка ",
+      "constraints": 2,
+      "counts": {
+       "match": 48,
+       "maybe": 37,
+       "fail": 144
+      },
+      "top": [
+       "9742403",
+       "10006322",
+       "11161658",
+       "13124554",
+       "7967155"
+      ]
+     },
+     {
+      "q": "Работаю удалённо две недели в ноябре: нужно тихо днём, хорош",
+      "constraints": 3,
+      "counts": {
+       "match": 35,
+       "maybe": 14,
+       "fail": 180
+      },
+      "top": [
+       "10014225",
+       "10011352",
+       "10829905",
+       "10622327",
+       "14042222"
+      ]
+     },
+     {
+      "q": "Прилетаем в 2 ночи. Важно, чтобы рядом была круглосуточная а",
+      "constraints": 3,
+      "counts": {
+       "match": 90,
+       "maybe": 19,
+       "fail": 120
+      },
+      "top": [
+       "8473960",
+       "10668609",
+       "11341610",
+       "13075397",
+       "10003527"
+      ]
+     },
+     {
+      "q": "Хочу смотреть, как солнце садится в море, в конце декабря",
+      "constraints": 1,
+      "counts": {
+       "match": 52,
+       "maybe": 0,
+       "fail": 177
+      },
+      "top": [
+       "10003527",
+       "10093697",
+       "9209138",
+       "9742403",
+       "11161658"
+      ]
+     },
+     {
+      "q": "Чтобы рядом не было стройки и баров под окнами, и не надо бы",
+      "constraints": 1,
+      "counts": {
+       "match": 136,
+       "maybe": 0,
+       "fail": 93
+      },
+      "top": [
+       "10668609",
+       "13075397",
+       "10003527",
+       "10093697",
+       "9209138"
+      ]
+     },
+     {
+      "q": "Есть ли плотные шторы блэкаут? Мне важно спать днём",
+      "constraints": 1,
+      "counts": {
+       "match": 144,
+       "maybe": 0,
+       "fail": 85
+      },
+      "top": [
+       "10668609",
+       "9322031",
+       "13075397",
+       "10003527",
+       "10093697"
+      ]
+     }
+    ],
+    "constraints_parsed_total": 18,
+    "scenarios_with_match": 8
+   }
+  },
+  "f2_window": {
+   "status": "absent",
+   "sec": 0.0,
+   "result": null
+  },
+  "f3_rooms": {
+   "status": "absent",
+   "sec": 0.0,
+   "result": null
+  },
+  "f4_grounding": {
+   "status": "absent",
+   "sec": 0.0,
+   "result": null
+  },
+  "f5_draft": {
+   "status": "ok",
+   "sec": 0.17,
+   "result": {
+    "status_after_add": null,
+    "public_sees_draft": true,
+    "has_eval_report": false,
+    "public_sees_after_approve": null,
+    "gate_works": false
+   }
+  },
+  "f6_photos": {
+   "status": "absent",
+   "sec": 0.0,
+   "result": null
+  },
+  "f7_relax": {
+   "status": "ok",
+   "sec": 0.28,
+   "result": {
+    "strict_queries": 3,
+    "with_relaxations": 0.0,
+    "with_positive_gain": 0.0,
+    "detail": [
+     {
+      "q": "Тихий номер с видом на море и закатом, без подъёма",
+      "match": 6,
+      "relaxations": []
+     },
+     {
+      "q": "Вид на море, тихо, круглосуточная аптека рядом, пу",
+      "match": 7,
+      "relaxations": []
+     },
+     {
+      "q": "Закат над морем в декабре, тихо ночью, без подъёма",
+      "match": 4,
+      "relaxations": []
+     }
+    ]
+   }
+  },
+  "f8_timeline": {
+   "status": "absent",
+   "sec": 0.0,
+   "result": null
+  },
+  "f9_radar": {
+   "status": "absent",
+   "sec": 0.0,
+   "result": null
+  },
+  "f10_region": {
+   "status": "absent",
+   "sec": 0.0,
+   "result": null
+  }
+ }
+}

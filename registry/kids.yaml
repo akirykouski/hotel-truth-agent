@@ -1,0 +1,34 @@
+id: kids
+name: Для детей рядом
+description: |
+  Детские площадки и парки в шаговой доступности, ближайшая больница или детская поликлиника, по OSM.
+level: отель
+class: physical
+weight: 0.6
+ttl_days: 180
+key: playground_near
+keywords: ["с детьми", "с ребенком", "с ребёнком", "детск", "семьей", "семьёй", "площадк"]
+default_constraint: {field: playground_near, op: "==", value: true}
+fields:
+  playground_near: {type: bool, label: "детская площадка в 300 м"}
+  playground_m: {type: number, better: lower, label: "до ближайшей площадки, м"}
+  park_m: {type: number, better: lower, label: "до парка, м"}
+  hospital_m: {type: number, better: lower, label: "до больницы или поликлиники, м"}
+methods:
+  - source: osm
+    method: "OSM leisure=playground|park, amenity=hospital|clinic"
+    steps:
+      - {as: pg, tool: nearby, args: {tags: {leisure: playground}, radius_m: 1000}}
+      - {as: pk, tool: nearby, args: {tags: {leisure: park}, radius_m: 1500}}
+      - {as: hs, tool: nearby, args: {tags: {amenity: "hospital|clinic"}, radius_m: 3000}}
+    value:
+      playground_near: "pg.nearest_m is not None and pg.nearest_m <= 300"
+      playground_m: "pg.nearest_m"
+      playgrounds_500: "len([i for i in pg.items if i.distance_m <= 500])"
+      park_m: "pk.nearest_m"
+      hospital_m: "hs.nearest_m"
+    confidence: "0.75"
+    summary: >-
+      (f'площадка в {pg.nearest_m} м' if pg.nearest_m else 'площадок в 1 км нет') + (f', парк в {pk.nearest_m} м' if pk.nearest_m else '')
+      + (f', больница/поликлиника в {hs.nearest_m} м ({hs.items[0].name})' if hs.nearest_m else '')
+    evidence: "{'playgrounds': pg.items[:5], 'parks': pk.items[:3], 'hospitals': hs.items[:3]}"

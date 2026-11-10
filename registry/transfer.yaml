@@ -1,0 +1,40 @@
+id: transfer
+name: Трансфер из аэропорта
+description: Встречает ли отель из аэропорта или с вокзала (трансфер), по удобствам в карточке Островка и отзывам.
+level: отель
+weight: 0.5
+ttl_days: 365
+key: has
+keywords: ["трансфер", "встрет", "из аэропорта", "от аэропорта", "с вокзала"]
+default_constraint: {field: has, op: "==", value: true}
+fields:
+  has: {type: bool, label: "трансфер"}
+  airport: {type: bool, label: "трансфер из аэропорта"}
+methods:
+  - source: card
+    method: "удобства в карточке"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["трансфер", "transfer"], where: ["amenities", "description", "policies"]}}
+    when: "c.found"
+    value:
+      has: "True"
+      airport: "any('аэропорт' in h.quote.lower() for h in c.hits)"
+    confidence: "0.75"
+    summary: "'в карточке: ' + ', '.join(sorted(set(h.quote[:60] for h in c.hits))[:2])"
+    evidence: "{'hits': c.hits}"
+  - source: reviews
+    method: "упоминания трансфера в отзывах"
+    steps:
+      - {as: r, tool: reviews_search, args: {terms: ["трансфер"]}}
+    when: "r.positive + r.negative > 0"
+    value:
+      has: "True"
+    confidence: "min(0.55, 0.35 + 0.1 * (r.positive + r.negative))"
+    summary: "f'трансфер упоминают в отзывах {r.positive + r.negative} раз'"
+    evidence: "{'quotes': r.positive_quotes + r.negative_quotes}"
+question:
+  when: "unknown or conf < 0.6"
+  text: "'Есть ли у вас трансфер из аэропорта Сочи? Сколько стоит и как заказать?'"
+answer_fields:
+  has: {type: bool}
+  price_rub: {type: number}

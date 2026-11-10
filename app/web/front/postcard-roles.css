@@ -1,0 +1,124 @@
+/* «Открытка из Сочи» для кабинета отельера и бэк-офиса команды (/hotelier, /backoffice): тот же мир, что у витрины /ui.
+   Токены мира — /waitgames/world.css (--w-*). Подключается после skin.css и перекрывает только эти две роли;
+   /ui и / не меняются. Модули (профиль города, регионы, черновики, вердикт) берут цвета из --card/--acc/--line,
+   поэтому большую часть работы делает подмена токенов. */
+:root:is([data-role="hotelier"],[data-role="admin"]){
+  --bg:var(--w-table);--card:var(--w-stock);--ink:var(--w-ink);--muted:var(--w-ink-2);--line:var(--w-deckle);
+  --acc:var(--w-blue);--acc-soft:#e8eefa;--ok:var(--w-ok);--ok-soft:var(--w-ok-soft);--warn:var(--w-maybe);--warn-soft:var(--w-maybe-soft);
+  --bad:var(--w-bad);--bad-soft:var(--w-bad-soft);--unk:var(--w-ink-2);--unk-soft:#f1efeb;
+  --pc-r:20px 20px 44px 20px;--rule-b:rgba(11,78,194,.28)}
+:root:is([data-role="hotelier"],[data-role="admin"]) body{font:400 15px/1.45 var(--w-font);background:var(--w-table);color:var(--w-ink);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;accent-color:var(--w-blue)}
+:root:is([data-role="hotelier"],[data-role="admin"]) :is(h2,h3,.o-big){font-family:var(--w-display);font-weight:500;letter-spacing:-.01em}
+:root:is([data-role="hotelier"],[data-role="admin"]) h2{font-size:24px}
+:root:is([data-role="hotelier"],[data-role="admin"]) h3{font-size:18px}
+:root:is([data-role="hotelier"],[data-role="admin"]) a{color:var(--w-blue)}
+
+/* шапка как у витрины: фон стола, словесный знак OSTR♥VOK.RU, вкладки на белой ленте, лайм у активной */
+:root:is([data-role="hotelier"],[data-role="admin"]) header{background:var(--w-table);min-height:64px;gap:16px;box-shadow:0 1px 0 var(--w-deckle)}
+.pc-logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--w-blue);min-height:44px;flex:none}
+.pc-logo .o-mark{display:inline-flex;align-items:center;font:700 20px/1 var(--w-font);letter-spacing:.02em}
+.pc-logo .o-mark svg{width:15px;height:19px;margin:0 1px;transform:translateY(-1px)}
+.pc-logo .logo-sub{font:500 16px/1.1 var(--w-display);color:var(--w-ink);padding-left:12px;border-left:1px solid var(--w-deckle);white-space:nowrap}
+.pc-logo .logo-sub small{display:block;font:400 12.5px/1.2 var(--w-font);color:var(--w-ink-2);margin-top:2px}
+:root:is([data-role="hotelier"],[data-role="admin"]) nav{background:#fff;box-shadow:inset 0 0 0 1px var(--w-deckle);border-radius:14px;padding:4px}
+:root:is([data-role="hotelier"],[data-role="admin"]) nav button{font:500 14.5px var(--w-font);color:var(--w-ink);border-radius:10px;padding:8px 14px}
+:root:is([data-role="hotelier"],[data-role="admin"]) nav button:hover{background:var(--w-table)}
+:root:is([data-role="hotelier"],[data-role="admin"]) nav button.on{background:var(--w-lime);color:#17420a;font-weight:600;box-shadow:none}
+:root:is([data-role="hotelier"],[data-role="admin"]) .o-roles a{font:500 14px var(--w-font);color:var(--w-blue);border-radius:12px;padding:9px 13px;background:#fff;box-shadow:inset 0 0 0 1px var(--w-deckle)}
+:root:is([data-role="hotelier"],[data-role="admin"]) .o-roles a:hover{box-shadow:inset 0 0 0 1.5px var(--w-blue)}
+:root:is([data-role="hotelier"],[data-role="admin"]) .o-roles a.on{background:var(--w-blue);color:#fff;box-shadow:0 8px 16px -8px rgba(11,78,194,.6)}
+:root:is([data-role="hotelier"],[data-role="admin"]) .arc-hbtn{border-radius:12px;white-space:nowrap}
+:root:is([data-role="hotelier"],[data-role="admin"]) .arc-hbtn i{white-space:nowrap}
+
+/* карточки — открытки: белый картон, кромка, вырубной угол */
+:root:is([data-role="hotelier"],[data-role="admin"]) main{max-width:1360px;padding:24px}
+:root:is([data-role="hotelier"],[data-role="admin"]) .card{background:var(--w-stock);border:1px solid var(--w-deckle);border-radius:var(--pc-r);box-shadow:var(--w-shadow-card);padding:22px 24px 26px}
+:root:is([data-role="hotelier"],[data-role="admin"]) .muted{color:var(--w-ink-2)}
+
+/* кнопки как на витрине: синяя основная, белая с синей кромкой вторичная */
+:root:is([data-role="hotelier"],[data-role="admin"]) button.b,:root:is([data-role="hotelier"],[data-role="admin"]) .o-btn{background:var(--w-blue);color:#fff;border-radius:12px;min-height:44px;padding:0 18px;font:600 15px var(--w-font);box-shadow:0 8px 16px -8px rgba(11,78,194,.55);transition:transform .2s var(--w-ease),background .15s}
+:root:is([data-role="hotelier"],[data-role="admin"]) button.b:hover{background:var(--w-blue-deep);filter:none}
+:root:is([data-role="hotelier"],[data-role="admin"]) :is(button.b,button.g,a.g):active{transform:scale(.97)}
+:root:is([data-role="hotelier"],[data-role="admin"]) :is(button.g,a.g){background:#fff;color:var(--w-blue);box-shadow:inset 0 0 0 1.5px var(--rule-b);border-radius:12px;min-height:40px;padding:0 14px;font:600 14px var(--w-font)}
+:root:is([data-role="hotelier"],[data-role="admin"]) :is(button.g,a.g):hover{box-shadow:inset 0 0 0 1.5px var(--w-blue);filter:none}
+
+/* поля: адресные линейки открытки */
+:root:is([data-role="hotelier"],[data-role="admin"]) :is(input:not([type]),input[type=text],input[type=search],select){border:0;border-bottom:1.5px solid var(--rule-b);border-radius:0;background:transparent;font:400 16px var(--w-font);color:var(--w-ink);padding:8px 2px;min-height:44px}
+:root:is([data-role="hotelier"],[data-role="admin"]) textarea{border:0;border-radius:0;font:400 16px/30px var(--w-font);color:var(--w-ink);padding:0 2px;min-height:92px;background:repeating-linear-gradient(to bottom,#0000 0 29px,var(--rule-b) 29px 30px);background-attachment:local}
+:root:is([data-role="hotelier"],[data-role="admin"]) :is(input,textarea,select):focus{outline:0;border-color:var(--w-blue);box-shadow:0 2px 0 0 var(--w-blue)}
+:root:is([data-role="hotelier"],[data-role="admin"]) input[type=range]{accent-color:var(--w-blue)}
+
+/* бейджи и чипы */
+:root:is([data-role="hotelier"],[data-role="admin"]) .chip{background:#fff;color:var(--w-ink);box-shadow:inset 0 0 0 1px var(--w-deckle);border-radius:10px}
+:root:is([data-role="hotelier"],[data-role="admin"]) .badge{border-radius:7px;font-weight:600}
+
+/* обзор админа: плитки-марки */
+:root[data-role="admin"] .o-tiles button{background:var(--w-stock);border:1px solid var(--w-deckle);border-radius:18px 18px 34px 18px;box-shadow:var(--w-shadow-card);padding:18px 20px;transition:transform .3s var(--w-ease),box-shadow .2s}
+:root[data-role="admin"] .o-tiles button:hover{outline:0;transform:translateY(-2px);box-shadow:var(--w-shadow-lift)}
+:root[data-role="admin"] .o-tiles b{font:700 30px/1.1 var(--w-font);color:var(--w-ink)}  /* цифры шрифтом текста: у Spoof ноль перечёркнут */
+:root[data-role="admin"] .o-tiles button:first-child b{font:500 26px/1.1 var(--w-display)}
+:root[data-role="admin"] .o-tiles .o-hot{background:var(--w-lime);border-color:#9bdc72}
+:root[data-role="admin"] .o-tiles .o-hot b{color:#17420a}
+:root[data-role="admin"] .o-tiles .o-hot span{color:#2c5a12}
+:root[data-role="admin"] .o-tiles button:first-child b{color:var(--w-blue)}
+
+/* отельер: «ваш отель», выбор отеля, вопросы — оборотные стороны открыток */
+:root[data-role="hotelier"] .o-me{background:var(--w-stock-back);box-shadow:inset 0 0 0 1px var(--w-deckle);border-radius:var(--pc-r)}
+:root[data-role="hotelier"] .o-pick button{background:var(--w-stock-back);box-shadow:inset 0 0 0 1px var(--w-deckle);border-radius:16px 16px 28px 16px;transition:transform .25s var(--w-ease)}
+:root[data-role="hotelier"] .o-pick button:hover{outline:0;box-shadow:inset 0 0 0 1.5px var(--w-blue);transform:translateY(-2px)}
+:root[data-role="hotelier"] .o-pick em{color:var(--w-maybe)}
+:root:is([data-role="hotelier"],[data-role="admin"]) .q{background:var(--w-stock-back);border:1px solid var(--w-deckle);border-radius:16px 16px 32px 16px;padding:16px 18px;margin:10px 0}
+:root:is([data-role="hotelier"],[data-role="admin"]) .q>div:first-child{font-size:16px}
+:root:is([data-role="hotelier"],[data-role="admin"]) .echo{background:#f2fbe9;box-shadow:inset 0 0 0 1px #c9eeb0;border-radius:14px 14px 28px 14px}
+:root:is([data-role="hotelier"],[data-role="admin"]) .echo>b{font:500 17px/1.35 var(--w-display);color:var(--w-ink)}
+:root:is([data-role="hotelier"],[data-role="admin"]) .kpi div{background:var(--w-stock-back);box-shadow:inset 0 0 0 1px var(--w-deckle);border:0;border-radius:16px 16px 28px 16px}
+:root:is([data-role="hotelier"],[data-role="admin"]) .kpi b{font:700 28px/1.1 var(--w-font)}
+
+/* таблицы и журнал */
+:root:is([data-role="hotelier"],[data-role="admin"]) table th{font-weight:600;color:var(--w-ink-2)}
+:root:is([data-role="hotelier"],[data-role="admin"]) .ev{border-color:var(--w-deckle)}
+
+/* подвал и баннер подстройки выдачи: баннер про гостевую персонализацию, отельеру и команде он не нужен */
+:root:is([data-role="hotelier"],[data-role="admin"]) footer.o-foot{color:var(--w-ink-2)}
+:root:is([data-role="hotelier"],[data-role="admin"]) .o-consent{display:none}
+
+@media (max-width:800px){
+  .pc-logo .logo-sub small{display:none}
+  :root:is([data-role="hotelier"],[data-role="admin"]) main{padding:16px}
+  :root:is([data-role="hotelier"],[data-role="admin"]) .card{padding:18px 16px 22px}
+}
+@media (max-width:560px){.pc-logo .logo-sub{display:none}}
+
+
+/* «Сменить роль» вместо трёх ссылок на роли: та же кнопка, что в шапке витрины (на всех страницах ролей, и на /ui/classic) */
+.o-switch{margin-left:auto;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:12px;background:#fff;color:var(--w-blue,#0b4ec2);box-shadow:inset 0 0 0 1px var(--w-deckle,#e4e1dc);font:600 14.5px var(--w-font,inherit);text-decoration:none;white-space:nowrap;flex:none}
+.o-switch:hover{box-shadow:inset 0 0 0 1.5px var(--w-blue,#0b4ec2)}
+.o-switch svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:640px){.o-switch span{display:none}.o-switch{padding:0 11px}}
+
+/* отельер: «Как видят гости» — карточка с витрины в рамке открытки */
+:root[data-role="hotelier"] #t-hotel>.card.pc-gv{display:flex;flex-direction:column;gap:12px;background:var(--w-stock);padding:22px 24px 26px}
+.pc-gv-frame{width:100%;height:max(640px,calc(100dvh - 260px));border:1px solid var(--w-deckle);border-radius:18px 18px 40px 18px;background:var(--w-stock-back);box-shadow:var(--w-shadow-card)}
+:root[data-role="hotelier"] .pc-gv .g{align-self:flex-start}
+
+/* отельер: «Проверка обещаний» только по своему отелю — без поиска по всем отелям и без действий команды */
+:root[data-role="hotelier"] #t-audit .row:has(#afind),:root[data-role="hotelier"] #alist,
+:root[data-role="hotelier"] #aout h3 button,:root[data-role="hotelier"] #aout .tr-act{display:none}
+:root:is([data-role="hotelier"],[data-role="admin"]) .tr-fold{background:var(--w-stock-back);border:1px solid var(--w-deckle);border-radius:14px 14px 28px 14px;padding:12px 16px;margin:10px 0}
+:root:is([data-role="hotelier"],[data-role="admin"]) .tr-fold>summary{cursor:pointer;font:500 16px var(--w-display);color:var(--w-blue);list-style-position:inside}
+:root:is([data-role="hotelier"],[data-role="admin"]) .tr-claim{background:var(--w-stock-back);border:1px solid var(--w-deckle);border-radius:14px 14px 28px 14px}
+
+/* команда: 11 вкладок — во второй строке шапки, логотип и «Сменить роль» в первой */
+:root[data-role="admin"] header{flex-wrap:wrap;row-gap:8px;padding-top:8px;padding-bottom:8px}
+:root[data-role="admin"] header nav{order:3;width:100%;flex-wrap:wrap}
+:root[data-role="admin"] #t-search #map{height:calc(100vh - 170px);min-height:480px}
+
+/* команда: страница отеля и поиск в бэк-офисе — те же открытки */
+:root[data-role="admin"] .o-hhead{border:1px solid var(--w-deckle);border-radius:var(--pc-r);box-shadow:var(--w-shadow-card)}
+:root[data-role="admin"] .o-hhead h2{font:500 26px/1.15 var(--w-display)}
+:root[data-role="admin"] .o-mosaic{border-radius:20px 20px 44px 20px}
+:root[data-role="admin"] #hotel .vd{background:var(--w-stock);border:1px solid var(--w-deckle);border-radius:var(--pc-r);box-shadow:var(--w-shadow-card)}
+:root[data-role="admin"] #hotel>.grid,:root[data-role="admin"] #hotel>table.ft{border:1px solid var(--w-deckle);border-radius:var(--pc-r);box-shadow:var(--w-shadow-card)}
+:root[data-role="admin"] :is(#hmap,#map){border-radius:18px 18px 36px 18px}
+:root[data-role="admin"] .m.u{background:var(--w-blue)}
+:root[data-role="admin"] .m.a{background:var(--w-stock-back);box-shadow:inset 0 0 0 1px var(--w-deckle)}

@@ -1,0 +1,55 @@
+id: private_beach
+name: Свой пляж
+description: |
+  Есть ли у отеля собственный или закреплённый пляж: по удобствам отеля и номеров в карточке Островка и отзывам.
+  Путь до ближайшего городского пляжа считает характеристика «Путь до пляжа».
+level: отель
+weight: 0.6
+ttl_days: 365
+key: has
+keywords: ["свой пляж", "собственный пляж", "частный пляж", "пляж отеля", "лежак", "шезлонг"]
+default_constraint: {field: has, op: "==", value: true}
+fields:
+  has: {type: bool, label: "свой пляж у отеля"}
+  loungers: {type: bool, label: "удобства для пляжа: лежаки, полотенца"}
+methods:
+  - source: card
+    method: "удобства в карточке (частный пляж, beach-access)"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["частный пляж", "собственный пляж", "свой пляж", "^beachfront$"], where: ["amenities", "rooms", "description"]}}
+      - {as: l, tool: card_search, args: {terms: ["удобства для пляжа", "полотенца для пляжа", "шезлонг", "лежак"], where: ["amenities"]}}
+    when: "c.found"
+    value:
+      has: "True"
+      loungers: "l.found"
+    confidence: "0.75"
+    summary: "'в карточке: ' + '; '.join(sorted(set(h.quote[:80] for h in c.hits))[:2]) + ('; есть удобства для пляжа' if l.found else '')"
+    evidence: "{'hits': c.hits + l.hits}"
+  - source: card
+    method: "в номерах указан выход к пляжу (beach-access): это не обязательно свой пляж"
+    steps:
+      - {as: b, tool: card_search, args: {terms: ["^beach-access$"], where: ["rooms"]}}
+      - {as: c, tool: card_search, args: {terms: ["частный пляж", "собственный пляж", "свой пляж", "^beachfront$"]}}
+    when: "b.found and not c.found"
+    value:
+      has: "True"
+    confidence: "0.45"
+    summary: "f'в {b.rooms_matched} из {b.rooms_total} категорий номеров указан выход к пляжу; свой ли это пляж, лучше уточнить'"
+    evidence: "{'hits': b.hits}"
+  - source: reviews
+    method: "упоминания пляжа отеля в отзывах"
+    steps:
+      - {as: r, tool: reviews_search, args: {terms: ["свой пляж", "собственный пляж", "пляж отеля", "пляж при отеле", "частный пляж"]}}
+    when: "r.positive + r.negative > 0"
+    value:
+      has: "True"
+    confidence: "min(0.6, 0.4 + 0.1 * (r.positive + r.negative))"
+    summary: "f'пляж отеля упоминают в отзывах {r.positive + r.negative} раз'"
+    evidence: "{'quotes': r.positive_quotes + r.negative_quotes}"
+question:
+  when: "unknown or conf < 0.6"
+  text: "'Есть ли у вас свой пляж? Лежаки и полотенца бесплатные? Как далеко от корпуса?'"
+answer_fields:
+  has: {type: bool}
+  loungers_free: {type: bool}
+  distance_m: {type: number}

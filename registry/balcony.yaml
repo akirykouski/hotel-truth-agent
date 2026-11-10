@@ -1,0 +1,40 @@
+id: balcony
+name: Балкон или терраса
+description: Есть ли в номере балкон, лоджия или своя терраса, по удобствам номеров в карточке Островка.
+level: категория номера
+weight: 0.5
+ttl_days: 365
+key: has
+keywords: ["балкон", "лоджи"]
+default_constraint: {field: has, op: "==", value: true}
+fields:
+  has: {type: bool, label: "балкон или терраса хотя бы в части номеров"}
+  share: {type: number, better: higher, label: "доля категорий номеров с балконом"}
+methods:
+  - source: card
+    method: "удобства номеров в карточке (balcony, patio)"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["^balcony$", "^patio$", "балкон", "лоджи"], where: ["rooms"]}}
+    when: "c.found"
+    value:
+      has: "True"
+      share: "round(c.rooms_matched / c.rooms_total, 2) if c.rooms_total else None"
+    confidence: "0.8"
+    summary: "f'балкон или терраса в {c.rooms_matched} из {c.rooms_total} категорий номеров'"
+    evidence: "{'hits': c.hits}"
+  - source: card
+    method: "в удобствах номеров балкона нет"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["^balcony$", "^patio$", "балкон", "лоджи"], where: ["rooms"]}}
+    when: "not c.found and c.rooms_total >= 1"
+    value:
+      has: "False"
+      share: "0"
+    confidence: "0.6"
+    summary: "f'балкона нет ни в одной из {c.rooms_total} категорий номеров'"
+question:
+  when: "unknown"
+  text: "'В каких категориях номеров есть балкон или терраса?'"
+answer_fields:
+  has: {type: bool}
+  categories: {type: text}

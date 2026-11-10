@@ -1,0 +1,42 @@
+id: sea_season
+name: Море и погода в месяц поездки
+description: |
+  Температура моря и воздуха, дожди и солнце в выбранный месяц для активной зоны (модели Open-Meteo, 2022–2025):
+  можно ли купаться. Одинаково для всех отелей зоны.
+level: регион × месяц
+class: physical
+weight: 0.5
+ttl_days: 365
+key: swim_any
+keywords: ["купаться", "купание", "тёплое море", "теплое море", "погода", "температура моря"]
+city_terms: ["купа", "тёпл\\w* мор|тепл\\w* мор", "холодн\\w* мор|вод\\w* холод"]  # как тема звучит в описаниях и отзывах региона (профиль города, app/city.py)
+default_constraint: {field: swim, op: "==", value: true}
+fields:
+  swim: {type: bool, per_month: true, path: by_month, label: "море ≥ 20 °C, можно купаться"}
+  sea_c: {type: number, per_month: true, path: by_month, better: higher, label: "температура моря, °C"}
+  sea_c_early: {type: number, per_month: true, path: by_month, better: higher, label: "море в 1–10 числа, °C"}
+  sea_c_late: {type: number, per_month: true, path: by_month, better: higher, label: "море в 21–31 числа, °C"}
+  swim_early: {type: bool, per_month: true, path: by_month, label: "в начале месяца море ≥ 20 °C"}
+  rain_days: {type: number, per_month: true, path: by_month, better: lower, label: "дней с дождём"}
+methods:
+  - source: open-meteo
+    method: "Open-Meteo Archive (ERA5) + Marine (MeteoFrance), средние 2022–2025"
+    steps:
+      - {as: m1, tool: climate, args: {month: 1}}
+      - {as: m2, tool: climate, args: {month: 2}}
+      - {as: m3, tool: climate, args: {month: 3}}
+      - {as: m4, tool: climate, args: {month: 4}}
+      - {as: m5, tool: climate, args: {month: 5}}
+      - {as: m6, tool: climate, args: {month: 6}}
+      - {as: m7, tool: climate, args: {month: 7}}
+      - {as: m8, tool: climate, args: {month: 8}}
+      - {as: m9, tool: climate, args: {month: 9}}
+      - {as: m10, tool: climate, args: {month: 10}}
+      - {as: m11, tool: climate, args: {month: 11}}
+      - {as: m12, tool: climate, args: {month: 12}}
+    value:
+      by_month: "dict([(str(x.month), {'swim': x.sea_c >= 20, 'sea_c': x.sea_c, 'sea_c_early': x.sea_c_by_decade[0], 'sea_c_mid': x.sea_c_by_decade[1], 'sea_c_late': x.sea_c_by_decade[2], 'swim_early': x.sea_c_by_decade[0] >= 20, 'air_max_c': x.air_max_c, 'rain_days': x.rain_days, 'sun_h': x.sunshine_h_per_day}) for x in [m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12]])"
+      swim_any: "True"
+    confidence: "0.7"
+    summary: "f'море: июль {m7.sea_c} °C; октябрь {m10.sea_c_by_decade[0]} → {m10.sea_c_by_decade[2]} °C; ноябрь {m11.sea_c_by_decade[0]} → {m11.sea_c_by_decade[2]} °C (начало → конец месяца); модель, не замеры'"
+    evidence: "{'sources': m1.sources, 'period': m1.period}"

@@ -1,0 +1,530 @@
+{
+ "repo": ".",
+ "branch": "perf/chat-latency",
+ "sha": "98402aa",
+ "at": "2026-10-27 23:39",
+ "tracks": {
+  "t1_metrics": {
+   "status": "ok",
+   "sec": 0.39,
+   "result": {
+    "sea_recall_vs_card": 0.9,
+    "sea_recall_vs_reviews": 0.87,
+    "sea_recall_vs_strong": 0.89,
+    "sea_agrees_no_view": 0.33,
+    "sea_geo_yes_not_advertised": 95,
+    "noise_complaints_per100_by_band": [
+     2.7,
+     3.2,
+     4.0
+    ],
+    "noise_monotonic": true,
+    "claims_overstated": 1,
+    "coverage_mean": 0.942,
+    "conflicts_total": 54,
+    "characteristics": 18,
+    "questions_total": 493,
+    "facts_total": 4780
+   }
+  },
+  "t2_fraud": {
+   "status": "ok",
+   "sec": 0.61,
+   "result": {
+    "sea_view": {
+     "n": 40,
+     "physics_holds": 1.0,
+     "conflict_flagged": 1.0
+    },
+    "night_quiet": {
+     "n": 40,
+     "physics_holds": 1.0,
+     "conflict_flagged": 1.0
+    },
+    "beach_walk": {
+     "n": 0,
+     "physics_holds": null,
+     "conflict_flagged": null
+    },
+    "sunset": {
+     "n": 40,
+     "physics_holds": 1.0,
+     "conflict_flagged": 1.0
+    },
+    "pets": {
+     "n": 40,
+     "hotelier_wins": 1.0,
+     "conflict_flagged": 0.975
+    },
+    "night_checkin": {
+     "n": 40,
+     "hotelier_wins": 1.0,
+     "conflict_flagged": 1.0
+    },
+    "_score": {
+     "physics_holds_mean": 1.0,
+     "policy_hotelier_wins_mean": 1.0
+    }
+   }
+  },
+  "t2_correction": {
+   "status": "ok",
+   "sec": 0.03,
+   "result": {
+    "sea_view": {
+     "n": 0,
+     "correction_accepted": null
+    },
+    "night_quiet": {
+     "n": 0,
+     "correction_accepted": null
+    },
+    "beach_walk": {
+     "n": 0,
+     "correction_accepted": null
+    },
+    "sunset": {
+     "n": 0,
+     "correction_accepted": null
+    },
+    "_score": {
+     "n": 0,
+     "correction_accepted": null,
+     "note": "не измеримо: система уже согласна с гостями до ответа отельера"
+    }
+   }
+  },
+  "t3_heldout": {
+   "status": "ok",
+   "sec": 0.12,
+   "result": {
+    "night_quiet": {
+     "n": 34,
+     "agree": 0.235,
+     "ece": 0.323,
+     "mean_conf": 0.558
+    },
+    "sea_view": {
+     "n": 12,
+     "agree": 1.0,
+     "ece": 0.12,
+     "mean_conf": 0.88
+    },
+    "soundproofing": {
+     "n": 1,
+     "agree": 0.0,
+     "ece": 0.599,
+     "mean_conf": 0.599
+    },
+    "wifi": {
+     "n": 133,
+     "agree": 0.496,
+     "ece": 0.006,
+     "mean_conf": 0.49
+    },
+    "_score": {
+     "n": 180,
+     "agree": 0.478,
+     "ece": 0.068
+    },
+    "_overconfidence": {
+     "sea_view_conf_eq_1": 0,
+     "sea_view_conf_ge_095": 15
+    }
+   }
+  },
+  "t4_search": {
+   "status": "ok",
+   "sec": 0.16,
+   "result": {
+    "scenarios": [
+     {
+      "q": "Тихий номер с видом на закат недалеко от моря, едем в июле",
+      "constraints": 4,
+      "counts": {
+       "match": 19,
+       "maybe": 0,
+       "fail": 210
+      },
+      "top": [
+       "8871166",
+       "8662148",
+       "7927299",
+       "7967155",
+       "10622327"
+      ]
+     },
+     {
+      "q": "Еду с мамой, ей тяжело ходить в гору. Нужно близко к пляжу и",
+      "constraints": 3,
+      "counts": {
+       "match": 65,
+       "maybe": 0,
+       "fail": 164
+      },
+      "top": [
+       "8276259",
+       "8871740",
+       "8313881",
+       "9995282",
+       "11165940"
+      ]
+     },
+     {
+      "q": "Мы с ребёнком 3 лет и собакой 12 кг. Нужна детская площадка ",
+      "constraints": 2,
+      "counts": {
+       "match": 48,
+       "maybe": 37,
+       "fail": 144
+      },
+      "top": [
+       "9742403",
+       "10006322",
+       "11161658",
+       "13124554",
+       "7967155"
+      ]
+     },
+     {
+      "q": "Работаю удалённо две недели в ноябре: нужно тихо днём, хорош",
+      "constraints": 3,
+      "counts": {
+       "match": 36,
+       "maybe": 22,
+       "fail": 171
+      },
+      "top": [
+       "11021168",
+       "10093697",
+       "7467615",
+       "10014225",
+       "10011352"
+      ]
+     },
+     {
+      "q": "Прилетаем в 2 ночи. Важно, чтобы рядом была круглосуточная а",
+      "constraints": 3,
+      "counts": {
+       "match": 90,
+       "maybe": 19,
+       "fail": 120
+      },
+      "top": [
+       "8473960",
+       "10668609",
+       "11341610",
+       "13075397",
+       "10003527"
+      ]
+     },
+     {
+      "q": "Хочу смотреть, как солнце садится в море, в конце декабря",
+      "constraints": 1,
+      "counts": {
+       "match": 52,
+       "maybe": 0,
+       "fail": 177
+      },
+      "top": [
+       "10003527",
+       "10093697",
+       "9209138",
+       "9742403",
+       "11161658"
+      ]
+     },
+     {
+      "q": "Чтобы рядом не было стройки и баров под окнами, и не надо бы",
+      "constraints": 1,
+      "counts": {
+       "match": 136,
+       "maybe": 0,
+       "fail": 93
+      },
+      "top": [
+       "10668609",
+       "13075397",
+       "10003527",
+       "10093697",
+       "9209138"
+      ]
+     },
+     {
+      "q": "Есть ли плотные шторы блэкаут? Мне важно спать днём",
+      "constraints": 1,
+      "counts": {
+       "match": 144,
+       "maybe": 0,
+       "fail": 85
+      },
+      "top": [
+       "10668609",
+       "9322031",
+       "13075397",
+       "10003527",
+       "10093697"
+      ]
+     }
+    ],
+    "constraints_parsed_total": 18,
+    "scenarios_with_match": 8
+   }
+  },
+  "f2_window": {
+   "status": "ok",
+   "sec": 4.47,
+   "result": {
+    "n": 55,
+    "consistent_with_sea_view": 1.0,
+    "ms_per_render": 81
+   }
+  },
+  "f3_rooms": {
+   "status": "ok",
+   "sec": 0.26,
+   "result": {
+    "categories": 1843,
+    "named_sea_view_consistent": 1.0,
+    "named_n": 151,
+    "agree_with_guests_who_stayed": 1.0,
+    "guest_n": 11,
+    "with_special_request": 1571,
+    "hidden_view_categories": 513
+   }
+  },
+  "f4_grounding": {
+   "status": "ok",
+   "sec": 0.01,
+   "result": {
+    "fabricated_caught": "5/5",
+    "caught_rate": 1.0,
+    "false_positive_on_true_answer": false
+   }
+  },
+  "f5_draft": {
+   "status": "ok",
+   "sec": 0.29,
+   "result": {
+    "status_after_add": "draft",
+    "public_sees_draft": false,
+    "has_eval_report": true,
+    "public_sees_after_approve": true,
+    "gate_works": true
+   }
+  },
+  "f6_photos": {
+   "status": "ok",
+   "sec": 0.02,
+   "result": {
+    "photo_facts": 156,
+    "hotels_labeled": 222,
+    "sea_view_agree_with_geo": 1.0,
+    "n": 20
+   }
+  },
+  "f7_relax": {
+   "status": "ok",
+   "sec": 0.21,
+   "result": {
+    "strict_queries": 3,
+    "with_relaxations": 1.0,
+    "with_positive_gain": 1.0,
+    "detail": [
+     {
+      "q": "Тихий номер с видом на море и закатом, без подъёма",
+      "match": 6,
+      "relaxations": [
+       {
+        "kind": "drop",
+        "idxs": [
+         3
+        ],
+        "drop": "можно с животными",
+        "gain": 12,
+        "best": {
+         "id": "8869683",
+         "name": "Курортный Отель COOCOOROOZA",
+         "price_nov1": 2900.0,
+         "rating": 8.9
+        },
+        "lack": "в карточке: Размещение с домашними животными не допускается; гулять: парк в 257 м",
+        "text": "если не важно «можно с животными»: +12 отелей, лучший Курортный Отель COOCOOROOZA (в карточке: Размещение с домашними животными не допускается; гулять: парк в 257 м)"
+       },
+       {
+        "kind": "drop",
+        "idxs": [
+         6
+        ],
+        "drop": "закат виден из окна",
+        "gain": 5,
+        "best": {
+         "id": "9995282",
+         "name": "Альфа Апартаменты",
+         "price_nov1": 5400.0,
+         "rating": 8.9
+        },
+        "lack": "закат летом (не виден), зимой (ЮЗ, с 2-го эт.)",
+        "text": "если не важно «закат виден из окна»: +5 отелей, лучший Альфа Апартаменты (закат летом (не виден), зимой (ЮЗ, с 2-го эт.))"
+       },
+       {
+        "kind": "drop",
+        "idxs": [
+         0
+        ],
+        "drop": "подъём ≤ 25 м",
+        "gain": 3,
+        "best": {
+         "id": "9227680",
+         "name": "Апарт-отель Метрополь",
+         "price_nov1": 4471.0,
+         "rating": 9.3
+        },
+        "lack": "Солнечный: 766 м, 10 мин туда и 13 мин обратно, подъём на обратном пути 58 м, переходы…",
+        "text": "если не важно «подъём ≤ 25 м»: +3 отеля, лучший Апарт-отель Метрополь (Солнечный: 766 м, 10 мин туда и 13 мин обратно, подъём на обратном пути 58 м, переходы…)"
+       }
+      ]
+     },
+     {
+      "q": "Вид на море, тихо, круглосуточная аптека рядом, пу",
+      "match": 7,
+      "relaxations": [
+       {
+        "kind": "drop",
+        "idxs": [
+         0
+        ],
+        "drop": "подъём ≤ 25 м",
+        "gain": 7,
+        "best": {
+         "id": "7865608",
+         "name": "Апарт-отель ЮПлаза",
+         "price_nov1": 6000.0,
+         "rating": 8.8
+        },
+        "lack": "Пляж \"Маяк\": 628 м, 9 мин туда и 10 мин обратно, подъём на обратном пути 28 м, без…",
+        "text": "если не важно «подъём ≤ 25 м»: +7 отелей, лучший Апарт-отель ЮПлаза (Пляж \"Маяк\": 628 м, 9 мин туда и 10 мин обратно, подъём на обратном пути 28 м, без…)"
+       },
+       {
+        "kind": "drop",
+        "idxs": [
+         6
+        ],
+        "drop": "можно с животными",
+        "gain": 7,
+        "best": {
+         "id": "6900890",
+         "name": "Санаторий Эдем (АО \"КП №1\")",
+         "price_nov1": null,
+         "rating": 6
+        },
+        "lack": "в карточке: Размещение с домашними животными не допускается; гулять: парк в 140 м",
+        "text": "если не важно «можно с животными»: +7 отелей, лучший Санаторий Эдем (АО \"КП №1\") (в карточке: Размещение с домашними животными не допускается; гулять: парк в 140 м)"
+       },
+       {
+        "kind": "loosen",
+        "idxs": [
+         0
+        ],
+        "drop": "подъём ≤ 25 м",
+        "from": 25,
+        "to": 30,
+        "gain": 5,
+        "chip": "подъём ≤ 30 м (было 25)",
+        "best": {
+         "id": "7865608",
+         "name": "Апарт-отель ЮПлаза",
+         "price_nov1": 6000.0,
+         "rating": 8.8
+        },
+        "lack": "Пляж \"Маяк\": 628 м, 9 мин туда и 10 мин обратно, подъём на обратном пути 28 м, без…",
+        "text": "если смягчить «подъём» с 25 до 30 м: +5 отелей, лучший Апарт-отель ЮПлаза (Пляж \"Маяк\": 628 м, 9 мин туда и 10 мин обратно, подъём на обратном пути 28 м, без…)"
+       }
+      ]
+     },
+     {
+      "q": "Закат над морем в декабре, тихо ночью, без подъёма",
+      "match": 7,
+      "relaxations": [
+       {
+        "kind": "drop",
+        "idxs": [
+         4
+        ],
+        "drop": "можно с животными",
+        "gain": 12,
+        "best": {
+         "id": "8871166",
+         "name": "Бутик-отель Санаторно-курортный комплекс Портрум 1905",
+         "price_nov1": 5802.0,
+         "rating": 9.3
+        },
+        "lack": "в карточке: Размещение с домашними животными не допускается; гулять: парк в 75 м",
+        "text": "если не важно «можно с животными»: +12 отелей, лучший Бутик-отель Санаторно-курортный комплекс Портрум 1905 (в карточке: Размещение с домашними животными не допускается; гулять: парк в 75 м)"
+       },
+       {
+        "kind": "drop",
+        "idxs": [
+         5
+        ],
+        "drop": "солнце садится в море",
+        "gain": 7,
+        "best": {
+         "id": "9763356",
+         "name": "Отель Сочи Галерея Парк",
+         "price_nov1": 1643.0,
+         "rating": 8.6
+        },
+        "lack": "закат летом (не виден), зимой (не виден)",
+        "text": "если не важно «солнце садится в море»: +7 отелей, лучший Отель Сочи Галерея Парк (закат летом (не виден), зимой (не виден))"
+       },
+       {
+        "kind": "drop",
+        "idxs": [
+         0
+        ],
+        "drop": "подъём ≤ 25 м",
+        "gain": 1,
+        "best": {
+         "id": "11161658",
+         "name": "Отель Luciano Hotel & Spa Sochi",
+         "price_nov1": 11590.0,
+         "rating": 9.5
+        },
+        "lack": "Солнечный: 683 м, 11 мин туда и 12 мин обратно, подъём на обратном пути 50 м, переходы…",
+        "text": "если не важно «подъём ≤ 25 м»: +1 отель, лучший Отель Luciano Hotel & Spa Sochi (Солнечный: 683 м, 11 мин туда и 12 мин обратно, подъём на обратном пути 50 м, переходы…)"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "f8_timeline": {
+   "status": "ok",
+   "sec": 0.57,
+   "result": {
+    "n": 40,
+    "consistent_with_night_db": 1.0
+   }
+  },
+  "f9_radar": {
+   "status": "ok",
+   "sec": 0.4,
+   "result": {
+    "alerts_on_real_data": 24,
+    "alert_rate": 0.105,
+    "synthetic_spike_caught": true
+   }
+  },
+  "f10_region": {
+   "status": "ok",
+   "sec": 0.78,
+   "result": {
+    "adler": {
+     "hotels": 339,
+     "sea_view_known": 339
+    }
+   }
+  }
+ }
+}

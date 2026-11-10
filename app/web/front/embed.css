@@ -1,0 +1,8 @@
+/* Встраиваемый режим витрины (?embed=1): только карточка отеля во всю ширину, без шапки, главной, выдачи и баннеров.
+   Так кабинет отельера показывает «Как видят гости» ровно той карточкой, что у гостя. */
+html.embed,html.embed body{background:var(--w-stock-back)}
+html.embed :is(.hdr,#main,footer,.skip,.scrim,.o-consent,.sh-x,.sh-grab,#shCmp,.arc-hbtns,#btnPlay,#btnMe){display:none!important}
+html.embed .sheet{position:static!important;inset:auto!important;transform:none!important;width:100%!important;max-width:none!important;height:100dvh!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+html.embed .sh-top{display:none}
+html.embed .sheet{padding:0 max(0px,calc((100% - 860px) / 2))}
+html.embed .gal-t{aspect-ratio:auto;height:min(380px,42vh)}

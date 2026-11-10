@@ -1,0 +1,40 @@
+id: blackout
+name: Плотные шторы
+description: |
+  Есть ли в номерах шторы блэкаут, чтобы выспаться днём или в белые ночи: по удобствам номеров в карточке и отзывам.
+level: категория номера
+class: policy
+weight: 0.4
+ttl_days: 365
+key: has
+keywords: ["шторы", "блэкаут", "blackout", "затемн", "выспаться днем", "выспаться днём"]
+default_constraint: {field: has, op: "==", value: true}
+fields:
+  has: {type: bool, label: "блэкаут-шторы хотя бы в части номеров"}
+  share: {type: number, better: higher, label: "доля категорий с блэкаутом"}
+methods:
+  - source: card
+    method: "удобства номеров в карточке (blackout-blinds)"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["blackout", "блэкаут", "затемняющ", "плотные шторы"]}}
+    value:
+      has: "c.found"
+      share: "round(c.rooms_matched / c.rooms_total, 2) if c.rooms_total else None"
+    confidence: "0.75 if c.found else 0.45"
+    summary: "f'блэкаут-шторы в {c.rooms_matched} из {c.rooms_total} категорий номеров' if c.found else 'в карточке блэкаут-шторы не указаны'"
+    evidence: "{'hits': c.hits}"
+  - source: photos
+    method: "разметка фото отеля зрением Claude: плотные шторы на кадрах номеров (только слабая улика: по фото блэкаут не отличить от обычной плотной шторы)"
+    steps:
+      - {as: p, tool: photo_labels}
+    when: "p.room_photos > 0 and p.blackout.yes > 0"
+    value: {has: "True"}
+    confidence: "0.3"
+    summary: "f'на фото видны плотные шторы (не обязательно блэкаут) на {p.blackout.yes} из {p.room_photos} фото номеров'"
+    evidence: "{'photos': p.evidence}"
+question:
+  when: "conf < 0.5"
+  text: "'Есть ли в номерах плотные шторы блэкаут? В каких категориях?'"
+answer_fields:
+  has: {type: bool}
+  categories: {type: text}

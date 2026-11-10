@@ -1,0 +1,25 @@
+[project]
+name = "ostrovok-agent"
+version = "0.1.0"
+description = "Агент собирает проверяемые факты об отелях из открытых данных и у отельера"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy==2.1.3",
+  "networkx==3.4.2",
+  "pyyaml==6.0.2",
+  "fastapi==0.115.6",
+  "uvicorn==0.32.1",
+  "anthropic==2.3.0",
+  "openai==1.57.4",
+  "mcp==1.9.4",
+  "httpx==0.28.1",
+  "pydantic==2.10.6",
+  "shapely==2.0.6",
+  "maxminddb==2.6.2",
+]
+
+[project.optional-dependencies]
+build = ["tifffile==2024.9.20", "imagecodecs==2024.9.22"]
+
+[tool.uv]
+package = false

@@ -1,0 +1,152 @@
+id: bathtub
+name: Ванна в номере
+description: ванна в номере. Ищем в карточке Островка и отзывах.
+level: отель
+weight: 0.5
+ttl_days: 365
+key: has
+origin: template
+keywords:
+- ванн
+- джакузи
+default_constraint:
+  field: has
+  op: ==
+  value: true
+fields:
+  has:
+    type: bool
+    label: ванна в номере
+methods:
+- source: card
+  steps:
+  - as: c
+    tool: card_search
+    args:
+      terms: &id001
+      - ^bath$
+      - bathtub
+      - джакуз
+      - душ/ванна
+      - с ванной
+  when: c.found
+  value:
+    has: 'True'
+  confidence: '0.75'
+  summary: '''в карточке: '' + ''; ''.join(sorted(set(h.quote[:80] for h in c.hits))[:2])'
+  evidence: '{''hits'': c.hits}'
+- source: reviews
+  steps:
+  - as: r
+    tool: reviews_search
+    args:
+      terms: *id001
+  when: r.positive > 0
+  value:
+    has: 'True'
+  confidence: min(0.6, 0.3 + 0.1 * r.positive)
+  summary: f'упоминают в отзывах {r.positive} раз'
+  evidence: '{''quotes'': r.positive_quotes}'
+question:
+  when: unknown
+  text: '''Есть ли у вас: ванна в номере? Если да, на каких условиях?'''
+status: draft
+requested_by: null
+drafted_at: '2026-10-28T16:03:08+00:00'
+eval:
+  verdict: нужна проверка
+  warnings:
+  - 'рецепт умеет только «да» или «нет данных»: «нет» он не выставляет никому, поэтому
+    ровное «да» у всех известных отелей ничего не доказывает. Откройте примеры и проверьте
+    глазами, что в каждом найден именно признак'
+  coverage:
+    known: 92
+    unknown: 137
+    conflict: 0
+    stale: 0
+    total: 229
+    key_true: 92
+  key: has
+  distribution:
+    kind: bool
+    n: 92
+    'true': 92
+    'false': 0
+    entropy: 0.0
+    top_share: 1.0
+  degenerate:
+    flag: false
+    reason: ''
+    note: '«нет» рецепт не выставляет никому: у 137 отелей просто нет данных (отсутствие
+      в карточке не доказывает отсутствие признака)'
+  signal:
+    available: false
+    note: рецепт уже использует карточку и отзывы, независимого сигнала нет
+  samples:
+  - hotel_id: '9987582'
+    hotel: Отель Рановский парк
+    status: known
+    value: true
+    summary: упоминают в отзывах 2 раз
+    source: отзывы гостей
+    confidence: 0.75
+    evidence: '{"quotes": [{"date": "2026-08-06", "room": "Одноместный номер Standard
+      (без окна)", "quote": "…да, белочки. За территорией сотрудники следят, чистенько.
+      Есть детская площадка, бассейн, джакузи, вкусный ресторан. Брал завтраки и рад
+      был, что в него включены завтраки на альтернативн…", "review_id": 2277300},
+      {"date": …'
+  - hotel_id: '13163670'
+    hotel: Гостевой дом Парадис
+    status: known
+    value: true
+    summary: упоминают в отзывах 1 раз
+    source: отзывы гостей
+    confidence: 0.692
+    evidence: '{"quotes": [{"date": "2025-03-29", "room": "Четырёхместные апартаменты
+      Superior Мансарда с балконом и с красивым видом из окна (питание для детей не
+      включено)", "quote": "…нице,удобная мини кухня со всем необходимым.В общем как
+      дома.На территории бассейн,баня и джакузи,к сожалению из за насыщенной программы
+      не успел…'
+  - hotel_id: '10001824'
+    hotel: Hostel Imperial
+    status: unknown
+    value: null
+    summary: нет данных
+    source: null
+    confidence: 0.0
+    evidence: ''
+  - hotel_id: '13343374'
+    hotel: Отель Пансионат с лечением Сокол
+    status: known
+    value: true
+    summary: упоминают в отзывах 1 раз
+    source: отзывы гостей
+    confidence: 0.692
+    evidence: '{"quotes": [{"date": "2026-10-11", "room": "Двухместный номер Стандартный
+      с балконом (двуспальная кровать)", "quote": "…тные процедуры. Массаж 15 мин
+      1400. Подводный 1500. И др много.. \r Огромный Бассейн 29гр, джакузи, водопад,
+      можно массироваться. Сауна с 11 только разогревсется. Жаль. Пораньше бы. Бассе…",
+      "revie…'
+  - hotel_id: '7467615'
+    hotel: Отель City Park Hotel Sochi
+    status: known
+    value: true
+    summary: упоминают в отзывах 1 раз
+    source: отзывы гостей
+    confidence: 0.692
+    evidence: '{"quotes": [{"date": "2026-08-17", "room": "Двухместная студия (двуспальная
+      кровать) (кресло-кровать, дополнительные кровати (без питания) включены)", "quote":
+      "…вино белое, красное, пиво, медовуха вишнёвая)\r Спа:\r Небольшой бассейн,
+      хамам, две сауны, джакузи с холодной водой, лежаки, гамаки на улице.", "review_id…'
+  recipe:
+    mode: template
+    sources:
+    - card
+    - reviews
+    tools:
+    - card_search
+    - reviews_search
+    methods: 2
+    attempts: 1
+    wall_s: 2.7
+demo_seed: true

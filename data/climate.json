@@ -1,0 +1,197 @@
+{
+ "point": [
+  43.585,
+  39.715
+ ],
+ "period": [
+  "2022-01-01",
+  "2025-12-31"
+ ],
+ "fetched_at": "2026-10-27",
+ "sources": {
+  "air": "Open-Meteo Archive API (реанализ ERA5)",
+  "sea": "Open-Meteo Marine API (модель MeteoFrance, ~8 км)"
+ },
+ "months": {
+  "1": {
+   "air_max_c": 10.0,
+   "air_min_c": 3.2,
+   "precip_mm": 190,
+   "rain_days": 15.0,
+   "sunshine_h_per_day": 5.7,
+   "sea_c": 11.3,
+   "sea_c_min": 10.2,
+   "sea_c_max": 12.7,
+   "sea_c_by_decade": [
+    11.9,
+    11.3,
+    10.8
+   ]
+  },
+  "2": {
+   "air_max_c": 9.2,
+   "air_min_c": 2.6,
+   "precip_mm": 181,
+   "rain_days": 13.8,
+   "sunshine_h_per_day": 5.5,
+   "sea_c": 10.3,
+   "sea_c_min": 9.4,
+   "sea_c_max": 11.7,
+   "sea_c_by_decade": [
+    10.6,
+    10.2,
+    10.2
+   ]
+  },
+  "3": {
+   "air_max_c": 12.2,
+   "air_min_c": 5.1,
+   "precip_mm": 143,
+   "rain_days": 15.5,
+   "sunshine_h_per_day": 7.0,
+   "sea_c": 10.4,
+   "sea_c_min": 9.3,
+   "sea_c_max": 12.4,
+   "sea_c_by_decade": [
+    10.0,
+    10.5,
+    10.7
+   ]
+  },
+  "4": {
+   "air_max_c": 17.0,
+   "air_min_c": 9.4,
+   "precip_mm": 146,
+   "rain_days": 13.5,
+   "sunshine_h_per_day": 8.7,
+   "sea_c": 12.9,
+   "sea_c_min": 10.4,
+   "sea_c_max": 16.9,
+   "sea_c_by_decade": [
+    12.0,
+    12.6,
+    14.1
+   ]
+  },
+  "5": {
+   "air_max_c": 19.1,
+   "air_min_c": 12.1,
+   "precip_mm": 153,
+   "rain_days": 15.8,
+   "sunshine_h_per_day": 10.4,
+   "sea_c": 16.9,
+   "sea_c_min": 12.9,
+   "sea_c_max": 20.9,
+   "sea_c_by_decade": [
+    15.3,
+    16.4,
+    18.8
+   ]
+  },
+  "6": {
+   "air_max_c": 24.3,
+   "air_min_c": 17.7,
+   "precip_mm": 130,
+   "rain_days": 12.5,
+   "sunshine_h_per_day": 13.3,
+   "sea_c": 22.8,
+   "sea_c_min": 18.2,
+   "sea_c_max": 26.4,
+   "sea_c_by_decade": [
+    21.4,
+    23.3,
+    23.8
+   ]
+  },
+  "7": {
+   "air_max_c": 27.2,
+   "air_min_c": 20.0,
+   "precip_mm": 104,
+   "rain_days": 10.0,
+   "sunshine_h_per_day": 13.4,
+   "sea_c": 26.2,
+   "sea_c_min": 21.3,
+   "sea_c_max": 29.9,
+   "sea_c_by_decade": [
+    24.9,
+    26.3,
+    27.4
+   ]
+  },
+  "8": {
+   "air_max_c": 29.1,
+   "air_min_c": 21.4,
+   "precip_mm": 60,
+   "rain_days": 9.8,
+   "sunshine_h_per_day": 12.5,
+   "sea_c": 27.9,
+   "sea_c_min": 25.4,
+   "sea_c_max": 29.6,
+   "sea_c_by_decade": [
+    28.2,
+    27.9,
+    27.6
+   ]
+  },
+  "9": {
+   "air_max_c": 24.8,
+   "air_min_c": 17.3,
+   "precip_mm": 154,
+   "rain_days": 12.5,
+   "sunshine_h_per_day": 10.4,
+   "sea_c": 25.7,
+   "sea_c_min": 21.2,
+   "sea_c_max": 28.9,
+   "sea_c_by_decade": [
+    27.1,
+    25.7,
+    24.1
+   ]
+  },
+  "10": {
+   "air_max_c": 19.4,
+   "air_min_c": 11.9,
+   "precip_mm": 171,
+   "rain_days": 14.5,
+   "sunshine_h_per_day": 8.0,
+   "sea_c": 20.9,
+   "sea_c_min": 17.6,
+   "sea_c_max": 24.8,
+   "sea_c_by_decade": [
+    22.8,
+    20.7,
+    19.5
+   ]
+  },
+  "11": {
+   "air_max_c": 16.4,
+   "air_min_c": 8.7,
+   "precip_mm": 177,
+   "rain_days": 13.0,
+   "sunshine_h_per_day": 6.4,
+   "sea_c": 16.9,
+   "sea_c_min": 14.1,
+   "sea_c_max": 20.6,
+   "sea_c_by_decade": [
+    18.3,
+    17.0,
+    15.8
+   ]
+  },
+  "12": {
+   "air_max_c": 12.3,
+   "air_min_c": 5.6,
+   "precip_mm": 216,
+   "rain_days": 16.5,
+   "sunshine_h_per_day": 5.1,
+   "sea_c": 13.6,
+   "sea_c_min": 11.6,
+   "sea_c_max": 15.7,
+   "sea_c_by_decade": [
+    14.8,
+    13.5,
+    12.6
+   ]
+  }
+ }
+}

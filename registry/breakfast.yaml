@@ -1,0 +1,52 @@
+id: breakfast
+name: Завтрак
+description: |
+  Есть ли в отеле завтрак, шведский стол или завтрак в номер: по удобствам в карточке Островка и упоминаниям в отзывах.
+  Включён ли завтрак в цену, зависит от тарифа, его знает только отельер.
+level: отель
+weight: 0.7
+ttl_days: 365
+key: has
+keywords: ["завтрак", "breakfast"]
+phrases:
+  "шведск|буфет": {field: buffet, op: "==", value: true}
+  "завтрак в номер": {field: in_room, op: "==", value: true}
+default_constraint: {field: has, op: "==", value: true}
+fields:
+  has: {type: bool, label: "завтрак в отеле"}
+  buffet: {type: bool, label: "шведский стол"}
+  in_room: {type: bool, label: "завтрак в номер"}
+  meal_score: {type: number, better: higher, label: "оценка еды гостями, из 10"}
+methods:
+  - source: card
+    method: "удобства и описание в карточке"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["завтрак", "breakfast", "шведск"], where: ["amenities", "description"]}}
+      - {as: s, tool: review_stats}
+    when: "c.found"
+    value:
+      has: "True"
+      buffet: "any(('шведск' in h.quote.lower() or 'буфет' in h.quote.lower()) for h in c.hits)"
+      in_room: "any('в номер' in h.quote.lower() for h in c.hits)"
+      meal_score: "s.aspects.meal"
+    confidence: "0.8"
+    summary: "'в карточке: ' + '; '.join(sorted(set(h.quote[:80] for h in c.hits))[:2]) + (f'; еду гости оценивают на {s.aspects.meal} из 10' if s.aspects.meal else '')"
+    evidence: "{'hits': c.hits}"
+  - source: reviews
+    method: "упоминания завтрака в отзывах"
+    steps:
+      - {as: r, tool: reviews_search, args: {terms: ["завтрак"], exclude: ["без завтрак", "завтрака нет", "нет завтрак", "не было завтрак"]}}
+    when: "r.positive + r.negative > 0"
+    value:
+      has: "True"
+    confidence: "min(0.65, 0.35 + 0.1 * (r.positive + r.negative))"
+    summary: "f'завтрак упоминают в отзывах {r.positive + r.negative} раз: хвалят {r.positive}, ругают {r.negative}'"
+    evidence: "{'quotes': r.positive_quotes + r.negative_quotes}"
+question:
+  when: "unknown or conf < 0.6"
+  text: "'Есть ли у вас завтрак? Шведский стол или по меню, во сколько, и входит ли он в цену номера?'"
+answer_fields:
+  has: {type: bool}
+  buffet: {type: bool}
+  included: {type: bool}
+  hours: {type: text}

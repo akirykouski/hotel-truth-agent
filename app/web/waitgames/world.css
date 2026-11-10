@@ -1,0 +1,24 @@
+/* Мир «Открытка из Сочи»: общие токены для фронта и О!ркады. Цвета и шрифты Островка. */
+@font-face{font-family:"PTRootUI";src:url("https://nof.fastrovok.net/fonts/ptrootui/pt-root-ui_vf.woff2") format("woff2");font-weight:300 700;font-display:swap}
+@font-face{font-family:"Spoof";src:url("https://nof.fastrovok.net/fonts/spoof/Spoof-Medium.woff2") format("woff2");font-weight:500;font-display:swap}
+:root{
+  color-scheme:light;
+  /* бренд */
+  --w-blue:#0b4ec2;--w-blue-deep:#0a3f9e;--w-lime:#acef81;--w-lime-deep:#8fdc5f;--w-table:#f2f1f0;--w-ink:#292f37;--w-purple:#855ca6;--w-red:#cb1b00;
+  /* открытка */
+  --w-stock:#ffffff;--w-stock-back:#fbfaf7;--w-deckle:#e4e1dc;--w-ink-2:#5b616b;--w-ink-3:#85878b;
+  --w-rule:#d8d5cf;                 /* линейки адресной стороны */
+  --w-postmark:#0b4ec2;             /* штемпель: источник + дата */
+  --w-ok:#2f7d0e;--w-ok-soft:#e6f7d9;--w-maybe:#8a5a00;--w-maybe-soft:#fff3d1;--w-bad:#cb1b00;--w-bad-soft:#fdeceA;
+  /* LCD «Электроники» */
+  --w-lcd:#cdeeb0;--w-lcd-ink:#20291d;--w-lcd-ghost:rgba(32,41,29,.08);--w-lcd-body:#0b4ec2;
+  /* форма */
+  --w-r-card:22px;--w-r-cut:44px;   /* скруглённый вырубной угол открытки */
+  --w-r-ctl:12px;
+  --w-shadow-card:0 1px 1px rgba(41,47,55,.06),0 10px 30px -8px rgba(41,47,55,.18);
+  --w-shadow-lift:0 2px 2px rgba(41,47,55,.06),0 24px 48px -12px rgba(11,78,194,.28);
+  --w-font:"PTRootUI","PT Sans",system-ui,sans-serif;--w-display:"Spoof","PTRootUI",system-ui,sans-serif;
+  --w-ease:cubic-bezier(.16,1,.3,1);--w-ease-press:cubic-bezier(.22,1,.36,1);
+}
+@media (prefers-color-scheme:dark){:root{color-scheme:light}}
+::selection{background:var(--w-lime);color:var(--w-ink)}

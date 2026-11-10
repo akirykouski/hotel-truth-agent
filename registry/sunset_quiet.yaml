@@ -1,0 +1,30 @@
+id: sunset_quiet
+name: Закат с тихой стороны
+description: |
+  Виден ли закат из окон той стороны здания, которая ночью тихая: сторона и этаж заката по месяцам сверяются с
+  уровнем ночного шума именно этой стороны. Нужна, когда гость хочет и закат, и выспаться в том же номере.
+level: сторона здания × этаж × месяц
+class: physical
+weight: 0.8
+ttl_days: 180
+key: any_month
+keywords: ["закат и тишин", "тихий номер с видом на закат", "тихий номер с закатом", "закат с тихой"]
+city_terms: ["закат"]  # как тема звучит в описаниях и отзывах региона (профиль города, app/city.py)
+default_constraint: {field: visible_quiet, op: "==", value: true}
+fields:
+  visible_quiet: {type: bool, per_month: true, path: by_month, label: "закат виден с тихой стороны (< 55 дБ ночью)"}
+  night_db: {type: number, per_month: true, path: by_month, better: lower, label: "ночной шум стороны заката, дБ"}
+methods:
+  - source: geo
+    method: "сторона заката по месяцам × шум этой стороны"
+    steps:
+      - {as: s, tool: sunset}
+      - {as: n, tool: noise}
+    value:
+      by_month: "dict([(m, {'facade': x.facade, 'from_floor': x.from_floor, 'night_db': ([f.night_db for f in n.facades if f.dir == x.facade] or [None])[0], 'visible_quiet': x.facade is not None and ([f.night_db for f in n.facades if f.dir == x.facade] or [99])[0] < 55}) for m, x in s.months.items()])"
+      any_month: "any(x.facade is not None and ([f.night_db for f in n.facades if f.dir == x.facade] or [99])[0] < 55 for x in s.months.values())"
+    confidence: "0.55"
+    summary: >-
+      ('летом закат со стороны ' + s.months['7'].facade + f' (~{round(([f.night_db for f in n.facades if f.dir == s.months["7"].facade] or [0])[0])} дБ ночью)' if s.months['7'].facade else 'летом закат из окон не виден')
+      + (', это тихая сторона' if s.months['7'].facade and ([f.night_db for f in n.facades if f.dir == s.months['7'].facade] or [99])[0] < 55 else (', сторона шумная' if s.months['7'].facade else ''))
+    evidence: "{'sunset': s.months, 'noise': n.facades}"

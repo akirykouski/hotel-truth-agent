@@ -1,0 +1,34 @@
+/* Бэк-офис (/backoffice) в мире «Открытка из Сочи»: бумага, синие чернила, лайм для активного. Токены: world.css. */
+:root{--o-blue:var(--w-blue);--o-blue-hover:var(--w-blue-deep);--o-lime:var(--w-lime);--o-grey:var(--w-table);--o-ink:var(--w-ink);--o-purple:var(--w-purple);--o-red:var(--w-red);
+--bg:var(--w-table);--card:var(--w-stock);--ink:var(--w-ink);--muted:var(--w-ink-3);--line:var(--w-deckle);--acc:var(--w-blue);--acc-soft:#e8effb;
+--ok:var(--w-ok);--ok-soft:var(--w-ok-soft);--warn:var(--w-maybe);--warn-soft:var(--w-maybe-soft);--bad:var(--w-bad);--bad-soft:var(--w-bad-soft);--unk:var(--w-ink-2);--unk-soft:#eeedeb;
+--o-font:var(--w-font);--o-display:var(--w-display)}
+@media (prefers-color-scheme:dark){:root{--bg:var(--w-table);--card:var(--w-stock);--ink:var(--w-ink);--muted:var(--w-ink-3);--line:var(--w-deckle);--acc:var(--w-blue);--acc-soft:#e8effb;
+--ok:var(--w-ok);--ok-soft:var(--w-ok-soft);--warn:var(--w-maybe);--warn-soft:var(--w-maybe-soft);--bad:var(--w-bad);--bad-soft:var(--w-bad-soft);--unk:var(--w-ink-2);--unk-soft:#eeedeb}}
+body{font-family:var(--w-font);font-size:14px;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+h1,h2,h3,.o-display{font-family:var(--w-display);font-weight:500;letter-spacing:-.01em}
+header{background:var(--card);border-bottom:0;box-shadow:0 1px 0 var(--line),0 8px 20px -14px rgba(41,47,55,.25);padding:12px 20px;gap:18px}
+header h1{display:flex;align-items:center;gap:12px;font-size:17px}
+.o-mark{display:inline-flex;align-items:center;font:700 19px/1 var(--w-font);letter-spacing:.02em;color:var(--w-blue);text-decoration:none}
+.o-mark svg{width:15px;height:19px;margin:0 1px;transform:translateY(-1px)}
+.o-sub{font-family:var(--w-display);font-weight:500;color:var(--ink);font-size:16px;padding-left:12px;border-left:1px solid var(--line)}
+nav button{font-family:var(--w-font);font-size:14px;border-radius:10px 10px 10px 14px;padding:8px 12px;min-height:40px;color:var(--ink)}
+nav button:hover{background:var(--bg)}
+nav button.on{background:var(--w-lime);color:var(--w-ink);font-weight:600}
+.card{border:1px solid var(--line);border-radius:12px 12px 12px 26px;box-shadow:var(--w-shadow-card);background:var(--card)}
+.kpi div{border:1px solid var(--line);border-radius:10px 10px 10px 18px;box-shadow:var(--w-shadow-card)}
+button.b{background:var(--w-blue);border-radius:10px 10px 10px 16px;padding:10px 18px;font-family:var(--w-font);font-weight:600;font-size:14px;min-height:44px;box-shadow:inset 0 1px 1px rgba(255,255,255,.3),0 6px 12px -6px rgba(11,78,194,.55)}
+button.b:hover{background:var(--w-blue-deep)}
+button.g{border-radius:10px;padding:7px 12px;font-size:13px;min-height:36px;background:var(--card)}
+button.g:hover{border-color:var(--w-blue);color:var(--w-blue)}
+.chip{background:var(--card);color:var(--w-blue);border:1px solid #cfdcf3;font-size:13px;padding:8px 12px;min-height:36px}
+.chip:hover{background:var(--acc-soft)}
+.m.u{background:var(--w-blue);border-radius:12px 12px 2px 12px}.m.a{background:var(--w-stock-back);border:1px solid var(--line);border-radius:12px 12px 12px 2px}
+textarea,input,select{border-radius:8px;font-family:var(--w-font);background:var(--w-stock-back)}
+textarea:focus,input:focus,select:focus,button:focus-visible{outline:2px solid var(--w-blue);outline-offset:1px}
+th{color:var(--w-ink-2);font-weight:600}
+.conf{background:rgba(11,78,194,.1)}
+.h img{border-radius:6px 6px 6px 14px}.h .t{font-size:15px}
+.badge.bm{background:var(--w-lime);color:#1d4a0a}
+a{color:var(--acc);text-underline-offset:3px}
+@media(max-width:600px){header{padding:10px 16px}.o-sub{display:none}main{padding:12px 16px}nav{overflow-x:auto;flex-wrap:nowrap;width:100%}nav button{white-space:nowrap}}

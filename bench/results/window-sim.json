@@ -1,0 +1,17 @@
+{
+ "repo": ".",
+ "branch": "feat/window-sim",
+ "sha": "6c75fd8",
+ "at": "2026-10-27 20:57",
+ "tracks": {
+  "f2_window": {
+   "status": "ok",
+   "sec": 6.91,
+   "result": {
+    "n": 55,
+    "consistent_with_sea_view": 1.0,
+    "ms_per_render": 125
+   }
+  }
+ }
+}

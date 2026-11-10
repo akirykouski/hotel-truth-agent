@@ -1,0 +1,30 @@
+id: center_walk
+name: Пешком до центра
+description: |
+  Сколько идти до центра (Морской вокзал Сочи) туда и обратно с подъёмом и ступенями. Расчёт map-app: пешеходный
+  граф OSM, FABDEM, лестницы маршем. Только для района «Центр».
+level: отель
+class: physical
+weight: 0.5
+ttl_days: 365
+key: minutes_there
+keywords: ["до центра", "центр пешком", "до морского вокзала", "морвокзал", "до морвокзала"]
+default_constraint: {field: minutes_there, op: "<=", value: 20}
+fields:
+  minutes_there: {type: number, better: lower, label: "минут пешком до центра"}
+  minutes_back: {type: number, better: lower, label: "минут из центра обратно"}
+  climb_back_m: {type: number, better: lower, label: "подъём из центра до отеля, м"}
+methods:
+  - source: geo
+    method: "расчёт map-app: пешеходный граф OSM + FABDEM, Тоблер, лестницы маршем, туда и обратно"
+    steps:
+      - {as: w, tool: mapapp_walk, args: {target: center}}
+    when: "w.available"
+    value:
+      minutes_there: "round(w.there.min)"
+      minutes_back: "round(w.back.min)"
+      climb_back_m: "round(w.back.up_m)"
+    confidence: "0.75"
+    summary: >-
+      f'до центра ({w.target}) {round(w.there.min)} мин пешком, обратно {round(w.back.min)} мин, подъём {round(w.back.up_m)} м'
+    evidence: "{'center': w.target, 'there': w.there, 'back': w.back, 'match': w.match, 'source': 'map-app ' + str(w.commit)}"

@@ -1,0 +1,49 @@
+id: wifi
+name: Интернет для работы
+description: |
+  Хватит ли интернета для удалённой работы: как гости оценили Wi-Fi в отзывах Островка (perfect / slow), средняя
+  оценка Wi-Fi, и что заявлено в карточке (Wi-Fi в номере, скоростной интернет, рабочий стол).
+level: отель
+class: experiential
+weight: 0.6
+ttl_days: 180
+key: good
+keywords: ["интернет", "wi-fi", "wifi", "вайфай", "удалённ", "удаленн", "поработать", "рабочий стол"]
+default_constraint: {field: good, op: "==", value: true}
+fields:
+  good: {type: bool, label: "гости довольны Wi-Fi"}
+  good_share: {type: number, better: higher, label: "доля оценок Wi-Fi «отлично»"}
+  desk: {type: bool, label: "рабочий стол в номерах"}
+methods:
+  - source: reviews
+    method: "поле wifi_quality и оценка wifi в отзывах Островка"
+    steps:
+      - {as: s, tool: review_stats}
+    when: "s.wifi_rated >= 3"
+    value:
+      good: "s.wifi_good_share >= 0.7 and (s.aspects.wifi or 10) >= 8"
+      good_share: "s.wifi_good_share"
+      wifi_score: "s.aspects.wifi"
+    confidence: "min(0.85, 0.4 + 0.05 * s.wifi_rated)"
+    summary: "f'Wi-Fi: «отлично» в {round(100 * s.wifi_good_share)}% из {s.wifi_rated} оценок гостей' + (f', средняя {s.aspects.wifi} из 10' if s.aspects.wifi else '')"
+    evidence: "{'votes': s.wifi_votes, 'aspects': s.aspects}"
+  - source: card
+    method: "удобства в карточке"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["high-speed-internet", "Wi-Fi в номер", "Скоростной интернет"], where: ["amenities", "rooms"]}}
+      - {as: d, tool: card_search, args: {terms: ["^desk$", "рабоч\\w* (стол|зон)"], where: ["amenities", "rooms"]}}
+    when: "c.found or d.found"
+    value:
+      good: "True if c.found else None"
+      desk: "d.found"
+    # слова отеля о «скоростном интернете» — слабая улика против оценок гостей
+    confidence: "0.35"
+    summary: "('в карточке: скоростной интернет' if c.found else 'в карточке про скорость интернета нет') + ('; рабочий стол в номерах' if d.found else '')"
+    evidence: "{'internet': c.hits[:3], 'desk': d.hits[:3]}"
+question:
+  when: "unknown or conf < 0.6"
+  text: "'Гости, которые работают удалённо, спрашивают про интернет: какая скорость Wi-Fi в номерах, есть ли рабочий стол?'"
+answer_fields:
+  good: {type: bool}
+  speed_mbps: {type: number, label: "скорость, Мбит/с"}
+  desk: {type: bool}

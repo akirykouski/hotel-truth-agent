@@ -1,0 +1,26 @@
+id: food_near
+name: Где поесть рядом
+description: |
+  Сколько кафе, ресторанов и столовых в пяти минутах пешком (300 м по прямой), по OSM, без учёта часов работы.
+level: отель
+class: physical
+weight: 0.5
+ttl_days: 120
+key: plenty
+keywords: ["поесть", "кафе рядом", "рестораны рядом", "где поесть", "столов"]
+default_constraint: {field: plenty, op: "==", value: true}
+fields:
+  plenty: {type: bool, label: "3 и больше мест поесть в 300 м"}
+  count: {type: number, better: higher, label: "мест поесть в 300 м"}
+methods:
+  - source: osm
+    method: "OSM amenity=restaurant|cafe|fast_food|food_court"
+    steps:
+      - {as: f, tool: nearby, args: {tags: {amenity: "restaurant|cafe|fast_food|food_court"}, radius_m: 300, limit: 50}}
+    value:
+      plenty: "f.count >= 3"
+      count: "f.count"
+      nearest_m: "f.nearest_m"
+    confidence: "0.7"
+    summary: "f'{f.count} мест поесть в 300 м, ближайшее в {f.nearest_m} м' if f.count else 'в 300 м мест поесть по OSM нет'"
+    evidence: "{'places': f.items[:8]}"

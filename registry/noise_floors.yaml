@@ -1,0 +1,37 @@
+id: noise_floors
+name: Тихая сторона и этаж ночью
+description: |
+  Шум ночью по каждой стороне здания и каждому этажу: где тише всего и на сколько стороны различаются. Расчёт map-app
+  по CNOSSOS-EU (дороги), Schall 03 (ж/д) и часам работы баров, с экранами из домов и рельефа, ± 5 дБ.
+  Тихо — меньше 45 дБ ночью снаружи у окна (ориентир ВОЗ для ночи — 40–45 дБ).
+level: сторона здания × этаж
+class: physical
+weight: 0.7
+ttl_days: 365
+key: quiet
+keywords: ["тихий этаж", "этаж потише", "шум по этажам", "окна во двор", "тихая сторона"]
+city_terms: ["шум", "тих", "тишин", "выспа"]  # как тема звучит в описаниях и отзывах региона (профиль города, app/city.py)
+default_constraint: {field: quiet, op: "==", value: true}
+fields:
+  quiet: {type: bool, label: "есть сторона и этаж тише 45 дБ ночью"}
+  quiet_side: {type: text, label: "самая тихая сторона ночью"}
+  quiet_floor: {type: number, label: "самый тихий этаж"}
+  quietest_db: {type: number, better: lower, label: "ночью на самой тихой стороне, дБ"}
+  spread_db: {type: number, label: "разница тихой и шумной стороны, дБ"}
+methods:
+  - source: geo
+    method: "расчёт map-app: CNOSSOS-EU 2020 для дорог, Schall 03 для ж/д, бары по opening_hours; экраны, высота окна по этажам"
+    steps:
+      - {as: n, tool: mapapp_noise}
+    when: "n.available"
+    value:
+      quiet: "n.quietest.night_db < 45"
+      quiet_side: "n.quietest.dir"
+      quiet_floor: "n.quietest.floor"
+      quietest_db: "round(n.quietest.night_db)"
+      spread_db: "round(n.spread_db)"
+    confidence: "0.55 if abs(n.quietest.night_db - 45) > 5 else 0.4"
+    summary: >-
+      f'ночью тише всего сторона {n.quietest.dir}, {n.quietest.floor}-й этаж: ~{round(n.quietest.night_db)} дБ; '
+      + f'самая шумная {n.loudest.dir}, {n.loudest.floor}-й этаж: ~{round(n.loudest.night_db)} дБ (± {round(n.uncert_db)} дБ)'
+    evidence: "{'by_floor': n.by_floor, 'facades': n.facades, 'match': n.match, 'source': 'map-app ' + str(n.commit)}"

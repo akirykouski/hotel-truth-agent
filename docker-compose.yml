@@ -1,0 +1,78 @@
+# Один образ, два сервиса: веб и API (app) и MCP для внешних агентов (mcp). Запуск: docker compose up --build
+# Демо-данные, предрасчёт и скрап Островка для новых регионов (data/sources) лежат в образе, соседние репозитории не нужны.
+# app и mcp делят рабочее состояние через два именованных тома:
+#   cache           -> data/cache: рабочая база фактов facts.runtime.sqlite (WAL), секрет входа auth_secret, кэши
+#   registry-custom -> registry/custom: характеристики, добавленные словами и одобренные админом
+# Ответ отельера, принятый в app, виден в mcp сразу и переживает `docker compose down && up` (без `down -v`).
+# Сброс демо к исходному состоянию: docker compose down -v
+name: ostrovok-truth
+
+x-base: &base
+  build: .                                             # слои общие: второй сервис собирается из кэша
+  platform: linux/amd64                                # одинаковый образ на Apple Silicon и x86
+  env_file: [{path: .env, required: false}]
+  restart: unless-stopped
+  extra_hosts: ["host.docker.internal:host-gateway"]   # локальная LLM на хосте (Ollama, LM Studio) и под Linux
+  environment: &env
+    FACTS_DB: /app/data/cache/facts.runtime.sqlite
+    ADMIN_PASSWORD: ${ADMIN_PASSWORD:-demo}            # демо-вход админа (жюри: demo)
+    HOTELIER_DEMO_CODE: ${HOTELIER_DEMO_CODE:-demo}    # демо-код отельера
+    AUTH_SECRET: ${AUTH_SECRET:-}                      # пусто: секрет создаётся один раз в томе cache
+    # LLM и ключи: берутся из .env (env_file выше) или из окружения shell; без значения переменная просто не задаётся
+    LLM_PROVIDER:                                      # anthropic | openai | none; пусто = по найденному ключу
+    LLM_MODEL:
+    ANTHROPIC_API_KEY:
+    ANTHROPIC_AUTH_TOKEN:
+    ANTHROPIC_BASE_URL:
+    OPENAI_API_KEY:
+    OPENAI_BASE_URL:
+    AGENT_API_KEY:                                     # ключ для нашего /v1/chat/completions
+    REGION:
+    TASTE_MODE:
+    TASTE_DEMO:
+    TASTE_ADMIN_KEY:
+  volumes: &vols
+    - cache:/app/data/cache
+    - registry-custom:/app/registry/custom
+    - ./data/regions:/app/data/regions                 # регионы, собранные во вкладке «Регионы», остаются на диске
+
+services:
+  app:
+    <<: *base
+    ports: ["${APP_PORT:-8080}:8080"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8080/health', timeout=5)"]
+      interval: 10s
+      timeout: 6s
+      start_period: 300s                               # под эмуляцией amd64 старт до 1,5–2 минут; провалы тут не считаются
+      start_interval: 5s
+      retries: 3
+
+  mcp:
+    <<: *base
+    command: ["python", "-m", "app.mcp_server", "--http"]
+    ports: ["${MCP_PORT:-8001}:8001"]
+    environment:
+      <<: *env
+      FASTMCP_HOST: 0.0.0.0
+      MCP_ADMIN_TOKEN: ${MCP_ADMIN_TOKEN:-}            # пусто: MCP только для чтения
+    depends_on:
+      app: {condition: service_healthy}                # app первым копирует предрасчёт в общий том, без гонки
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; socket.create_connection(('localhost', 8001), 5)"]
+      interval: 10s
+      timeout: 6s
+      start_period: 300s
+      start_interval: 5s
+      retries: 3
+
+  test:                                                # docker compose --profile test run --rm test
+    <<: *base
+    profiles: [test]
+    restart: "no"
+    healthcheck: {disable: true}                       # сервер тут не запускается, только тесты
+    command: ["sh", "-c", "python tests/smoke.py && LLM_PROVIDER=none python tests/front_queries.py && python tests/auth_check.py"]
+
+volumes:
+  cache:
+  registry-custom:

@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>О!Правда об отеле</title>
+<script>{const r={'/ui/classic':'guest','/hotelier':'hotelier','/backoffice':'admin','/admin':'admin'}[location.pathname.replace(/\/+$/,'')];if(r)document.documentElement.dataset.role=r}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="/web/skin.css">
+<link rel="stylesheet" href="/waitgames/world.css">
+<link rel="stylesheet" href="/front/postcard-roles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0E41D2">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#16181d;--muted:#667085;--line:#e4e7ec;--acc:#0b63f6;--acc-soft:#e8f0ff;
+--ok:#12805c;--ok-soft:#e6f6ef;--warn:#b54708;--warn-soft:#fef3e6;--bad:#c01048;--bad-soft:#fdeef3;--unk:#475467;--unk-soft:#eef1f5}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1115;--card:#171a21;--ink:#e8eaf0;--muted:#98a2b3;--line:#2a2f3a;--acc:#5b9bff;
+--acc-soft:#1b2a45;--ok:#47cd89;--ok-soft:#12261d;--warn:#f5a54a;--warn-soft:#2e2112;--bad:#f97393;--bad-soft:#2d1520;--unk:#a3acbd;--unk-soft:#1f232c}}
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{display:flex;align-items:center;gap:16px;padding:10px 20px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:1000;flex-wrap:wrap}
+header h1{font-size:17px;margin:0}header .st{color:var(--muted);font-size:12px}
+nav{display:flex;gap:4px;flex-wrap:wrap}nav button{border:0;background:none;padding:7px 11px;border-radius:8px;color:var(--muted);cursor:pointer;font-size:13px}
+nav button.on{background:var(--acc-soft);color:var(--acc);font-weight:600}
+main{padding:16px 20px;max-width:1400px;margin:0 auto}.tab{display:none}.tab.on{display:block}
+.grid{display:grid;grid-template-columns:420px 1fr;gap:16px}@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.chat{display:flex;flex-direction:column;height:calc(100vh - 110px);min-height:480px}
+.msgs{flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px;padding-right:4px}
+.m{padding:9px 12px;border-radius:10px;white-space:pre-wrap;max-width:95%}.m.u{background:var(--acc);color:#fff;align-self:flex-end}
+.m.a{background:var(--unk-soft)}.trace{font-size:11px;color:var(--muted)}
+form.ask{display:flex;gap:8px;margin-top:10px}textarea,input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px}
+textarea{flex:1;resize:vertical;min-height:44px}button.b{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:600}
+button.g{background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.chip{font-size:12px;padding:4px 9px;border-radius:99px;background:var(--acc-soft);color:var(--acc);cursor:pointer;border:0}
+.res{display:flex;flex-direction:column;gap:10px}.h{display:grid;grid-template-columns:120px 1fr;gap:12px}.h img{width:120px;height:86px;object-fit:cover;border-radius:8px;background:var(--line)}
+.h .t{font-weight:600}.h .meta{color:var(--muted);font-size:12px}.lines{margin:6px 0 0;padding:0;list-style:none;font-size:12.5px}
+.lines li{margin:2px 0}.ok{color:var(--ok)}.bad{color:var(--bad)}.unk{color:var(--unk)}
+.badge{display:inline-block;font-size:11px;padding:1px 7px;border-radius:99px;margin-right:4px}
+.bm{background:var(--ok-soft);color:var(--ok)}.bq{background:var(--warn-soft);color:var(--warn)}.bf{background:var(--bad-soft);color:var(--bad)}.bu{background:var(--unk-soft);color:var(--unk)}.bn{background:#eef0f3;color:#667085}
+#map,#hmap,#emap{height:300px;border-radius:12px;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);font-weight:500;font-size:12px}
+.conf{display:inline-block;width:46px;height:6px;background:var(--line);border-radius:3px;vertical-align:middle;margin-right:4px}.conf i{display:block;height:6px;border-radius:3px;background:var(--acc)}
+details summary{cursor:pointer;color:var(--acc);font-size:12px}pre{white-space:pre-wrap;font-size:11.5px;background:var(--bg);padding:8px;border-radius:8px;max-height:280px;overflow:auto}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.muted{color:var(--muted)}h2{font-size:16px;margin:0 0 10px}h3{font-size:14px;margin:12px 0 6px}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.kpi div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}.kpi b{font-size:22px;display:block}
+.q{border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0}.echo{margin-top:8px;padding:10px 12px;border-radius:10px;background:var(--acc-soft)}.echo>b{display:block;margin:4px 0;font-size:14px}.small{font-size:12px}
+#metrics{overflow-x:auto}
+.fc{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:3px 9px;border-radius:99px;background:var(--unk-soft);color:var(--ink);cursor:help;max-width:100%}
+.fc em{font-style:normal;font-weight:700;font-size:11px;color:var(--muted)}.fc.fail{text-decoration:line-through;text-decoration-color:var(--bad)}.fc.fail em{color:var(--bad);display:inline-block}
+.fc.unknown{background:transparent;border:1px dashed var(--line);color:var(--muted)}
+.fc i{width:7px;height:7px;border-radius:50%;background:var(--ink);flex:none}
+.chipsrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.ev{padding:8px 0;border-bottom:1px solid var(--line)}.ev .when{color:var(--muted);font-size:12px}
+.arr{display:none}
+@media(max-width:600px){
+ header{gap:6px;padding:8px 12px}header .st{display:none}
+ nav{flex-wrap:nowrap;overflow-x:auto;width:100%;scrollbar-width:none}nav button{white-space:nowrap;flex:none}
+ main{padding:12px}
+ .chat{height:45vh;min-height:0;max-height:45vh}
+ .h{grid-template-columns:1fr}.h img{width:100%;height:160px}
+ #map,#hmap,#emap{height:240px}
+ #cmp,#metrics{overflow-x:auto}
+ .ft,.ft tbody{display:block}.ft tr:first-child{display:none}
+ .ft tr{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0}
+ .ft td{display:block;border:0;padding:0;min-width:0}
+ .ft td:nth-child(1){order:1}.ft td:nth-child(4){order:2;font-size:12px}.ft td:nth-child(2){order:3;flex-basis:100%;margin-top:4px}
+ .ft td:nth-child(3){order:4}.ft td:nth-child(5){order:5}.ft td:nth-child(3),.ft td:nth-child(5){color:var(--muted);font-size:12px}
+ .ft .arr{display:inline}.ft br.dbr{display:none}
+ .kpi{grid-template-columns:1fr 1fr}
+}
+</style>
+<link rel="stylesheet" href="/waitgames/world.css"><link rel="stylesheet" href="/waitgames/theme.css"><link rel="stylesheet" href="/waitgames/arcade.css">
+</head>
+<body>
+<header><h1><a class="o-mark" href="https://ostrovok.ru/" target="_blank" rel="noopener" aria-label="Ostrovok.ru">OSTR<svg viewBox="0 0 15 19" aria-hidden="true"><path fill="currentColor" d="M7.5 0C3.4 0 0 3.3 0 7.4c0 5 6.3 10.8 6.6 11.1.5.4 1.3.4 1.8 0 .3-.3 6.6-6.1 6.6-11.1C15 3.3 11.6 0 7.5 0zm0 10.6a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4z"/></svg>VOK.RU</a><span class="o-sub">О!Правда об отеле</span></h1><span class="st" id="status">…</span>
+<nav id="nav"></nav></header>
+<main>
+<section class="tab on" id="t-search"><div class="grid">
+  <div class="card chat"><div class="msgs" id="msgs"></div>
+    <div class="chips" id="examples"></div>
+    <form class="ask" id="askf"><textarea id="q" placeholder="Например: тихий номер с видом на закат недалеко от моря, июль"></textarea><button class="b">Найти</button></form></div>
+  <div><div id="map"></div><div class="row" style="margin:10px 0"><span id="counts" class="muted"></span></div><div class="res" id="results"></div></div>
+</div></section>
+
+<section class="tab" id="t-hotel"><div class="card"><div id="hotel">Выберите отель в поиске или найдите по названию:
+  <div class="row" style="margin-top:8px"><input id="hfind" placeholder="название"><button class="g" onclick="findHotel('hfind','hlist',openHotel)">Найти</button></div><div id="hlist"></div></div></div></section>
+
+<section class="tab" id="t-compare"><div class="card"><h2>Сравнение</h2><div class="muted small">Добавляйте отели кнопкой «в сравнение» в поиске.</div><div id="cmp"></div></div></section>
+
+<section class="tab" id="t-hotelier"><div class="card"><h2>Кабинет отельера</h2>
+  <div class="row"><input id="kfind" placeholder="название отеля"><button class="g" onclick="findHotel('kfind','klist',openCabinet)">Найти</button>
+  <button class="g" onclick="openQueue()">Все открытые вопросы</button></div><div id="klist"></div><div id="cab"></div></div></section>
+
+<section class="tab" id="t-chars"><div class="grid">
+  <div class="card"><h2>Новая характеристика словами</h2><div class="muted small">Агент сам выберет источники и инструменты, напишет рецепт, проверит на 5 отелях и посчитает для всех. Без ключа LLM работает шаблонный разбор частых пожеланий.</div>
+    <textarea id="newc" style="width:100%;margin-top:8px" placeholder="Например: рядом можно погулять с собакой"></textarea>
+    <div class="chips"><button class="chip" onclick="newc.value='рядом можно погулять с собакой'">собака</button><button class="chip" onclick="newc.value='в отеле есть бассейн'">бассейн</button><button class="chip" onclick="newc.value='остановка автобуса в пяти минутах'">остановка</button><button class="chip" onclick="newc.value='рядом есть набережная или пешеходная зона для вечерних прогулок'">набережная</button></div>
+    <div style="margin-top:8px"><button class="b" onclick="addChar()">Собрать и посчитать</button></div><div id="newres"></div></div>
+  <div class="card"><h2>Реестр характеристик</h2><div id="chars"></div></div></div></section>
+
+<section class="tab" id="t-metrics"><div id="metrics" class="card">Считаю…</div></section>
+
+<section class="tab" id="t-log"><div class="grid">
+  <div class="card"><h2>Актуализация</h2><div class="muted small">Кликните по карте, чтобы «построить» дом: система пересчитает вид у отелей в 1,2 км, покажет, что изменилось, и спросит отельеров.</div>
+    <div id="emap" style="margin-top:8px"></div><div class="row" style="margin-top:8px">этажей <input id="lv" type="number" value="16" style="width:70px"><span id="pick" class="muted small">точка не выбрана</span><button class="b" onclick="build()">Построить</button></div>
+    <div class="row" style="margin-top:8px"><button class="g" onclick="recheck()">Перепроверить устаревшее к 01.01.2027</button></div><div id="act"></div></div>
+  <div class="card"><h2>Журнал</h2><div id="events"></div></div></div></section>
+</main>
+<script>
+const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const api=async(p,b)=>{const r=await fetch(p,b?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}:{});if(!r.ok){let t=await r.text();try{t=JSON.parse(t).detail||t}catch(e){}throw new Error(t)}return r.json()};
+const TABS=[['search','Поиск'],['hotel','Отель'],['compare','Сравнение'],['hotelier','Кабинет отельера'],['chars','Характеристики'],['metrics','Метрики'],['log','Актуализация и журнал']];
+$('nav').innerHTML=TABS.map(([k,v])=>`<button data-t="${k}">${v}</button>`).join('');
+function show(t){document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('on',e.id=='t-'+t));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));
+ if(t=='chars')loadChars();if(t=='metrics')loadMetrics();if(t=='log'){loadEvents();setTimeout(initEmap,50)}if(t=='compare')loadCompare();if(t=='search')setTimeout(()=>map.invalidateSize(),50)}
+$('nav').onclick=e=>e.target.dataset.t&&show(e.target.dataset.t);show('search');
+const BUCKET={match:['подходит','bm'],maybe:['возможно: уточняем','bq'],fail:['не подходит','bf']};
+const SRC={'расчёт по геоданным':'🛰','OpenStreetMap':'🗺','карточка Островка':'🏷','отзывы гостей':'💬','ответ отельера':'🏨','Open-Meteo':'🌡'};
+const conf=c=>`<span class="conf" title="уверенность ${dc((+c||0).toFixed(2))}"><i style="width:${Math.round((c||0)*100)}%"></i></span>${dc((+c||0).toFixed(2))}`;
+let status={},history=[],compareIds=JSON.parse(localStorage.getItem('cmp')||'[]');
+const pl=(n,a,b,c)=>{n=Math.abs(n);return n%10==1&&n%100!=11?a:(n%10>=2&&n%10<=4&&(n%100<12||n%100>14)?b:c)}, dc=x=>String(x).replace('.',','), ruDate=d=>String(d).slice(0,10).split('-').reverse().join('.');
+api('/api/status').then(s=>{status=s;if(s.center&&s.region!=='default')map.setView(s.center,14);$('status').textContent=`${s.zone} · ${s.hotels} ${pl(s.hotels,'отель','отеля','отелей')} · OSM на ${ruDate(s.osm_base)}`;$('status').title=s.llm?'Разбор запросов: '+s.model:'Разбор запросов по ключевым словам'});
+const EX=['тихий номер с видом на закат недалеко от моря, июль','с мамой, ей тяжело в гору: близко к пляжу без подъёма','с ребёнком и собакой, рядом площадка','чтобы ночью рядом была аптека и можно поесть','вид на море с балкона, бассейн в отеле, сентябрь'];
+$('examples').innerHTML=EX.map(e=>`<button class="chip">${esc(e)}</button>`).join('');$('examples').onclick=e=>{if(e.target.tagName=='BUTTON'){$('q').value=e.target.textContent;send()}};
+const map=L.map('map').setView([43.59,39.725],14);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);let layer=L.layerGroup().addTo(map);
+function addMsg(cls,html){const d=document.createElement('div');d.className='m '+cls;d.innerHTML=html;$('msgs').appendChild(d);$('msgs').scrollTop=1e9;return d}
+$('askf').onsubmit=e=>{e.preventDefault();send()};$('q').onkeydown=e=>{if(e.key=='Enter'&&!e.shiftKey){e.preventDefault();send()}};
+async function send(){const q=$('q').value.trim();if(!q)return;$('q').value='';addMsg('u',esc(q));history.push({role:'user',content:q});const w=addMsg('a','Ищу…');
+ try{const r=await api('/api/chat',{messages:history});history.push({role:'assistant',content:r.text});
+  w.innerHTML=md(r.text)+`<div class="trace">${r.mode=='rules'?'разбор по ключевым словам':'разбор запроса нейросетью'}</div>`;
+  if(r.search)renderResults(r.search)}catch(e){w.textContent='Ошибка: '+e.message}}
+function md(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')}
+function renderResults(s){const c=s.counts,cons=s.parsed.constraints||[],miss=s.parsed.missing||[];
+  const mbtn=miss.map(m=>`<button class="chip" onclick='show("chars");newc.value=${JSON.stringify(m.proposal||m.phrase)}'>＋ ${esc(m.phrase)}</button>`).join(' ');
+  const chk=cons.map(x=>`<span class="badge bu" title="${esc(x.phrase||'')}">${esc(x.label||x.char)}</span>`).join('')+(s.month?`<span class="badge bu">${esc(s.month)}</span>`:'');
+  let head;
+  if(s.nothing_to_check){head=`<b>Не нашёл условий, которые умею проверять${miss.length?': '+esc(miss.map(m=>m.phrase).join(', ')):''}.</b>${miss.length?' Собрать характеристику?':' Попробуйте: «тихо ночью», «до пляжа без подъёма», «с собакой».'}`+(mbtn?`<div class="small" style="margin-top:6px">${mbtn}</div>`:'')}
+  else head=`Проверил: ${chk||'только цену и звёзды'} · подходят ${c.match}, возможно ${c.maybe}, нет ${c.fail}`+(miss.length?`<div class="small" style="margin-top:6px">Не умею пока: ${miss.map(m=>esc(m.phrase)).join(', ')}. ${mbtn}</div>`:'');
+  $('counts').innerHTML=head;
+  const rows=s.results.length?s.results:s.near_misses;layer.clearLayers();
+ $('results').innerHTML=(s.results.length||s.nothing_to_check?'':'<div class="muted">Подходящих нет. Ближе всего:</div>')+rows.map(r=>card(r)).join('');
+ rows.forEach((r,i)=>{const col={match:'#12805c',maybe:'#b54708',fail:'#c01048'}[r.bucket]||'#666';L.circleMarker([r.hotel.lat,r.hotel.lon],{radius:8,color:col,fillOpacity:.8}).bindTooltip(`${i+1}. ${r.hotel.name}`).on('click',()=>openHotel(r.hotel.id)).addTo(layer)});
+ setTimeout(()=>{map.invalidateSize();if(rows.length)map.fitBounds(rows.map(r=>[r.hotel.lat,r.hotel.lon]),{padding:[30,30],maxZoom:15})},60)}
+const MARK={pass:'✓',fail:'✕',unknown:'?'};
+function chip(x){const c=+x.confidence||0;return `<span class="fc ${x.status}" title="${esc(x.full)}"><em>${MARK[x.status]||'?'}</em>${esc(x.text)}${x.status=='fail'?'':`<i style="opacity:${(.25+.75*c).toFixed(2)}" title="уверенность ${dc(c.toFixed(2))}"></i>`}</span>`}
+function card(r){const h=r.hotel,[bl,bc]=BUCKET[r.bucket]||['не определено','bu'];
+ return `<div class="card h"><img src="${esc(h.photo||'')}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><div><div class="t">${esc(h.name)} <span class="badge ${bc}">${bl}</span></div>
+ <div class="meta">${h.stars?h.stars+'★ · ':''}${h.rating?'оценка '+dc(h.rating)+' ('+h.reviews+') · ':''}${h.price_nov1?'от '+Math.round(h.price_nov1)+' ₽ на 1 ноября':'нет мест на 1 ноября'}</div>
+  <div class="chipsrow">${(r.chips||[]).map(chip).join('')}</div>
+ <div class="row" style="margin-top:6px"><button class="g" onclick="openHotel('${h.id}')">Все факты</button><button class="g" onclick="addCmp('${h.id}')">В сравнение</button><a class="g" style="text-decoration:none" href="${esc(h.url)}" target="_blank">Островок ↗</a></div></div></div>`}
+function addCmp(id){if(!compareIds.includes(id))compareIds.push(id);compareIds=compareIds.slice(-4);localStorage.setItem('cmp',JSON.stringify(compareIds));show('compare')}
+async function loadCompare(){if(!compareIds.length){$('cmp').innerHTML='';return}const d=await api('/api/compare',{hotel_ids:compareIds});
+ $('cmp').innerHTML=`<table><tr><th></th>${d.hotels.map(h=>`<th>${esc(h.name)}<br><button class="g" onclick="compareIds=compareIds.filter(x=>x!='${h.id}');localStorage.setItem('cmp',JSON.stringify(compareIds));loadCompare()">убрать</button></th>`).join('')}</tr>`+
+ d.rows.map(r=>`<tr><td><b>${esc(r.name)}</b></td>${r.cells.map(c=>`<td class="${c.status=='conflict'?'bad':c.status=='unknown'?'unk':''}">${esc(c.summary)}<div class="muted small">${SRC[c.source]||''} ${esc(c.source||'')} ${c.status!='unknown'?conf(c.confidence):''}${c.status=='conflict'?' · ⚠ спор':''}</div></td>`).join('')}</tr>`).join('')+'</table>'}
+async function findHotel(inp,out,fn){const fname=fn===window.openHotel?'openHotel':fn===window.openCabinet?'openCabinet':fn.name;const r=await api('/api/hotels?q='+encodeURIComponent($(inp).value));$(out).innerHTML=r.map(h=>`<div><button class="g" style="margin:3px 0" onclick="${fname}('${h.id}')">${esc(h.name)}</button></div>`).join('')||'<span class="muted">не нашёл</span>'}
+const STATUS={known:['известно','bm'],conflict:['источники спорят','bf'],stale:['устарело','bq'],unknown:['не знаем','bu']};
+let hmap;async function openHotel(id){show('hotel');const d=await api('/api/hotels/'+id),h=d.hotel;
+ $('hotel').innerHTML=`<div class="grid"><div><h2>${esc(h.name)}</h2><div class="muted">${esc(h.address||'')} · ${h.rating?'оценка '+dc(h.rating):''} · <a href="${esc(h.url)}" target="_blank">Островок ↗</a></div>
+ <div class="row" style="margin:8px 0">${(d.card.photos||[]).slice(0,3).map(p=>`<img src="${esc(p)}" style="width:32%;border-radius:8px" loading="lazy">`).join('')}</div>
+ <div class="small muted">Номера: ${d.card.rooms.map(esc).join(' · ')}</div>
+ ${d.open_questions.length?`<h3>Ждём ответа отельера</h3>${d.open_questions.map(q=>`<div class="q small">${esc(q.text)}<div class="muted">${esc(q.reason)}</div></div>`).join('')}`:''}</div><div id="hmap"></div></div>
+ <h3>Что мы знаем и откуда</h3><table class="ft"><tr><th>Характеристика</th><th>Итог</th><th>Источник</th><th>Уверенность</th><th>Получено / годно до</th></tr>`+
+ d.facts.map(f=>{const [sl,sc]=f.status=='known'&&f.confidence<0.6?['вероятно','bn']:STATUS[f.status];return `<tr><td><b>${esc(f.name)}</b><br><span class="badge ${sc}">${sl}</span></td><td>${esc(f.summary)}
+ ${f.conflicts.map(c=>`<div class="small ${c.kind.startsWith('масштаб')?'unk':'bad'}">⚠ ${esc(c.kind)}: ${esc(c.other)}: «${esc(c.other_says)}»${c.why?`<div class="muted">Поверили: ${esc(c.trusted)}. ${esc(c.why)}</div>`:''}</div>`).join('')}
+ <details><summary>все источники (${f.facts.length})</summary>${f.facts.map(x=>`<div class="small" style="margin:6px 0"><b>${SRC[x.source]||''} ${esc(x.source)}</b> ${conf(x.confidence)} · ${esc(x.method||'')}<br>${esc(x.summary)}<br><span class="muted">${esc((x.observed_at||'').slice(0,10))} → ${esc((x.valid_until||'').slice(0,10))}${x.stale?' · устарел':''}</span><pre>${esc(JSON.stringify(x.evidence,null,1)).slice(0,3000)}</pre></div>`).join('')}</details>
+ ${f.status!='known'||f.confidence<0.7?`<button class="g" onclick="askH('${h.id}','${f.char}',this)">Спросить отельера</button>`:''}</td>
+ <td>${SRC[f.source]||''} ${esc(f.source||'нет')}</td><td>${f.status=='unknown'?'нет':conf(f.confidence)}</td><td class="small muted">${esc(ruDate(f.observed_at||''))}<span class="arr"> → </span><br class="dbr">${esc(ruDate(f.valid_until||''))}</td></tr>`}).join('')+'</table>';
+ setTimeout(()=>{if(hmap)hmap.remove();hmap=L.map('hmap').setView([h.lat,h.lon],15);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(hmap);L.marker([h.lat,h.lon]).addTo(hmap).bindTooltip(h.name);
+  const bw=d.facts.find(f=>f.char=='beach_walk'),g=bw?.facts.find(x=>x.source=='расчёт по геоданным');if(g?.evidence?.route){const pl=L.polyline(g.evidence.route,{color:'#0b63f6',weight:4}).addTo(hmap).bindTooltip('путь до пляжа');hmap.fitBounds(pl.getBounds(),{padding:[20,20]})}
+  const sv=d.facts.find(f=>f.char=='sea_view'),gs=sv?.facts.find(x=>x.source=='расчёт по геоданным');(gs?.evidence?.facades||[]).forEach(fc=>{const a=fc.az*Math.PI/180,len=0.0018;
+   L.polyline([[h.lat,h.lon],[h.lat+len*Math.cos(a),h.lon+len*Math.sin(a)/Math.cos(h.lat*Math.PI/180)]],{color:fc.sea_from_floor?'#12805c':'#98a2b3',weight:fc.sea_from_floor?5:2}).addTo(hmap).bindTooltip(`сторона ${fc.dir}: ${fc.sea_from_floor?'море с '+fc.sea_from_floor+'-го этажа (уверенность '+dc(fc.confidence)+')':'моря нет'}`)})},60)}
+async function askH(hid,cid,btn){const r=await api(`/api/hotels/${hid}/ask`,{char_id:cid});btn.outerHTML=`<div class="small ok">Вопрос в очереди отельера: ${esc(r.queued?.text||r.queued)}</div>`}
+async function openCabinet(id){const d=await api('/api/hotelier/'+id),h=d.hotel;
+ $('cab').innerHTML=`<h2 style="margin-top:12px">${esc(h.name)}</h2><div class="kpi"><div><b>${Math.round(d.completeness*100)}%</b>полнота профиля</div><div><b>${d.strengths.length}</b>сильных сторон</div><div><b>${d.risks.length}</b>рисков и споров</div><div><b>${d.questions.filter(q=>q.status=='open').length}</b>вопросов ждут ответа</div></div>
+ <h3>Вопросы от системы</h3>${d.questions.map(q=>qBox(q)).join('')||'<div class="muted">Вопросов нет: всё, что важно гостям, мы уже знаем.</div>'}
+ <h3>Сильные стороны, которые мы нашли</h3><ul class="lines">${d.strengths.map(f=>`<li class="ok">✅ <b>${esc(f.name)}</b>: ${esc(f.summary)} <span class="muted">(${esc(f.source)})</span></li>`).join('')}</ul>
+ <h3>Риски и противоречия</h3><ul class="lines">${d.risks.map(f=>`<li class="bad">⚠ <b>${esc(f.name)}</b>: ${esc(f.summary)}${f.conflicts.map(c=>`; ${esc(c.other)}: «${esc(c.other_says)}»`).join('')}</li>`).join('')||'<li class="muted">нет</li>'}</ul>`}
+function parsedView(v,raw){return (v&&v.length?`<ul class="lines small">${v.map(x=>`<li><b>${esc(x.label)}</b>: ${esc(x.value)}</li>`).join('')}</ul>`:'')+`<details class="small"><summary>как разобрано</summary><pre>${esc(JSON.stringify(raw,null,1))}</pre></details>`}
+function qBox(q){return `<div class="q" id="q${q.id}"><div>${esc(q.text)}</div><div class="muted small">${esc(q.char_name||q.char_id)} · ${esc(q.reason)} · ценность ${dc(q.voi)}${q.hotel_name?' · '+esc(q.hotel_name):''}</div>
+ ${q.status=='open'?(q.echo?echoBox(q.id,q.echo,q.parsed_view,q.parsed,q.answer):ansBox(q.id,'')):`<div class="small ok">Ответ: ${esc(q.answer)}</div>${parsedView(q.parsed_view,q.parsed)}`}<div id="r${q.id}"></div></div>`}
+function ansBox(id,text){return `<div class="row" id="ab${id}" style="margin-top:6px"><textarea id="a${id}" placeholder="Ответ свободным текстом, например: делюксы смотрят на море с 5 по 9 этаж, стандарты во двор">${esc(text)}</textarea><button class="b" onclick="answer(${id})">Ответить</button></div>`}
+function echoBox(id,echo,view,raw,text){return `<div class="echo" id="ab${id}"><div class="small muted">Ваш ответ: «${esc(text)}»</div><b>${esc(echo)}</b>${parsedView(view,raw)}
+ <div class="row" style="margin-top:6px"><button class="b" onclick="confirmA(${id},true)">Да, верно</button><button class="g" onclick="confirmA(${id},false)">Нет, поправлю</button></div></div>`}
+async function answer(id){const a=$('a'+id).value.trim();if(!a)return;$('r'+id).textContent='Разбираю ответ…';let r;try{r=await api(`/api/questions/${id}/answer`,{answer:a,echo:true})}catch(e){$('r'+id).innerHTML=`<div class="bad small">${esc(e.message)}</div>`;return}
+ $('r'+id).innerHTML='';$('ab'+id).outerHTML=echoBox(id,r.echo,r.parsed_view,r.parsed,a)}
+async function confirmA(id,ok){let r;try{r=await api(`/api/questions/${id}/confirm`,{ok})}catch(e){$('r'+id).innerHTML=`<div class="bad small">${esc(e.message)}</div>`;return}
+ if(!ok){$('ab'+id).outerHTML=ansBox(id,r.answer);$('a'+id).focus();$('r'+id).innerHTML='<div class="small muted">Поправьте ответ: разберём заново.</div>';return}
+ $('ab'+id).outerHTML=`<div class="small ok">Подтверждено. Ответ стал фактом с источником «отельер».</div>`;
+ $('r'+id).innerHTML=`<div class="small">Разобрано ${r.mode=='llm'?'моделью':'по правилам'}:</div>${parsedView(r.parsed_view,r.parsed)}${r.before?`<div class="small">Было: ${esc(r.before.summary)} (${esc(r.before.source_label)}, ${dc(r.before.confidence)})<br>Стало: <b>${esc(r.after.summary)}</b> (${esc(r.after.source_label)}, ${dc(r.after.confidence)})${r.after.conflicts.map(c=>`<div class="bad">⚠ ${esc(c.kind)}: ${esc(c.other)}: «${esc(c.other_says)}»</div>`).join('')}</div>`:''}${r.calibration?`<div class="small bq badge" style="display:block;margin-top:6px">Калибровка: ${esc(r.calibration.hint)}. Проверить здания: ${r.calibration.check_buildings.map(b=>esc(b.address||b.osm_id)+' ('+esc(b.height_source)+')').join(', ')}</div>`:''}`}
+async function openQueue(){const qs=await api('/api/questions');$('cab').innerHTML=`<h3>Открытые вопросы: ${qs.length}</h3>`+qs.slice(0,40).map(q=>qBox(q)).join('')}
+async function loadChars(){const d=await api('/api/characteristics');$('chars').innerHTML=d.characteristics.map(c=>`<div class="q"><b>${esc(c.name)}</b><div class="small">${esc(c.description)}</div>
+ <details><summary>для разработчиков</summary><div class="small muted" style="overflow-wrap:anywhere">${esc(c.id)} · ${esc(c.level||'')} · ${esc(c.origin)} · срок ${c.ttl_days} дн.<br>Источники: ${c.sources.map(esc).join(', ')}<br>Поля: ${Object.entries(c.fields).map(([k,v])=>esc(k)+' ('+esc(v.type)+')').join(', ')}<br>Файл ${esc(c.file)}</div></details></div>`).join('')}
+async function addChar(){const t=$('newc').value.trim();if(!t)return;$('newres').innerHTML='<div class="muted">Агент пишет рецепт, проверяет на 5 отелях и считает для всех (10–40 с)…</div>';
+ const r=await api('/api/characteristics',{description:t});if(!r.ok){$('newres').innerHTML=`<div class="bad">${esc(r.error)}</div>`;return}
+ $('newres').innerHTML=`<h3>${esc(r.spec.name)} <span class="muted small">(${esc(r.mode)}, ${esc(r.file)})</span></h3><div class="small">Посчитано: известно ${r.coverage.known}, спорно ${r.coverage.conflict}, нет данных ${r.coverage.unknown}; «да» у ${r.coverage.key_true} из ${r.coverage.total}</div>
+ <h3>Пробный прогон</h3><ul class="lines">${r.samples.map(s=>`<li>${esc(s.hotel)}, ${esc(s.source)}: ${esc(s.summary)} (${dc(s.confidence)})</li>`).join('')}</ul><details><summary>рецепт</summary><pre>${esc(JSON.stringify(r.spec,null,1))}</pre></details>
+ <div class="small muted">Это черновик: его видите только вы, остальным он станет доступен после одобрения админом. Попробуйте запрос со словами «${esc((r.spec.keywords||[]).slice(0,2).join('», «'))}».</div>`;loadChars()}
+async function loadMetrics(){const m=await api('/api/metrics'),s=m.sea_view,q=m.questions;
+ $('metrics').innerHTML=`<h2>Метрики качества</h2><div class="kpi"><div><b>${Math.round(s.recall_vs_card*100)}%</b>отелей с видом на море в карточке: расчёт тоже видит море (${s.card_claims})</div><div><b>${Math.round(s.recall_vs_strong*100)}%</b>то же для «сильных» меток: карточка + отзывы (${s.strong_positive})</div><div><b>${s.geo_yes_not_advertised}</b>отелей, где море видно, но отель об этом не пишет</div><div><b>${Math.round(q.share_hotels*100)}%</b>отелей получили вопрос; в среднем ${q.per_hotel_avg}, максимум ${q.max_per_hotel}</div><div><b>${q.facts_total}</b>фактов с источником, уверенностью и датой</div></div>
+ <h3>Вид на море: калибровка уверенности (доля совпадений с карточкой/отзывами)</h3><table><tr><th>уверенность</th><th>отелей</th><th>совпало</th></tr>${s.calibration.map(c=>`<tr><td>${c.bucket}</td><td>${c.n}</td><td>${Math.round(c.agree*100)}%</td></tr>`).join('')}</table><div class="small muted">${esc(s.note)}</div>
+ <h3>Шум: жалобы в отзывах против расчёта</h3><table><tr><th>самая шумная сторона по расчёту</th><th>отелей</th><th>жалоб на 100 отзывов</th></tr>${m.noise.by_loudest_side.map(r=>`<tr><td>${r.loud_side}</td><td>${r.hotels}</td><td>${r.complaints_per_100_reviews}</td></tr>`).join('')}</table>
+ <h3>Обещания в описаниях против расчёта</h3><div class="small">Описаний с обещанием расстояния до моря: ${m.claims.hotels_with_claims}, преувеличено: ${m.claims.overstated}</div><ul class="lines">${m.claims.examples.map(e=>`<li>${esc(e.hotel)}: «${esc(e.claim)}» → по дорожкам ${e.computed_m?e.computed_m+' м, ':''}${e.computed_min} мин, подъём ${e.climb_m} м</li>`).join('')}</ul>
+ <h3>Покрытие</h3><table><tr><th>характеристика</th><th>известно</th><th>спорно</th><th>устарело</th><th>нет данных</th><th>покрытие</th></tr>${m.coverage.map(c=>`<tr><td>${esc(c.name)}</td><td>${c.known}</td><td>${c.conflict}</td><td>${c.stale}</td><td>${c.unknown}</td><td>${Math.round(c.coverage*100)}%</td></tr>`).join('')}</table>
+ <h3>Вопросы отельерам</h3><div class="small">Всего ${q.total}, отвечено ${q.answered}. По характеристикам: ${Object.entries(q.by_char).map(([k,v])=>esc(k)+' '+v).join(', ')}. По причине: ${Object.entries(q.by_reason).map(([k,v])=>esc(k)+' '+v).join(', ')}.</div>`}
+let emap,pt;function initEmap(){if(emap){emap.invalidateSize();return}emap=L.map('emap').setView(status&&status.region!=='default'?status.center:[43.585,39.72],15);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(emap);let mk;
+ api('/api/hotels').then(hs=>hs.forEach(h=>L.circleMarker([h.lat,h.lon],{radius:4,color:'#0b63f6'}).bindTooltip(h.name).addTo(emap)));
+ emap.on('click',e=>{pt=e.latlng;if(mk)mk.remove();mk=L.marker(pt).addTo(emap);$('pick').textContent=pt.lat.toFixed(5)+', '+pt.lng.toFixed(5)})}
+async function build(){if(!pt){$('pick').textContent='сначала кликните по карте';return}$('act').innerHTML='<div class="muted">Пересчитываю отели в 1,2 км…</div>';
+ const r=await api('/api/simulate/building',{lat:pt.lat,lon:pt.lng,levels:+$('lv').value});
+ $('act').innerHTML=`<div class="small">Проверено отелей: ${r.checked_hotels}, изменилось: ${r.changed.length}</div><ul class="lines">${r.changed.map(c=>`<li><b>${esc(c.hotel)}</b> (${c.distance_m} м), ${esc(c.char)}: <span class="muted">${esc(c.before)}</span> → <b>${esc(c.after)}</b></li>`).join('')}</ul>${r.changed.length?'<div class="small ok">Отельерам ушли вопросы, выдача поиска уже учитывает новые факты.</div>':''}`;loadEvents()}
+async function recheck(){const r=await fetch('/api/refresh/stale?before=2027-01-01T00:00:00%2B00:00',{method:'POST'}).then(r=>r.json());$('act').innerHTML=`<div class="small">Пересчитано фактов: ${r.recomputed}, повторных вопросов отельерам: ${r.asked_hoteliers_again}</div>`;loadEvents()}
+let NAMES;async function names(){if(NAMES)return NAMES;const[hs,cs]=await Promise.all([api('/api/hotels'),api('/api/characteristics')]);NAMES={h:Object.fromEntries(hs.map(h=>[h.id,h.name])),c:Object.fromEntries(cs.characteristics.map(c=>[c.id,c.name.toLowerCase()]))};return NAMES}
+function evLine(e,N){const p=e.payload||{},h=N.h[e.hotel_id]||'',c=N.c[e.char_id]||e.char_id||'',n=x=>x==null?'':String(x);
+ switch(e.kind){
+  case 'hotelier_answer':return `<b>${esc(h)}</b>: отельер ответил про «${esc(c)}»${p.before||p.after?`. Было: ${esc(n(p.before)||'нет данных')}. Стало: <b>${esc(n(p.after))}</b>`:''}`;
+  case 'hotelier_echo_rejected':return `<b>${esc(h)}</b>: отельер не подтвердил, как мы поняли ответ про «${esc(c)}», и правит его`;
+  case 'hotelier_unsure':return `<b>${esc(h)}</b>: отельер не уверен в ответе про «${esc(c)}»`;
+  case 'question_asked':return `Вопрос отельеру${h?' <b>'+esc(h)+'</b>':''}: ${esc(n(p.text))}`;
+  case 'world_changed':{const k=(p.changes||[]).length;return `${esc(p.what||'Изменение вокруг отелей')}: проверили ${p.checked_hotels} ${pl(p.checked_hotels,'отель','отеля','отелей')}, изменилось у ${k}`}
+  case 'recheck':return `Перепроверка устаревшего: пересчитано ${p.recomputed} ${pl(p.recomputed,'факт','факта','фактов')}, повторных вопросов отельерам ${p.asked_again??0}`;
+  case 'characteristic_added':return `Новая характеристика «${esc(c)}» по запросу «${esc(n(p.text))}»${p.coverage?`: известно у ${p.coverage.known} из ${p.coverage.total} отелей`:''}`;
+  case 'compile_step':return `Сборка характеристики${c?' «'+esc(c)+'»':''}: ${esc(n(p.msg))}`;
+  case 'characteristic_drafted':return `Черновик «${esc(c)}» собран по запросу «${esc(n(p.text))}», ждёт решения`;
+  case 'characteristic_approved':return `Характеристика «${esc(c)}» одобрена и работает в поиске`;
+  case 'characteristic_rejected':return `Черновик «${esc(c)}» отклонён${p.reason?': '+esc(p.reason):''}`;
+  case 'characteristic_failed':return `Не удалось собрать характеристику «${esc(n(p.text))}»`;
+  case 'demo_seeded':return 'Загружены демонстрационные ответы отельеров';
+  case 'precompute':return 'Факты посчитаны по всем отелям';
+  case 'city_profile':return `Профиль города «${esc(n(p.region))}» пересчитан: ${p.chars} ${pl(p.chars||0,'характеристика','характеристики','характеристик')}`;
+  case 'city_weight':return `Профиль города: «${esc(c)}» ${p.status==='off'?'выключена':p.weight==null?'вес снова авто ('+dc(n(p.auto))+')':'вес '+dc(n(p.weight))+' вручную (авто '+dc(n(p.auto))+')'}`;
+  default:return `${esc(e.kind)}${h?' · '+esc(h):''}`}}
+async function loadEvents(){const[ev,N]=await Promise.all([api('/api/events'),names()]);
+ $('events').innerHTML=ev.map(e=>`<div class="ev"><div class="when">${esc(ruDate(e.at))} ${esc(e.at.slice(11,16))}</div><div>${evLine(e,N)}</div><details><summary>подробнее</summary><pre>${esc(JSON.stringify(e.payload,null,1)).slice(0,1500)}</pre></details></div>`).join('')||'<div class="muted">Пока пусто.</div>'}
+</script>
+<script src="/web/auth.js"></script>
+<script src="/relax.js"></script>
+<script src="/drafts.js"></script>
+<script src="/radar.js"></script>
+<script src="/web/nightline.js"></script>
+<script src="/web/window.js"></script>
+<script src="/rooms.js"></script>
+<script src="/truth.js"></script>
+<script src="/photos.js"></script>
+<script src="/web/grounding.js"></script>
+<script src="/web/verdict.js"></script>
+<script src="/regions.js"></script>
+<script src="/city.js"></script>
+<script src="/web/roles.js"></script>
+<script>/* О!ркада и профиль по играм — гостевые: отельеру, команде и бэк-офису не грузим. async=false сохраняет порядок. */
+if(document.documentElement.dataset.role==='guest')['/waitgames/sense.js','/waitgames/arcade.js','/waitgames/games/all.js'].forEach(src=>{const e=document.createElement('script');e.src=src;e.async=false;document.body.appendChild(e)})</script>
+</body>
+</html>

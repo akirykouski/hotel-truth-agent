@@ -1,0 +1,37 @@
+id: pets
+name: С питомцем
+description: |
+  Пускают ли с животными, на каких условиях (из карточки и правил отеля) и где гулять с собакой рядом (парки и
+  площадки для собак по OSM). Вес и виды животных обычно знает только отельер.
+level: отель
+class: policy
+weight: 0.6
+ttl_days: 365
+key: allowed
+keywords: ["с собакой", "с питомц", "с кошкой", "с животн", "pet"]
+default_constraint: {field: allowed, op: "==", value: true}
+fields:
+  allowed: {type: bool, label: "можно с животными"}
+  walk_m: {type: number, better: lower, label: "до парка или площадки для собак, м"}
+  max_weight_kg: {type: number, better: higher, label: "максимальный вес питомца, кг"}
+methods:
+  - source: card
+    method: "правила и удобства в карточке"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["pets-allowed", "питом", "животн", "собак", "кошк"]}}
+      - {as: w, tool: nearby, args: {tags: {leisure: "dog_park|park"}, radius_m: 1500}}
+    when: "c.found"
+    value:
+      allowed: "not any(('запрещ' in h.quote.lower() or 'не допуск' in h.quote.lower() or 'не разреш' in h.quote.lower()) for h in c.hits)"
+      walk_m: "w.nearest_m"
+    confidence: "0.7"
+    summary: "'в карточке: ' + '; '.join(sorted(set(h.quote[:100] for h in c.hits))[:2]) + (f'; гулять: парк в {w.nearest_m} м' if w.nearest_m else '')"
+    evidence: "{'hits': c.hits, 'walk': w.items[:3]}"
+question:
+  when: "unknown or (fact.allowed and fact.max_weight_kg is None)"
+  text: "'Гости спрашивают про питомцев. Каких животных вы принимаете, до какого веса и сколько это стоит?'"
+answer_fields:
+  allowed: {type: bool}
+  max_weight_kg: {type: number}
+  fee_rub: {type: number}
+  animals: {type: text}

@@ -1,0 +1,35 @@
+id: station_walk
+name: Пешком до вокзала
+description: |
+  Сколько идти до ближайшей ж/д станции (Сочи, Мацеста, Хоста) туда и обратно, с подъёмом и ступенями: приехали на
+  «Ласточке» с чемоданом. Расчёт map-app: пешеходный граф OSM, FABDEM, лестницы маршем.
+level: отель
+class: physical
+weight: 0.5
+ttl_days: 365
+key: minutes_there
+keywords: ["до вокзала", "до станции", "от вокзала", "от станции", "к поезду", "на поезде", "электричк", "ласточк"]
+default_constraint: {field: minutes_there, op: "<=", value: 15}
+fields:
+  minutes_there: {type: number, better: lower, label: "минут пешком до станции"}
+  minutes_back: {type: number, better: lower, label: "минут от станции обратно"}
+  climb_back_m: {type: number, better: lower, label: "подъём от станции до отеля, м"}
+  steps: {type: number, better: lower, label: "ступеней по пути"}
+  station: {type: text, label: "станция"}
+methods:
+  - source: geo
+    method: "расчёт map-app: пешеходный граф OSM + FABDEM, Тоблер, лестницы маршем, туда и обратно"
+    steps:
+      - {as: w, tool: mapapp_walk, args: {target: station}}
+    when: "w.available"
+    value:
+      minutes_there: "round(w.there.min)"
+      minutes_back: "round(w.back.min)"
+      climb_back_m: "round(w.back.up_m)"
+      steps: "w.back.steps"
+      station: "w.target"
+    confidence: "0.75"
+    summary: >-
+      f'до станции «{w.target}» {round(w.there.min)} мин пешком, от неё {round(w.back.min)} мин, подъём {round(w.back.up_m)} м'
+      + (f', ступеней по пути: {w.back.steps}' if w.back.steps else ', без лестниц')
+    evidence: "{'station': w.target, 'there': w.there, 'back': w.back, 'match': w.match, 'source': 'map-app ' + str(w.commit)}"

@@ -1,0 +1,58 @@
+id: night_quiet
+name: Тишина
+description: |
+  Насколько тихо ночью: оценка шума по каждой стороне здания от дорог, железной дороги, баров и клубов с
+  часами работы; сверяем с жалобами на шум в отзывах.
+level: сторона здания
+class: physical
+weight: 0.9
+ttl_days: 180
+key: quiet
+keywords: ["тихий", "тихо", "тишина", "тихо днём", "тихо днем", "выспаться", "без шума", "не шумно", "спокойный", "тишин"]
+city_terms: ["тих", "тишин", "шум", "выспа"]  # как тема звучит в описаниях и отзывах региона (профиль города, app/city.py)
+default_constraint: {field: quiet, op: "==", value: true}
+phrases:
+  "тихо\\s+дн[её]м": {field: day_quiet, op: "==", value: true}
+  # «не у дороги» это про тишину; «у дороги» без отрицания мы не трогаем
+  "(?<![а-яё])(?:не\\s+(?:у|на|возле|около|рядом\\s+с|близко\\s+к)|подальше\\s+от|вдали\\s+от)\\s+(?:дорог\\w*|трасс\\w*|шосс\\w*|магистрал\\w*)": {field: quiet, op: "==", value: true}
+fields:
+  quiet: {type: bool, label: "есть тихая сторона ночью (< 55 дБ)"}
+  level: {type: enum, values: ["тихо", "умеренно", "шумно"], label: "уровень на самой тихой стороне"}
+  quiet_side: {type: text, label: "самая тихая сторона"}
+  day_quiet: {type: bool, label: "есть сторона, тихая днём (< 60 дБ)"}
+methods:
+  - source: geo
+    method: "дороги и ж/д OSM по классу, бары и клубы с opening_hours, затухание с расстоянием"
+    steps:
+      - {as: n, tool: noise}
+    value:
+      quiet: "n.quietest.night_db < 55"
+      level: "n.night_level"
+      quiet_side: "n.quietest.dir"
+      day_quiet: "min(f.day_db for f in n.facades) < 60"
+      day_db_quiet: "min(f.day_db for f in n.facades)"
+      loud_side: "n.loudest.dir"
+      night_db_quiet: "n.quietest.night_db"
+      night_db_loud: "n.loudest.night_db"
+    confidence: "0.6 if n.venues_unknown_hours == 0 else 0.5"
+    summary: >-
+      (f'ночью {n.night_level} на стороне {n.quietest.dir} (~{round(n.quietest.night_db)} дБ)' if n.quietest.night_db > 30 else f'ночью тихо на стороне {n.quietest.dir}: заметных источников шума нет')
+      + f', шумнее всего {n.loudest.dir} (~{round(n.loudest.night_db)} дБ)'
+      + (': ' + ', '.join(s.kind + (' ' + s.name if s.name else '') + f' в {s.distance_m} м' for s in n.top_sources[:2]) if n.top_sources else '')
+    evidence: "{'facades': n.facades, 'sources': n.top_sources}"
+  - source: reviews
+    method: "жалобы на шум в отзывах"
+    steps:
+      - {as: r, tool: reviews_search, args: {terms: ["шум", "шумно", "слышн", "тонкие стены", "громк", "не выспал", "дискотек", "музык"], exclude: ["не было слышно", "не шумно", "без шума", "тихо", "шумоизоляц\\w* (хорош|отличн)"]}}
+    when: "r.reviews_total > 0"
+    value: {quiet: "r.negative < 2"}
+    # отсутствие жалоб — слабая улика (0.35, ниже порога спора), две и больше жалобы — сильная
+    confidence: "min(0.75, 0.4 + 0.1 * r.negative) if r.negative >= 2 else 0.35"
+    summary: "f'жалоб на шум в отзывах: {r.negative} из {r.reviews_total}'"
+    evidence: "{'complaints': r.negative_quotes}"
+question:
+  when: "conflict"
+  text: "'По расчёту и отзывам выводы о шуме расходятся (' + str(summary) + '). Есть ли в номерах шумоизоляция или окна во двор? Какие категории самые тихие?'"
+answer_fields:
+  quiet: {type: bool}
+  quiet_categories: {type: text, label: "самые тихие категории номеров"}

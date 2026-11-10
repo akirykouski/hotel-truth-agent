@@ -1,0 +1,38 @@
+id: car
+name: На машине
+description: |
+  Парковка: что пишет отель в карточке и есть ли общественные парковки рядом по OSM; зарядки для электромобилей.
+level: отель
+class: policy
+weight: 0.5
+ttl_days: 180
+key: parking
+keywords: ["на машине", "парковк", "на авто", "электромобил", "зарядк"]
+city_terms: ["парковк", "на машине", "на авто"]  # как тема звучит в описаниях и отзывах региона (профиль города, app/city.py)
+default_constraint: {field: parking, op: "==", value: true}
+fields:
+  parking: {type: bool, label: "можно припарковаться у отеля или рядом"}
+  parking_m: {type: number, better: lower, label: "до парковки, м"}
+  ev_charging_m: {type: number, better: lower, label: "до зарядки электромобиля, м"}
+methods:
+  - source: osm
+    method: "OSM amenity=parking|charging_station"
+    steps:
+      - {as: p, tool: nearby, args: {tags: {amenity: parking}, radius_m: 300}}
+      - {as: ev, tool: nearby, args: {tags: {amenity: charging_station}, radius_m: 3000}}
+    value:
+      parking: "True if p.count > 0 else None"
+      parking_m: "p.nearest_m"
+      ev_charging_m: "ev.nearest_m"
+    confidence: "0.65"
+    summary: "(f'парковок OSM в 300 м: {p.count}, ближайшая {p.nearest_m} м' if p.count else 'парковок OSM в 300 м нет') + (f'; зарядка в {ev.nearest_m} м' if ev.nearest_m else '; зарядок в 3 км нет')"
+    evidence: "{'parkings': p.items[:5], 'chargers': ev.items[:3]}"
+  - source: card
+    method: "удобства и правила в карточке"
+    steps:
+      - {as: c, tool: card_search, args: {terms: ["парковк", "parking"]}}
+    when: "c.found"
+    value: {parking: "True"}
+    confidence: "0.8"
+    summary: "'в карточке: ' + '; '.join(sorted(set(h.quote[:80] for h in c.hits))[:3])"
+    evidence: "{'hits': c.hits}"

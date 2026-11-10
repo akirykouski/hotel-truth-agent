@@ -1,0 +1,278 @@
+{
+ "accessibility": {
+  "class": "policy",
+  "excluded": [],
+  "hotels": 229,
+  "multi_source_hotels": 0,
+  "pi": 0.55,
+  "sources": {
+   "card": {
+    "sens": 0.88,
+    "spec": 0.85,
+    "votes": 229
+   }
+  }
+ },
+ "blackout": {
+  "class": "policy",
+  "excluded": [],
+  "hotels": 229,
+  "multi_source_hotels": 0,
+  "pi": 0.55,
+  "sources": {
+   "card": {
+    "sens": 0.88,
+    "spec": 0.85,
+    "votes": 144
+   },
+   "card:lo": {
+    "sens": 0.728,
+    "spec": 0.71,
+    "votes": 85
+   }
+  }
+ },
+ "car": {
+  "class": "policy",
+  "excluded": [],
+  "hotels": 229,
+  "multi_source_hotels": 0,
+  "pi": 0.55,
+  "sources": {
+   "card": {
+    "sens": 0.88,
+    "spec": 0.85,
+    "votes": 229
+   },
+   "osm": {
+    "sens": 0.8,
+    "spec": 0.8,
+    "votes": 192
+   }
+  }
+ },
+ "construction": {
+  "class": "physical",
+  "excluded": [],
+  "hotels": 229,
+  "multi_source_hotels": 0,
+  "pi": 0.55,
+  "sources": {
+   "osm": {
+    "sens": 0.9,
+    "spec": 0.9,
+    "votes": 229
+   }
+  }
+ },
+ "food_near": {
+  "class": "physical",
+  "excluded": [],
+  "hotels": 229,
+  "multi_source_hotels": 0,
+  "pi": 0.55,
+  "sources": {
+   "osm": {
+    "sens": 0.9,
+    "spec": 0.9,
+    "votes": 229
+   }
+  }
+ },
+ "kids": {
+  "class": "physical",
+  "excluded": [],
+  "hotels": 229,
+  "multi_source_hotels": 0,
+  "pi": 0.55,
+  "sources": {
+   "osm": {
+    "sens": 0.9,
+    "spec": 0.9,
+    "votes": 229
+   }
+  }
+ },
+ "night_checkin": {
+  "class": "policy",
+  "excluded": [],
+  "hotels": 181,
+  "multi_source_hotels": 0,
+  "pi": 0.55,
+  "sources": {
+   "card": {
+    "sens": 0.88,
+    "spec": 0.85,
+    "votes": 179
+   },
+   "reviews:lo": {
+    "sens": 0.62,
+    "spec": 0.62,
+    "votes": 9
+   }
+  }
+ },
+ "night_open": {
+  "class": "physical",
+  "excluded": [],
+  "hotels": 229,
+  "multi_source_hotels": 0,
+  "pi": 0.55,
+  "sources": {
+   "osm": {
+    "sens": 0.9,
+    "spec": 0.9,
+    "votes": 229
+   }
+  }
+ },
+ "night_quiet": {
+  "class": "physical",
+  "excluded": [],
+  "hotels": 229,
+  "multi_source_hotels": 224,
+  "pi": 0.52,
+  "sources": {
+   "geo": {
+    "sens": 0.861,
+    "spec": 0.317,
+    "votes": 229
+   },
+   "reviews": {
+    "sens": 0.442,
+    "spec": 0.901,
+    "votes": 34
+   },
+   "reviews:lo": {
+    "sens": 0.954,
+    "spec": 0.11,
+    "votes": 190
+   }
+  }
+ },
+ "pets": {
+  "class": "policy",
+  "excluded": [],
+  "hotels": 177,
+  "multi_source_hotels": 0,
+  "pi": 0.45,
+  "sources": {
+   "card": {
+    "sens": 0.88,
+    "spec": 0.85,
+    "votes": 176
+   },
+   "hotelier": {
+    "sens": 0.96,
+    "spec": 0.96,
+    "votes": 1
+   }
+  }
+ },
+ "sea_view": {
+  "class": "physical",
+  "excluded": [],
+  "hotels": 229,
+  "multi_source_hotels": 42,
+  "pi": 0.55,
+  "sources": {
+   "card": {
+    "sens": 0.75,
+    "spec": 0.65,
+    "votes": 59
+   },
+   "geo": {
+    "sens": 0.971,
+    "spec": 0.705,
+    "votes": 227
+   },
+   "geo:lo": {
+    "sens": 0.758,
+    "spec": 0.758,
+    "votes": 2
+   },
+   "hotelier": {
+    "sens": 0.65,
+    "spec": 0.55,
+    "votes": 1
+   },
+   "reviews": {
+    "sens": 0.865,
+    "spec": 0.754,
+    "votes": 12
+   },
+   "reviews:lo": {
+    "sens": 0.812,
+    "spec": 0.442,
+    "votes": 30
+   }
+  }
+ },
+ "sea_view_quiet": {
+  "class": "physical",
+  "excluded": [],
+  "hotels": 229,
+  "multi_source_hotels": 0,
+  "pi": 0.45,
+  "sources": {
+   "geo": {
+    "sens": 0.93,
+    "spec": 0.93,
+    "votes": 227
+   },
+   "geo:lo": {
+    "sens": 0.758,
+    "spec": 0.758,
+    "votes": 2
+   }
+  }
+ },
+ "soundproofing": {
+  "class": "experiential",
+  "excluded": [],
+  "hotels": 115,
+  "multi_source_hotels": 0,
+  "pi": 0.55,
+  "sources": {
+   "card": {
+    "sens": 0.7,
+    "spec": 0.5,
+    "votes": 88
+   },
+   "hotelier": {
+    "sens": 0.75,
+    "spec": 0.65,
+    "votes": 1
+   },
+   "reviews": {
+    "sens": 0.85,
+    "spec": 0.85,
+    "votes": 6
+   },
+   "reviews:lo": {
+    "sens": 0.71,
+    "spec": 0.71,
+    "votes": 38
+   }
+  }
+ },
+ "wifi": {
+  "class": "experiential",
+  "excluded": [],
+  "hotels": 200,
+  "multi_source_hotels": 0,
+  "pi": 0.45,
+  "sources": {
+   "card:lo": {
+    "sens": 0.62,
+    "spec": 0.5,
+    "votes": 137
+   },
+   "reviews": {
+    "sens": 0.85,
+    "spec": 0.85,
+    "votes": 196
+   }
+  }
+ }
+}

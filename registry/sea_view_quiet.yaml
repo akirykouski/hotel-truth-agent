@@ -1,0 +1,31 @@
+id: sea_view_quiet
+name: Море с тихой стороны
+description: |
+  Видно ли море со стороны здания, которая ночью тихая: стороны с видом на море из расчёта видимости сверяются
+  с ночным шумом этих же сторон. Нужна, когда гость хочет и вид, и выспаться в том же номере.
+level: сторона здания × этаж
+class: physical
+weight: 0.8
+ttl_days: 180
+key: has
+keywords: ["тихий номер с видом на море", "вид на море и тишин", "море и тишина", "тихо и вид на море"]
+city_terms: ["вид\\w* на мор", "тишин|тих\\w+ номер"]  # как тема звучит в описаниях и отзывах региона (профиль города, app/city.py)
+default_constraint: {field: has, op: "==", value: true}
+fields:
+  has: {type: bool, label: "море видно с тихой стороны (< 55 дБ ночью)"}
+  from_floor: {type: number, better: lower, label: "с какого этажа на тихой видовой стороне"}
+methods:
+  - source: geo
+    method: "стороны с видом на море × ночной шум этих сторон"
+    steps:
+      - {as: v, tool: sea_view}
+      - {as: n, tool: noise}
+    value:
+      has: "any(f.sea_from_floor is not None and ([x.night_db for x in n.facades if x.dir == f.dir] or [99])[0] < 55 for f in v.facades)"
+      from_floor: "min([f.sea_from_floor for f in v.facades if f.sea_from_floor is not None and ([x.night_db for x in n.facades if x.dir == f.dir] or [99])[0] < 55] or [None]) if any(f.sea_from_floor is not None and ([x.night_db for x in n.facades if x.dir == f.dir] or [99])[0] < 55 for f in v.facades) else None"
+      sides: "[f.dir + ': море с ' + str(f.sea_from_floor) + '-го, ~' + str(round(([x.night_db for x in n.facades if x.dir == f.dir] or [0])[0])) + ' дБ' for f in v.facades if f.sea_from_floor is not None]"
+    confidence: "round(min(v.sea_view.confidence, 0.6), 2)"
+    summary: >-
+      ('стороны с видом на море: ' + '; '.join([f.dir + ' с ' + str(f.sea_from_floor) + '-го эт. (~' + str(round(([x.night_db for x in n.facades if x.dir == f.dir] or [0])[0])) + ' дБ ночью)' for f in v.facades if f.sea_from_floor is not None]))
+      if v.sea_view.possible else 'моря из окон не видно'
+    evidence: "{'facades': v.facades, 'noise': n.facades}"

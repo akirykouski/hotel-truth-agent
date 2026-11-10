@@ -1,0 +1,421 @@
+{
+ "seed": 20261028,
+ "n": 46,
+ "universe": 229,
+ "sample": [
+  {
+   "id": "10007237",
+   "name": "Bamboo Dom Guest house",
+   "stratum": "no/hi/far",
+   "from": "спор",
+   "coast_dist_m": 878,
+   "band": "far",
+   "disagree": true
+  },
+  {
+   "id": "10153497",
+   "name": "Sweet Hostel",
+   "stratum": "no/hi/mid",
+   "from": "ячейка",
+   "coast_dist_m": 714,
+   "band": "mid",
+   "disagree": false
+  },
+  {
+   "id": "10370458",
+   "name": "Апарт-отель Лиссабон Неолит",
+   "stratum": "yes/hi/far",
+   "from": "ячейка",
+   "coast_dist_m": 821,
+   "band": "far",
+   "disagree": false
+  },
+  {
+   "id": "10441489",
+   "name": "Грейс Наири",
+   "stratum": "no/low/any",
+   "from": "спор",
+   "coast_dist_m": 750,
+   "band": "mid",
+   "disagree": true
+  },
+  {
+   "id": "10829905",
+   "name": "Отель Куба",
+   "stratum": "yes/hi/near",
+   "from": "ячейка",
+   "coast_dist_m": 88,
+   "band": "near",
+   "disagree": false
+  },
+  {
+   "id": "10843836",
+   "name": "Отель Грей",
+   "stratum": "no/low/any",
+   "from": "ячейка",
+   "coast_dist_m": 635,
+   "band": "mid",
+   "disagree": false
+  },
+  {
+   "id": "10950245",
+   "name": "Меблированные Комнаты Надежда",
+   "stratum": "no/hi/mid",
+   "from": "ячейка",
+   "coast_dist_m": 686,
+   "band": "mid",
+   "disagree": false
+  },
+  {
+   "id": "11278581",
+   "name": "Гостевой дом Ветер Сочи",
+   "stratum": "yes/low/any",
+   "from": "ячейка",
+   "coast_dist_m": 832,
+   "band": "far",
+   "disagree": false
+  },
+  {
+   "id": "11290623",
+   "name": "Гостевой дом 4 AVENUE",
+   "stratum": "yes/hi/far",
+   "from": "спор",
+   "coast_dist_m": 1118,
+   "band": "far",
+   "disagree": true
+  },
+  {
+   "id": "11349466",
+   "name": "SL Luxury",
+   "stratum": "no/hi/mid",
+   "from": "ячейка",
+   "coast_dist_m": 694,
+   "band": "mid",
+   "disagree": false
+  },
+  {
+   "id": "13286301",
+   "name": "Лавикон Апарт Сочи",
+   "stratum": "yes/hi/mid",
+   "from": "ячейка",
+   "coast_dist_m": 534,
+   "band": "mid",
+   "disagree": false
+  },
+  {
+   "id": "13299353",
+   "name": "Гостевой Дом Michelle",
+   "stratum": "no/hi/far",
+   "from": "спор",
+   "coast_dist_m": 1088,
+   "band": "far",
+   "disagree": true
+  },
+  {
+   "id": "13364688",
+   "name": "Меблированные комнаты на Приморской в центре Сочи",
+   "stratum": "yes/low/any",
+   "from": "ячейка",
+   "coast_dist_m": 211,
+   "band": "near",
+   "disagree": false
+  },
+  {
+   "id": "13646238",
+   "name": "Хостел El Mar Навагинская",
+   "stratum": "no/hi/mid",
+   "from": "ячейка",
+   "coast_dist_m": 577,
+   "band": "mid",
+   "disagree": false
+  },
+  {
+   "id": "6577068",
+   "name": "Гостевой дом Антика",
+   "stratum": "yes/hi/far",
+   "from": "ячейка",
+   "coast_dist_m": 1330,
+   "band": "far",
+   "disagree": false
+  },
+  {
+   "id": "6593439",
+   "name": "Studio Bambukovaya 42A",
+   "stratum": "yes/hi/mid",
+   "from": "ячейка",
+   "coast_dist_m": 701,
+   "band": "mid",
+   "disagree": false
+  },
+  {
+   "id": "6604665",
+   "name": "Гостевой дом Мамы Терезы",
+   "stratum": "no/low/any",
+   "from": "ячейка",
+   "coast_dist_m": 1345,
+   "band": "far",
+   "disagree": false
+  },
+  {
+   "id": "6848682",
+   "name": "Отель Соната",
+   "stratum": "yes/hi/near",
+   "from": "ячейка",
+   "coast_dist_m": 219,
+   "band": "near",
+   "disagree": false
+  },
+  {
+   "id": "6911393",
+   "name": "Гостевой дом на Виноградной",
+   "stratum": "yes/low/any",
+   "from": "ячейка",
+   "coast_dist_m": 1279,
+   "band": "far",
+   "disagree": false
+  },
+  {
+   "id": "7380700",
+   "name": "Отель У Бочарова Ручья",
+   "stratum": "yes/hi/mid",
+   "from": "ячейка",
+   "coast_dist_m": 748,
+   "band": "mid",
+   "disagree": false
+  },
+  {
+   "id": "7380741",
+   "name": "Гостевой Дом Акс",
+   "stratum": "no/low/any",
+   "from": "спор",
+   "coast_dist_m": 752,
+   "band": "mid",
+   "disagree": true
+  },
+  {
+   "id": "7381093",
+   "name": "Гостевой дом Вилла Бавария",
+   "stratum": "no/low/any",
+   "from": "ячейка",
+   "coast_dist_m": 524,
+   "band": "mid",
+   "disagree": false
+  },
+  {
+   "id": "7606060",
+   "name": "Отель Экодом Сочи",
+   "stratum": "no/hi/far",
+   "from": "спор",
+   "coast_dist_m": 806,
+   "band": "far",
+   "disagree": true
+  },
+  {
+   "id": "7608669",
+   "name": "Yozh Hostel",
+   "stratum": "yes/hi/mid",
+   "from": "ячейка",
+   "coast_dist_m": 742,
+   "band": "mid",
+   "disagree": false
+  },
+  {
+   "id": "7674705",
+   "name": "Гостевой дом Вилла Светлана",
+   "stratum": "yes/hi/near",
+   "from": "ячейка",
+   "coast_dist_m": 88,
+   "band": "near",
+   "disagree": false
+  },
+  {
+   "id": "7842711",
+   "name": "Мини-отель Сон у Моря",
+   "stratum": "yes/hi/near",
+   "from": "ячейка",
+   "coast_dist_m": 43,
+   "band": "near",
+   "disagree": false
+  },
+  {
+   "id": "7855157",
+   "name": "Меблированные комнаты Аледо",
+   "stratum": "no/low/any",
+   "from": "спор",
+   "coast_dist_m": 765,
+   "band": "mid",
+   "disagree": true
+  },
+  {
+   "id": "7967155",
+   "name": "Отель Swissôtel Resort Sochi Kamelia",
+   "stratum": "yes/hi/near",
+   "from": "ячейка",
+   "coast_dist_m": 209,
+   "band": "near",
+   "disagree": false
+  },
+  {
+   "id": "8271671",
+   "name": "Garage Hostel",
+   "stratum": "yes/low/any",
+   "from": "ячейка",
+   "coast_dist_m": 534,
+   "band": "mid",
+   "disagree": false
+  },
+  {
+   "id": "8307772",
+   "name": "Гостевой Дом Просперус",
+   "stratum": "yes/low/any",
+   "from": "ячейка",
+   "coast_dist_m": 1164,
+   "band": "far",
+   "disagree": false
+  },
+  {
+   "id": "8360529",
+   "name": "Санаторий Русь",
+   "stratum": "no/hi/near",
+   "from": "ячейка",
+   "coast_dist_m": 224,
+   "band": "near",
+   "disagree": false
+  },
+  {
+   "id": "8436925",
+   "name": "Мини-Гостиница Сокол",
+   "stratum": "yes/low/any",
+   "from": "ячейка",
+   "coast_dist_m": 717,
+   "band": "mid",
+   "disagree": false
+  },
+  {
+   "id": "8573894",
+   "name": "Санаторий Октябрьский",
+   "stratum": "no/hi/mid",
+   "from": "спор",
+   "coast_dist_m": 488,
+   "band": "mid",
+   "disagree": true
+  },
+  {
+   "id": "8696062",
+   "name": "Гостевой дом Белый парус",
+   "stratum": "no/hi/far",
+   "from": "ячейка",
+   "coast_dist_m": 2425,
+   "band": "far",
+   "disagree": false
+  },
+  {
+   "id": "8747326",
+   "name": "Меблированные комнаты Delsochi",
+   "stratum": "yes/hi/far",
+   "from": "ячейка",
+   "coast_dist_m": 1038,
+   "band": "far",
+   "disagree": false
+  },
+  {
+   "id": "8753343",
+   "name": "Отель Атмосфера",
+   "stratum": "yes/hi/far",
+   "from": "ячейка",
+   "coast_dist_m": 1291,
+   "band": "far",
+   "disagree": false
+  },
+  {
+   "id": "8871740",
+   "name": "Отель Черноморъ",
+   "stratum": "yes/hi/near",
+   "from": "ячейка",
+   "coast_dist_m": 63,
+   "band": "near",
+   "disagree": false
+  },
+  {
+   "id": "8880663",
+   "name": "Хостел  ДеАрт Хаус",
+   "stratum": "yes/hi/mid",
+   "from": "ячейка",
+   "coast_dist_m": 645,
+   "band": "mid",
+   "disagree": false
+  },
+  {
+   "id": "9079349",
+   "name": "Гостевой дом Vostok",
+   "stratum": "yes/hi/far",
+   "from": "ячейка",
+   "coast_dist_m": 1110,
+   "band": "far",
+   "disagree": false
+  },
+  {
+   "id": "9244943",
+   "name": "Отель Grand Way Один Сочи Центр",
+   "stratum": "no/hi/far",
+   "from": "ячейка",
+   "coast_dist_m": 1160,
+   "band": "far",
+   "disagree": false
+  },
+  {
+   "id": "9322031",
+   "name": "Сочи Ярдъ",
+   "stratum": "no/hi/near",
+   "from": "ячейка",
+   "coast_dist_m": 252,
+   "band": "near",
+   "disagree": false
+  },
+  {
+   "id": "9751811",
+   "name": "Grand Way Panorama",
+   "stratum": "yes/hi/mid",
+   "from": "спор",
+   "coast_dist_m": 729,
+   "band": "mid",
+   "disagree": true
+  },
+  {
+   "id": "9751868",
+   "name": "Бутик-отель Усадьба Хлудова",
+   "stratum": "yes/hi/near",
+   "from": "ячейка",
+   "coast_dist_m": 277,
+   "band": "near",
+   "disagree": false
+  },
+  {
+   "id": "9824926",
+   "name": "Гостевой дом Мамайка Резиденс",
+   "stratum": "no/hi/far",
+   "from": "спор",
+   "coast_dist_m": 1378,
+   "band": "far",
+   "disagree": true
+  },
+  {
+   "id": "9974510",
+   "name": "Отель Bergs Spa and Сonference hotel",
+   "stratum": "no/hi/mid",
+   "from": "спор",
+   "coast_dist_m": 747,
+   "band": "mid",
+   "disagree": true
+  },
+  {
+   "id": "9994616",
+   "name": "Хостел Солнечный Сочи",
+   "stratum": "yes/hi/mid",
+   "from": "ячейка",
+   "coast_dist_m": 328,
+   "band": "mid",
+   "disagree": false
+  }
+ ]
+}

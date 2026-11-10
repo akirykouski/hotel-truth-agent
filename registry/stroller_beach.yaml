@@ -1,0 +1,34 @@
+id: stroller_beach
+name: С коляской до пляжа
+description: |
+  Можно ли докатить коляску до пляжа без лестниц и сколько это займёт туда и обратно с подъёмом. Расчёт map-app:
+  пешеходный граф OSM без ступеней, рельеф FABDEM, переходы через ж/д. Есть у отелей, которые посчитал map-app.
+level: отель
+class: physical
+weight: 0.7
+ttl_days: 365
+key: possible
+keywords: ["коляск", "с малышом", "с младенцем"]
+city_terms: ["коляск"]  # как тема звучит в описаниях и отзывах региона (профиль города, app/city.py)
+default_constraint: {field: minutes_there, op: "<=", value: 20}
+fields:
+  possible: {type: bool, label: "до пляжа можно без лестниц"}
+  minutes_there: {type: number, better: lower, label: "минут с коляской до пляжа"}
+  minutes_back: {type: number, better: lower, label: "минут с коляской обратно"}
+  climb_back_m: {type: number, better: lower, label: "подъём на обратном пути, м"}
+methods:
+  - source: geo
+    method: "расчёт map-app: пешеходный граф OSM без лестниц + FABDEM, Тоблер ×0,85 для коляски, туда и обратно"
+    steps:
+      - {as: w, tool: mapapp_walk, args: {target: beach}}
+    when: "w.available"
+    value:
+      possible: "w.stroller.possible"
+      minutes_there: "round(w.stroller.there.min) if w.stroller.possible else None"
+      minutes_back: "round(w.stroller.back.min) if w.stroller.possible else None"
+      climb_back_m: "round(w.stroller.back.up_m) if w.stroller.possible else None"
+    confidence: "0.75 if w.stroller.possible else 0.6"
+    summary: >-
+      (f'с коляской до пляжа {round(w.stroller.there.min)} мин без лестниц, обратно {round(w.stroller.back.min)} мин, подъём {round(w.stroller.back.up_m)} м'
+      if w.stroller.possible else f'без лестниц до пляжа не дойти: пешком {round(w.there.min)} мин, ступеней по пути: {w.there.steps}')
+    evidence: "{'beach': w.target, 'walk': w.there, 'stroller': w.stroller, 'match': w.match, 'source': 'map-app ' + str(w.commit)}"
